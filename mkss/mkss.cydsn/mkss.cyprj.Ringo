@@ -11,6 +11,56 @@
 <CyGuid_f44455c5-3770-4452-b988-0a7a7ff46256 type_name="CyDesigner.Common.ProjMgmt.Model.CyConfigDependencies" version="1">
 <dependency_info name="4bd5669a-0e4e-4e1c-9625-e982dd945372@Debug@DP8051" xml_contents_version="2">
 <CyGuid_1173175f-1b9b-4ad4-a065-754a48a27021 type_name="CyDesigner.Common.Base.CyFileDeps" version="1">
+<file name=".\DP8051\DP8051_Keil_951\Debug\main.obj">
+<dep name=".\Generated_Source\PSoC3\CyDmac.h" />
+<dep name=".\Generated_Source\PSoC3\CyFlash.h" />
+<dep name=".\Generated_Source\PSoC3\CyLib.h" />
+<dep name=".\Generated_Source\PSoC3\CySpc.h" />
+<dep name=".\Generated_Source\PSoC3\ISR_PS2.h" />
+<dep name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
+<dep name=".\Generated_Source\PSoC3\UART_Debug.h" />
+<dep name=".\Generated_Source\PSoC3\UART_Debug_IntClock.h" />
+<dep name=".\Generated_Source\PSoC3\UART_PS2.h" />
+<dep name=".\Generated_Source\PSoC3\UART_PS2_IntClock.h" />
+<dep name=".\Generated_Source\PSoC3\UART_Servo.h" />
+<dep name=".\Generated_Source\PSoC3\UART_Servo_IntClock.h" />
+<dep name=".\Generated_Source\PSoC3\cyPm.h" />
+<dep name=".\Generated_Source\PSoC3\cydevice.h" />
+<dep name=".\Generated_Source\PSoC3\cydevice_trm.h" />
+<dep name=".\Generated_Source\PSoC3\cydisabledsheets.h" />
+<dep name=".\Generated_Source\PSoC3\cyfitter.h" />
+<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
+<dep name=".\Generated_Source\PSoC3\cypins.h" />
+<dep name=".\Generated_Source\PSoC3\cytypes.h" />
+<dep name=".\Generated_Source\PSoC3\project.h" />
+<dep name=".\ICS3_5.h" />
+<dep name=".\PS2_Controller.h" />
+<dep name=".\main.c" />
+</file>
+<file name=".\Generated_Source\PSoC3\CyDmac.h" />
+<file name=".\Generated_Source\PSoC3\CyFlash.h" />
+<file name=".\Generated_Source\PSoC3\CyLib.h" />
+<file name=".\Generated_Source\PSoC3\CySpc.h" />
+<file name=".\Generated_Source\PSoC3\ISR_PS2.h" />
+<file name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
+<file name=".\Generated_Source\PSoC3\UART_Debug.h" />
+<file name=".\Generated_Source\PSoC3\UART_Debug_IntClock.h" />
+<file name=".\Generated_Source\PSoC3\UART_PS2.h" />
+<file name=".\Generated_Source\PSoC3\UART_PS2_IntClock.h" />
+<file name=".\Generated_Source\PSoC3\UART_Servo.h" />
+<file name=".\Generated_Source\PSoC3\UART_Servo_IntClock.h" />
+<file name=".\Generated_Source\PSoC3\cyPm.h" />
+<file name=".\Generated_Source\PSoC3\cydevice.h" />
+<file name=".\Generated_Source\PSoC3\cydevice_trm.h" />
+<file name=".\Generated_Source\PSoC3\cydisabledsheets.h" />
+<file name=".\Generated_Source\PSoC3\cyfitter.h" />
+<file name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
+<file name=".\Generated_Source\PSoC3\cypins.h" />
+<file name=".\Generated_Source\PSoC3\cytypes.h" />
+<file name=".\Generated_Source\PSoC3\project.h" />
+<file name=".\ICS3_5.h" />
+<file name=".\PS2_Controller.h" />
+<file name=".\main.c" />
 <file name=".\DP8051\DP8051_Keil_951\Debug\Kondo_Servo.obj">
 <dep name=".\Generated_Source\PSoC3\CyDmac.h" />
 <dep name=".\Generated_Source\PSoC3\CyFlash.h" />
@@ -36,28 +86,6 @@
 <dep name=".\ICS3_5.h" />
 <dep name=".\Kondo_Servo.c" />
 </file>
-<file name=".\Generated_Source\PSoC3\CyDmac.h" />
-<file name=".\Generated_Source\PSoC3\CyFlash.h" />
-<file name=".\Generated_Source\PSoC3\CyLib.h" />
-<file name=".\Generated_Source\PSoC3\CySpc.h" />
-<file name=".\Generated_Source\PSoC3\ISR_PS2.h" />
-<file name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
-<file name=".\Generated_Source\PSoC3\UART_Debug.h" />
-<file name=".\Generated_Source\PSoC3\UART_Debug_IntClock.h" />
-<file name=".\Generated_Source\PSoC3\UART_PS2.h" />
-<file name=".\Generated_Source\PSoC3\UART_PS2_IntClock.h" />
-<file name=".\Generated_Source\PSoC3\UART_Servo.h" />
-<file name=".\Generated_Source\PSoC3\UART_Servo_IntClock.h" />
-<file name=".\Generated_Source\PSoC3\cyPm.h" />
-<file name=".\Generated_Source\PSoC3\cydevice.h" />
-<file name=".\Generated_Source\PSoC3\cydevice_trm.h" />
-<file name=".\Generated_Source\PSoC3\cydisabledsheets.h" />
-<file name=".\Generated_Source\PSoC3\cyfitter.h" />
-<file name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
-<file name=".\Generated_Source\PSoC3\cypins.h" />
-<file name=".\Generated_Source\PSoC3\cytypes.h" />
-<file name=".\Generated_Source\PSoC3\project.h" />
-<file name=".\ICS3_5.h" />
 <file name=".\Kondo_Servo.c" />
 <file name=".\DP8051\DP8051_Keil_951\Debug\PS2_Controller.obj">
 <dep name=".\Generated_Source\PSoC3\CyDmac.h" />
@@ -85,32 +113,6 @@
 <dep name=".\PS2_Controller.h" />
 </file>
 <file name=".\PS2_Controller.c" />
-<file name=".\PS2_Controller.h" />
-<file name=".\DP8051\DP8051_Keil_951\Debug\main.obj">
-<dep name=".\Generated_Source\PSoC3\CyDmac.h" />
-<dep name=".\Generated_Source\PSoC3\CyFlash.h" />
-<dep name=".\Generated_Source\PSoC3\CyLib.h" />
-<dep name=".\Generated_Source\PSoC3\CySpc.h" />
-<dep name=".\Generated_Source\PSoC3\ISR_PS2.h" />
-<dep name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
-<dep name=".\Generated_Source\PSoC3\UART_Debug.h" />
-<dep name=".\Generated_Source\PSoC3\UART_Debug_IntClock.h" />
-<dep name=".\Generated_Source\PSoC3\UART_PS2.h" />
-<dep name=".\Generated_Source\PSoC3\UART_PS2_IntClock.h" />
-<dep name=".\Generated_Source\PSoC3\UART_Servo.h" />
-<dep name=".\Generated_Source\PSoC3\UART_Servo_IntClock.h" />
-<dep name=".\Generated_Source\PSoC3\cyPm.h" />
-<dep name=".\Generated_Source\PSoC3\cydevice.h" />
-<dep name=".\Generated_Source\PSoC3\cydevice_trm.h" />
-<dep name=".\Generated_Source\PSoC3\cydisabledsheets.h" />
-<dep name=".\Generated_Source\PSoC3\cyfitter.h" />
-<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
-<dep name=".\Generated_Source\PSoC3\cypins.h" />
-<dep name=".\Generated_Source\PSoC3\cytypes.h" />
-<dep name=".\Generated_Source\PSoC3\project.h" />
-<dep name=".\main.c" />
-</file>
-<file name=".\main.c" />
 <file name=".\DP8051\DP8051_Keil_951\Debug\CyDmac.obj">
 <dep name=".\Generated_Source\PSoC3\CyDmac.c" />
 <dep name=".\Generated_Source\PSoC3\CyDmac.h" />
@@ -522,9 +524,10 @@
 <name_val_pair name=".\Generated_Source\PSoC3\cyutils.c" v="NOIV LARGE MODDP2 OMF2 VB(1) NOIP &quot;INCDIR(., Generated_Source\PSoC3)&quot; FF(3) DB DF(DEBUG) WL(2) PR(${OutputDir}/${CompileFile}.lst) CD OT(2 ,Size)" />
 <name_val_pair name=".\Generated_Source\PSoC3\KeilStart.a51" v="CASE EP &quot;INCDIR(., Generated_Source\PSoC3)&quot; DB MACRO DF(DEBUG) NOCO PR(${OutputDir}/${CompileFile}.lst)" />
 <name_val_pair name="C:\Users\Ringo\Documents\robot\roboken\roboken\mkss.cydsn\DP8051\DP8051_Keil_951\Debug\mkss.hex" v="TO '${OutputDir}\${ProjectShortName}.omf' CODE RU RC(10) DW(16) WL(2) PR(${OutputDir}/${ProjectShortName}.map) IX CL(XDATA(X:0x0000-X:0x0FFF)) CL(CODE(C:0x0000-C:0x7FFF)) CL(CONST(C:0x0000-C:0x7FFF))" />
+<name_val_pair name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\DP8051\DP8051_Keil_951\Debug\mkss.hex" v="TO '${OutputDir}\${ProjectShortName}.omf' CODE RU RC(10) DW(16) WL(2) PR(${OutputDir}/${ProjectShortName}.map) IX CL(XDATA(X:0x0000-X:0x0FFF)) CL(CODE(C:0x0000-C:0x7FFF)) CL(CONST(C:0x0000-C:0x7FFF))" />
 </name>
 </genericCmdLineData>
-<codeGenCmdLineTag v="-.appdatapath &quot;C:\Users\Ringo\AppData\Local\Cypress Semiconductor\PSoC Creator\3.3&quot; -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -p C:\Users\Ringo\Documents\robot\roboken\roboken\mkss.cydsn\mkss.cyprj -d CY8C3245AXI-158 -s C:\Users\Ringo\Documents\robot\roboken\roboken\mkss.cydsn\Generated_Source\PSoC3 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=BE" />
+<codeGenCmdLineTag v="-.appdatapath &quot;C:\Users\Ringo\AppData\Local\Cypress Semiconductor\PSoC Creator\3.3&quot; -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -p C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\mkss.cyprj -d CY8C3245AXI-158 -s C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\Generated_Source\PSoC3 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=BE" />
 </CyGuid_b0374e30-ce3a-47f2-ad85-821643292c68>
 </dataGuid>
 <dataGuid v="597c5b74-0c46-4204-8b7f-96f3570671dc">
@@ -886,14 +889,14 @@
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\warp\lib\common\stdlogic\rtlpkg.vif</v>
 <v>C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\warp\lib\common\stdlogic\cy_psoc3.vif</v>
 </warp_dep>
-<deps_time v="130936179095958508" />
+<deps_time v="130936195838816145" />
 <top_block v="TopDesign" />
 <last_generation v="0" />
 </CyGuid_925cc1e1-309e-4e08-b0a1-09a83c35b157>
 </dataGuid>
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
-<deps_time v="130936179187203727" />
+<deps_time v="130936228956270355" />
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>
 </userData>

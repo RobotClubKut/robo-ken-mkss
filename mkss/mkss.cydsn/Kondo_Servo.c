@@ -32,6 +32,7 @@ void Pos_Set(uint8 ID, int16 kakudo){
     tx[1]=(unsigned char)(Data>>7) & 0x7F;
     tx[2]=(unsigned char)Data & 0x7F;
     UART_Servo_PutArray(tx,3);
+    CyDelay(1);
 }
 
 void ID_Read()
@@ -59,7 +60,6 @@ void ID_Read()
 
 void ID_Write (uint8 ID)
 {
-    int pos_h,pos_l,pos,kakudo,Data;
     uint8 i,tx[4], rx[6];
     char buffer[40];
     //ID書き込み

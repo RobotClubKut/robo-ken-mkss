@@ -17,5 +17,5 @@ move "%~1\%~2\%~n3.hex" "%~1\%~2\%~n3.ihx"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 
 CD /D "C:\Keil\UV4"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 
-IF NOT EXIST "C:\Users\Ringo\Documents\robot\roboken\roboken\mkss.cydsn\mkss.svd" rem "C:\Users\Ringo\Documents\robot\roboken\roboken\mkss.cydsn\mkss.sfr"
+IF NOT EXIST "C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\mkss.svd" rem "C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\mkss.sfr"
 @IF %errorlevel% NEQ 0 EXIT /b %errorlevel% 

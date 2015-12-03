@@ -1,6 +1,6 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+#windouws image file caches
+Thumbs.ab
+ehthumbs.ab
 
 # Folder config file
 Desktop.ini
@@ -8,15 +8,15 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Windows Installer files
-*.cab
+# windows Installer files
+*.cad
 *.msi
 *.msm
 *.msp
 
 # =========================
 # Operating System Files
-# =========================
+#==========================
 
 # OSX
 # =========================
@@ -29,18 +29,19 @@ $RECYCLE.BIN/
 Icon
 
 
-# Thumbnails
+# Thumbnaile
 ._*
 
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
 
-
 # Log files
 *.log
 *.rpt
 
-*.tada/*.cydsn/codegentemp/*
-
-*.tada/*.cydsn/DP8051/*
+*.cydsn/codegentemp/*
+*.cydsn/DP8051/*
+*.cydsn/Generated_Source/*
+Archive/*
+Backup/*

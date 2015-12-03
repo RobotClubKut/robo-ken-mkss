@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 1   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE KONDO_SERVO
@@ -46,43 +46,43 @@ line level    source
   32   1          tx[1]=(unsigned char)(Data>>7) & 0x7F;
   33   1          tx[2]=(unsigned char)Data & 0x7F;
   34   1          UART_Servo_PutArray(tx,3);
-  35   1      }
+  35   1          CyDelay(1);
+  36   1      }
 *** WARNING C280 IN LINE 29 OF .\Kondo_Servo.c: 'i': unreferenced local variable
 *** WARNING C280 IN LINE 29 OF .\Kondo_Servo.c: 'rx': unreferenced local variable
-  36          
-  37          void ID_Read()
-  38          {       
-  39   1          int i,pos_h,pos_l,pos,kakudo,Data;
-  40   1          uint8 tx[4], rx[6];
-  41   1          char buffer[40];
-  42   1          //ID読み込み
-  43   1          tx[0]=0xFF;
-  44   1          tx[1]=0x00;
-  45   1          tx[2]=0x00;
-  46   1          tx[3]=0x00;
-  47   1      
-  48   1          //送信
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 2   
+  37          
+  38          void ID_Read()
+  39          {       
+  40   1          int i,pos_h,pos_l,pos,kakudo,Data;
+  41   1          uint8 tx[4], rx[6];
+  42   1          char buffer[40];
+  43   1          //ID読み込み
+  44   1          tx[0]=0xFF;
+  45   1          tx[1]=0x00;
+  46   1          tx[2]=0x00;
+  47   1          tx[3]=0x00;
+  48   1      
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 2   
 
-  49   1          for (i = 0;i < 4;i++){
-  50   2              UART_Servo_PutChar(tx[i]); // コマンドを１バイトずつ送信する
-  51   2          }
-  52   1          //受信
-  53   1          for (i = 0;i < 5;i++){
-  54   2              rx[i] = UART_Servo_GetChar(); // モーターからの返値を受け取り、rxに代入する
-  55   2          }
-  56   1          sprintf(buffer,"%x,%x,%x,%x,%x\n",(int)rx[0], (int)rx[1], (int)rx[2], (int)rx[3], (int)rx[4]);
-  57   1      }
-*** WARNING C280 IN LINE 39 OF .\Kondo_Servo.c: 'pos_h': unreferenced local variable
-*** WARNING C280 IN LINE 39 OF .\Kondo_Servo.c: 'pos_l': unreferenced local variable
-*** WARNING C280 IN LINE 39 OF .\Kondo_Servo.c: 'pos': unreferenced local variable
-*** WARNING C280 IN LINE 39 OF .\Kondo_Servo.c: 'kakudo': unreferenced local variable
-*** WARNING C280 IN LINE 39 OF .\Kondo_Servo.c: 'Data': unreferenced local variable
-  58          
+  49   1          //送信
+  50   1          for (i = 0;i < 4;i++){
+  51   2              UART_Servo_PutChar(tx[i]); // コマンドを１バイトずつ送信する
+  52   2          }
+  53   1          //受信
+  54   1          for (i = 0;i < 5;i++){
+  55   2              rx[i] = UART_Servo_GetChar(); // モーターからの返値を受け取り、rxに代入する
+  56   2          }
+  57   1          sprintf(buffer,"%x,%x,%x,%x,%x\n",(int)rx[0], (int)rx[1], (int)rx[2], (int)rx[3], (int)rx[4]);
+  58   1      }
+*** WARNING C280 IN LINE 40 OF .\Kondo_Servo.c: 'pos_h': unreferenced local variable
+*** WARNING C280 IN LINE 40 OF .\Kondo_Servo.c: 'pos_l': unreferenced local variable
+*** WARNING C280 IN LINE 40 OF .\Kondo_Servo.c: 'pos': unreferenced local variable
+*** WARNING C280 IN LINE 40 OF .\Kondo_Servo.c: 'kakudo': unreferenced local variable
+*** WARNING C280 IN LINE 40 OF .\Kondo_Servo.c: 'Data': unreferenced local variable
   59          
-  60          void ID_Write (uint8 ID)
-  61          {
-  62   1          int pos_h,pos_l,pos,kakudo,Data;
+  60          
+  61          void ID_Write (uint8 ID)
+  62          {
   63   1          uint8 i,tx[4], rx[6];
   64   1          char buffer[40];
   65   1          //ID書き込み
@@ -101,13 +101,8 @@ line level    source
   78   2          }       
   79   1          CyDelay(1000);
   80   1      }
-*** WARNING C280 IN LINE 62 OF .\Kondo_Servo.c: 'pos_h': unreferenced local variable
-*** WARNING C280 IN LINE 62 OF .\Kondo_Servo.c: 'pos_l': unreferenced local variable
-*** WARNING C280 IN LINE 62 OF .\Kondo_Servo.c: 'pos': unreferenced local variable
-*** WARNING C280 IN LINE 62 OF .\Kondo_Servo.c: 'kakudo': unreferenced local variable
-*** WARNING C280 IN LINE 62 OF .\Kondo_Servo.c: 'Data': unreferenced local variable
 *** WARNING C280 IN LINE 64 OF .\Kondo_Servo.c: 'buffer': unreferenced local variable
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 3   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 3   
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
@@ -171,7 +166,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0050 E4                CLR     A
 0051 3400        R     ADDC    A,#HIGH rx
 0053 F583              MOV     DPH,A
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 4   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 4   
 
 0055 EF                MOV     A,R7
 0056 F0                MOVX    @DPTR,A
@@ -235,7 +230,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00A3 EC                MOV     A,R4
 00A4 4E                ORL     A,R6
 00A5 FE                MOV     R6,A
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 5   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 5   
 
 00A6 ED                MOV     A,R5
 00A7 4F                ORL     A,R7
@@ -299,7 +294,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000C F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 30
 000D 900000      R     MOV     DPTR,#kakudo
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 6   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 6   
 
 0010 E0                MOVX    A,@DPTR
 0011 FE                MOV     R6,A
@@ -363,7 +358,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 005E E0                MOVX    A,@DPTR
 005F FF                MOV     R7,A
 0060 EF                MOV     A,R7
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 7   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 7   
 
 0061 547F              ANL     A,#07FH
 0063 FF                MOV     R7,A
@@ -377,29 +372,35 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 006F 7D03              MOV     R5,#03H
 0071 120000      E     LCALL   _UART_Servo_PutArray
                                            ; SOURCE LINE # 35
-0074 22                RET     
+0074 7F01              MOV     R7,#01H
+0076 7E00              MOV     R6,#00H
+0078 7D00              MOV     R5,#00H
+007A 7C00              MOV     R4,#00H
+007C 120000      E     LCALL   _?CyDelay
+                                           ; SOURCE LINE # 36
+007F 22                RET     
              ; FUNCTION _Pos_Set (END)
 
              ; FUNCTION ID_Read (BEGIN)
-                                           ; SOURCE LINE # 37
                                            ; SOURCE LINE # 38
-                                           ; SOURCE LINE # 43
+                                           ; SOURCE LINE # 39
+                                           ; SOURCE LINE # 44
 0000 900000      R     MOV     DPTR,#tx
 0003 74FF              MOV     A,#0FFH
 0005 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 44
+                                           ; SOURCE LINE # 45
 0006 900000      R     MOV     DPTR,#tx+01H
 0009 E4                CLR     A
 000A F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 45
+                                           ; SOURCE LINE # 46
 000B 900000      R     MOV     DPTR,#tx+02H
 000E E4                CLR     A
 000F F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 46
+                                           ; SOURCE LINE # 47
 0010 900000      R     MOV     DPTR,#tx+03H
 0013 E4                CLR     A
 0014 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 49
+                                           ; SOURCE LINE # 50
 0015 900000      R     MOV     DPTR,#i
 0018 E4                CLR     A
 0019 F0                MOVX    @DPTR,A
@@ -420,15 +421,15 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 002A 6480              XRL     A,#080H
 002C 9480              SUBB    A,#080H
 002E 5023              JNC     ?C0007
-                                           ; SOURCE LINE # 50
+                                           ; SOURCE LINE # 51
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 8   
+
 0030 900000      R     MOV     DPTR,#i
 0033 E0                MOVX    A,@DPTR
 0034 FE                MOV     R6,A
 0035 A3                INC     DPTR
 0036 E0                MOVX    A,@DPTR
 0037 FF                MOV     R7,A
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 8   
-
 0038 7400        R     MOV     A,#LOW tx
 003A 2F                ADD     A,R7
 003B F582              MOV     DPL,A
@@ -438,14 +439,14 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0042 E0                MOVX    A,@DPTR
 0043 FF                MOV     R7,A
 0044 120000      E     LCALL   _UART_Servo_PutChar
-                                           ; SOURCE LINE # 51
+                                           ; SOURCE LINE # 52
 0047 900000      R     MOV     DPTR,#i
 004A E4                CLR     A
 004B 75F001            MOV     B,#01H
 004E 120000      E     LCALL   ?C?IILDX
 0051 80CA              SJMP    ?C0006
 0053         ?C0007:
-                                           ; SOURCE LINE # 53
+                                           ; SOURCE LINE # 54
 0053 900000      R     MOV     DPTR,#i
 0056 E4                CLR     A
 0057 F0                MOVX    @DPTR,A
@@ -466,7 +467,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0068 6480              XRL     A,#080H
 006A 9480              SUBB    A,#080H
 006C 5023              JNC     ?C0010
-                                           ; SOURCE LINE # 54
+                                           ; SOURCE LINE # 55
 006E 120000      E     LCALL   UART_Servo_GetChar
 0071 900000      R     MOV     DPTR,#i
 0074 E0                MOVX    A,@DPTR
@@ -482,17 +483,17 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0081 F583              MOV     DPH,A
 0083 EF                MOV     A,R7
 0084 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 55
+                                           ; SOURCE LINE # 56
 0085 900000      R     MOV     DPTR,#i
 0088 E4                CLR     A
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 9   
+
 0089 75F001            MOV     B,#01H
 008C 120000      E     LCALL   ?C?IILDX
 008F 80CA              SJMP    ?C0009
 0091         ?C0010:
-                                           ; SOURCE LINE # 56
+                                           ; SOURCE LINE # 57
 0091 7B01              MOV     R3,#01H
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 9   
-
 0093 7A00        R     MOV     R2,#HIGH buffer
 0095 7900        R     MOV     R1,#LOW buffer
 0097 C003              PUSH    AR3
@@ -549,26 +550,26 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00EA 7E00              MOV     R6,#00H
 00EC 900000      E     MOV     DPTR,#?_sprintf?BYTE+0EH
 00EF EE                MOV     A,R6
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 10  
+
 00F0 F0                MOVX    @DPTR,A
 00F1 A3                INC     DPTR
 00F2 EF                MOV     A,R7
 00F3 F0                MOVX    @DPTR,A
 00F4 D001              POP     AR1
 00F6 D002              POP     AR2
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 10  
-
 00F8 D003              POP     AR3
 00FA 120000      E     LCALL   _sprintf
-                                           ; SOURCE LINE # 57
+                                           ; SOURCE LINE # 58
 00FD 22                RET     
              ; FUNCTION ID_Read (END)
 
              ; FUNCTION _ID_Write (BEGIN)
-                                           ; SOURCE LINE # 60
+                                           ; SOURCE LINE # 61
 0000 900000      R     MOV     DPTR,#ID
 0003 EF                MOV     A,R7
 0004 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 61
+                                           ; SOURCE LINE # 62
                                            ; SOURCE LINE # 66
 0005 900000      R     MOV     DPTR,#ID
 0008 E0                MOVX    A,@DPTR
@@ -613,14 +614,14 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 003F E4                CLR     A
 0040 3400        R     ADDC    A,#HIGH tx
 0042 F583              MOV     DPH,A
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 11  
+
 0044 E0                MOVX    A,@DPTR
 0045 FF                MOV     R7,A
 0046 120000      E     LCALL   _UART_Servo_PutChar
                                            ; SOURCE LINE # 74
 0049 900000      R     MOV     DPTR,#i
 004C E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 21:05:10 PAGE 11  
-
 004D 04                INC     A
 004E F0                MOVX    @DPTR,A
 004F 80D9              SJMP    ?C0013
@@ -670,13 +671,15 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    737    ----
+   CODE SIZE        =    748    ----
    CONSTANT SIZE    =     16    ----
-   XDATA SIZE       =   ----     200
+   XDATA SIZE       =   ----     190
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/03/2015 22:22:09 PAGE 12  
+
    EDATA SIZE       =   ----    ----
    HDATA SIZE       =   ----    ----
    XDATA CONST SIZE =   ----    ----
@@ -684,4 +687,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  16 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  11 WARNING(S),  0 ERROR(S)

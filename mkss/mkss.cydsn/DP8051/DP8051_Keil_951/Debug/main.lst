@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   MAIN                                                                  12/03/2015 21:05:09 PAGE 1   
+C51 COMPILER V9.51   MAIN                                                                  12/03/2015 22:28:14 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE MAIN
@@ -21,47 +21,151 @@ line level    source
   10           * ========================================
   11          */
   12          #include <project.h>
-  13          
-  14          int main()
-  15          {
-  16   1          CyGlobalIntEnable; /* Enable global interrupts. */
-  17   1      
-  18   1          /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-  19   1      
-  20   1          for(;;)
-  21   1          {
-  22   2              /* Place your application code here. */
-  23   2          }
-  24   1      }
-  25          
-  26          /* [] END OF FILE */
-C51 COMPILER V9.51   MAIN                                                                  12/03/2015 21:05:09 PAGE 2   
+  13          #include <stdio.h>
+  14          #include "PS2_Controller.h"
+  15          #include "ICS3_5.h"
+  16          
+  17          int main()
+  18          {
+  19   1          int16 a;
+  20   1          PS2Controller psData;
+  21   1          CyGlobalIntEnable; /* Enable global interrupts. */
+  22   1          UART_Servo_Start();
+  23   1          PS2_Start();
+  24   1          UART_Debug_Start();
+  25   1          CyDelay(1000);
+  26   1      
+  27   1          /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  28   1          for(;;)
+  29   1          {
+  30   2              /* Place your application code here. */
+  31   2              psData = PS2_Controller_get();
+  32   2              Pos_Set(0,a);
+  33   2              Pos_Set(1,a);
+  34   2              Pos_Set(2,a);
+  35   2              Pos_Set(3,a);
+  36   2              Pos_Set(4,a);
+  37   2              CyDelay(1000);
+  38   2              a+=10;
+  39   2          }
+  40   1      }
+  41          
+  42          /* [] END OF FILE */
+C51 COMPILER V9.51   MAIN                                                                  12/03/2015 22:28:14 PAGE 2   
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
 
              ; FUNCTION main (BEGIN)
-                                           ; SOURCE LINE # 14
-                                           ; SOURCE LINE # 15
-                                           ; SOURCE LINE # 16
+                                           ; SOURCE LINE # 17
+                                           ; SOURCE LINE # 18
+                                           ; SOURCE LINE # 19
+                                           ; SOURCE LINE # 21
 0000 D2AF              SETB    EA
 0002 9044F4            MOV     DPTR,#044F4H
 0005 74FD              MOV     A,#0FDH
 0007 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 20
-0008         ?C0001:
-                                           ; SOURCE LINE # 21
+                                           ; SOURCE LINE # 22
+0008 120000      E     LCALL   UART_Servo_Start
                                            ; SOURCE LINE # 23
-0008 80FE              SJMP    ?C0001
-000A 22                RET     
+000B 120000      E     LCALL   PS2_Start
+                                           ; SOURCE LINE # 24
+000E 120000      E     LCALL   UART_Debug_Start
+                                           ; SOURCE LINE # 25
+0011 7FE8              MOV     R7,#0E8H
+0013 7E03              MOV     R6,#03H
+0015 7D00              MOV     R5,#00H
+0017 7C00              MOV     R4,#00H
+0019 120000      E     LCALL   _?CyDelay
+                                           ; SOURCE LINE # 28
+001C         ?C0001:
+                                           ; SOURCE LINE # 29
+                                           ; SOURCE LINE # 31
+001C 120000      E     LCALL   PS2_Controller_get
+001F C003              PUSH    AR3
+0021 C002              PUSH    AR2
+0023 C001              PUSH    AR1
+0025 7B01              MOV     R3,#01H
+0027 7A00        R     MOV     R2,#HIGH psData
+0029 7900        R     MOV     R1,#LOW psData
+002B A801              MOV     R0,AR1
+002D AC02              MOV     R4,AR2
+002F AD03              MOV     R5,AR3
+0031 D001              POP     AR1
+0033 D002              POP     AR2
+0035 D003              POP     AR3
+0037 7E00              MOV     R6,#00H
+0039 7F06              MOV     R7,#06H
+003B 120000      E     LCALL   ?C?COPYAMD
+                                           ; SOURCE LINE # 32
+003E 900000      R     MOV     DPTR,#a
+0041 E0                MOVX    A,@DPTR
+0042 FC                MOV     R4,A
+0043 A3                INC     DPTR
+0044 E0                MOVX    A,@DPTR
+0045 FD                MOV     R5,A
+0046 7F00              MOV     R7,#00H
+0048 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 33
+004B 900000      R     MOV     DPTR,#a
+004E E0                MOVX    A,@DPTR
+004F FC                MOV     R4,A
+0050 A3                INC     DPTR
+0051 E0                MOVX    A,@DPTR
+0052 FD                MOV     R5,A
+0053 7F01              MOV     R7,#01H
+0055 120000      E     LCALL   _Pos_Set
+C51 COMPILER V9.51   MAIN                                                                  12/03/2015 22:28:14 PAGE 3   
+
+                                           ; SOURCE LINE # 34
+0058 900000      R     MOV     DPTR,#a
+005B E0                MOVX    A,@DPTR
+005C FC                MOV     R4,A
+005D A3                INC     DPTR
+005E E0                MOVX    A,@DPTR
+005F FD                MOV     R5,A
+0060 7F02              MOV     R7,#02H
+0062 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 35
+0065 900000      R     MOV     DPTR,#a
+0068 E0                MOVX    A,@DPTR
+0069 FC                MOV     R4,A
+006A A3                INC     DPTR
+006B E0                MOVX    A,@DPTR
+006C FD                MOV     R5,A
+006D 7F03              MOV     R7,#03H
+006F 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 36
+0072 900000      R     MOV     DPTR,#a
+0075 E0                MOVX    A,@DPTR
+0076 FC                MOV     R4,A
+0077 A3                INC     DPTR
+0078 E0                MOVX    A,@DPTR
+0079 FD                MOV     R5,A
+007A 7F04              MOV     R7,#04H
+007C 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 37
+007F 7FE8              MOV     R7,#0E8H
+0081 7E03              MOV     R6,#03H
+0083 7D00              MOV     R5,#00H
+0085 7C00              MOV     R4,#00H
+0087 120000      E     LCALL   _?CyDelay
+                                           ; SOURCE LINE # 38
+008A 900000      R     MOV     DPTR,#a
+008D E4                CLR     A
+008E 75F00A            MOV     B,#0AH
+0091 120000      E     LCALL   ?C?IILDX
+                                           ; SOURCE LINE # 39
+0094 8086              SJMP    ?C0001
+0096 22                RET     
              ; FUNCTION main (END)
 
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     11    ----
+   CODE SIZE        =    151    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =   ----       8
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
