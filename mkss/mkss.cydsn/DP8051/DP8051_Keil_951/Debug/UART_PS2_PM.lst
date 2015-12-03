@@ -1,0 +1,305 @@
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 1   
+
+
+C51 COMPILER V9.51, COMPILATION OF MODULE UART_PS2_PM
+OBJECT MODULE PLACED IN .\DP8051\DP8051_Keil_951\Debug\UART_PS2_PM.obj
+COMPILER INVOKED BY: C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\import\keil\pk51\9.51\C51\BIN\c51.exe 
+                    -.\Generated_Source\PSoC3\UART_PS2_PM.c NOIV LARGE MODDP2 OMF2 VB(1) NOIP INCDIR(.,Generated_Source\PSoC3) FF(3) DB DF(DE
+                    -BUG) WL(2) PR(.\DP8051\DP8051_Keil_951\Debug/UART_PS2_PM.lst) CD OT(2,SIZE) OJ(.\DP8051\DP8051_Keil_951\Debug\UART_PS2_P
+                    -M.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          * File Name: UART_PS2_PM.c
+   3          * Version 2.50
+   4          *
+   5          * Description:
+   6          *  This file provides Sleep/WakeUp APIs functionality.
+   7          *
+   8          * Note:
+   9          *
+  10          ********************************************************************************
+  11          * Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  12          * You may use this file only in accordance with the license, terms, conditions,
+  13          * disclaimers, and limitations in the end user license agreement accompanying
+  14          * the software package with which this file was provided.
+  15          *******************************************************************************/
+  16          
+  17          #include "UART_PS2.h"
+  18          
+  19          
+  20          /***************************************
+  21          * Local data allocation
+  22          ***************************************/
+  23          
+  24          static UART_PS2_BACKUP_STRUCT  UART_PS2_backup =
+  25          {
+  26              /* enableState - disabled */
+  27              0u,
+  28          };
+  29          
+  30          
+  31          
+  32          /*******************************************************************************
+  33          * Function Name: UART_PS2_SaveConfig
+  34          ********************************************************************************
+  35          *
+  36          * Summary:
+  37          *  This function saves the component nonretention control register.
+  38          *  Does not save the FIFO which is a set of nonretention registers.
+  39          *  This function is called by the UART_PS2_Sleep() function.
+  40          *
+  41          * Parameters:
+  42          *  None.
+  43          *
+  44          * Return:
+  45          *  None.
+  46          *
+  47          * Global Variables:
+  48          *  UART_PS2_backup - modified when non-retention registers are saved.
+  49          *
+  50          * Reentrant:
+  51          *  No.
+  52          *
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 2   
+
+  53          *******************************************************************************/
+  54          void UART_PS2_SaveConfig(void)
+  55          {
+  56   1          #if(UART_PS2_CONTROL_REG_REMOVED == 0u)
+                      UART_PS2_backup.cr = UART_PS2_CONTROL_REG;
+                  #endif /* End UART_PS2_CONTROL_REG_REMOVED */
+  59   1      }
+  60          
+  61          
+  62          /*******************************************************************************
+  63          * Function Name: UART_PS2_RestoreConfig
+  64          ********************************************************************************
+  65          *
+  66          * Summary:
+  67          *  Restores the nonretention control register except FIFO.
+  68          *  Does not restore the FIFO which is a set of nonretention registers.
+  69          *
+  70          * Parameters:
+  71          *  None.
+  72          *
+  73          * Return:
+  74          *  None.
+  75          *
+  76          * Global Variables:
+  77          *  UART_PS2_backup - used when non-retention registers are restored.
+  78          *
+  79          * Reentrant:
+  80          *  No.
+  81          *
+  82          * Notes:
+  83          *  If this function is called without calling UART_PS2_SaveConfig() 
+  84          *  first, the data loaded may be incorrect.
+  85          *
+  86          *******************************************************************************/
+  87          void UART_PS2_RestoreConfig(void)
+  88          {
+  89   1          #if(UART_PS2_CONTROL_REG_REMOVED == 0u)
+                      UART_PS2_CONTROL_REG = UART_PS2_backup.cr;
+                  #endif /* End UART_PS2_CONTROL_REG_REMOVED */
+  92   1      }
+  93          
+  94          
+  95          /*******************************************************************************
+  96          * Function Name: UART_PS2_Sleep
+  97          ********************************************************************************
+  98          *
+  99          * Summary:
+ 100          *  This is the preferred API to prepare the component for sleep. 
+ 101          *  The UART_PS2_Sleep() API saves the current component state. Then it
+ 102          *  calls the UART_PS2_Stop() function and calls 
+ 103          *  UART_PS2_SaveConfig() to save the hardware configuration.
+ 104          *  Call the UART_PS2_Sleep() function before calling the CyPmSleep() 
+ 105          *  or the CyPmHibernate() function. 
+ 106          *
+ 107          * Parameters:
+ 108          *  None.
+ 109          *
+ 110          * Return:
+ 111          *  None.
+ 112          *
+ 113          * Global Variables:
+ 114          *  UART_PS2_backup - modified when non-retention registers are saved.
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 3   
+
+ 115          *
+ 116          * Reentrant:
+ 117          *  No.
+ 118          *
+ 119          *******************************************************************************/
+ 120          void UART_PS2_Sleep(void)
+ 121          {
+ 122   1          #if(UART_PS2_RX_ENABLED || UART_PS2_HD_ENABLED)
+ 123   1              if((UART_PS2_RXSTATUS_ACTL_REG  & UART_PS2_INT_ENABLE) != 0u)
+ 124   1              {
+ 125   2                  UART_PS2_backup.enableState = 1u;
+ 126   2              }
+ 127   1              else
+ 128   1              {
+ 129   2                  UART_PS2_backup.enableState = 0u;
+ 130   2              }
+ 131   1          #else
+                      if((UART_PS2_TXSTATUS_ACTL_REG  & UART_PS2_INT_ENABLE) !=0u)
+                      {
+                          UART_PS2_backup.enableState = 1u;
+                      }
+                      else
+                      {
+                          UART_PS2_backup.enableState = 0u;
+                      }
+                  #endif /* End UART_PS2_RX_ENABLED || UART_PS2_HD_ENABLED*/
+ 141   1      
+ 142   1          UART_PS2_Stop();
+ 143   1          UART_PS2_SaveConfig();
+ 144   1      }
+ 145          
+ 146          
+ 147          /*******************************************************************************
+ 148          * Function Name: UART_PS2_Wakeup
+ 149          ********************************************************************************
+ 150          *
+ 151          * Summary:
+ 152          *  This is the preferred API to restore the component to the state when 
+ 153          *  UART_PS2_Sleep() was called. The UART_PS2_Wakeup() function
+ 154          *  calls the UART_PS2_RestoreConfig() function to restore the 
+ 155          *  configuration. If the component was enabled before the 
+ 156          *  UART_PS2_Sleep() function was called, the UART_PS2_Wakeup()
+ 157          *  function will also re-enable the component.
+ 158          *
+ 159          * Parameters:
+ 160          *  None.
+ 161          *
+ 162          * Return:
+ 163          *  None.
+ 164          *
+ 165          * Global Variables:
+ 166          *  UART_PS2_backup - used when non-retention registers are restored.
+ 167          *
+ 168          * Reentrant:
+ 169          *  No.
+ 170          *
+ 171          *******************************************************************************/
+ 172          void UART_PS2_Wakeup(void)
+ 173          {
+ 174   1          UART_PS2_RestoreConfig();
+ 175   1          #if( (UART_PS2_RX_ENABLED) || (UART_PS2_HD_ENABLED) )
+ 176   1              UART_PS2_ClearRxBuffer();
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 4   
+
+ 177   1          #endif /* End (UART_PS2_RX_ENABLED) || (UART_PS2_HD_ENABLED) */
+ 178   1          #if(UART_PS2_TX_ENABLED || UART_PS2_HD_ENABLED)
+                      UART_PS2_ClearTxBuffer();
+                  #endif /* End UART_PS2_TX_ENABLED || UART_PS2_HD_ENABLED */
+ 181   1      
+ 182   1          if(UART_PS2_backup.enableState != 0u)
+ 183   1          {
+ 184   2              UART_PS2_Enable();
+ 185   2          }
+ 186   1      }
+ 187          
+ 188          
+ 189          /* [] END OF FILE */
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 5   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION UART_PS2_SaveConfig (BEGIN)
+                                           ; SOURCE LINE # 54
+                                           ; SOURCE LINE # 55
+                                           ; SOURCE LINE # 59
+0000 22                RET     
+             ; FUNCTION UART_PS2_SaveConfig (END)
+
+             ; FUNCTION UART_PS2_RestoreConfig (BEGIN)
+                                           ; SOURCE LINE # 87
+                                           ; SOURCE LINE # 88
+                                           ; SOURCE LINE # 92
+0000 22                RET     
+             ; FUNCTION UART_PS2_RestoreConfig (END)
+
+             ; FUNCTION UART_PS2_Sleep (BEGIN)
+                                           ; SOURCE LINE # 120
+                                           ; SOURCE LINE # 121
+                                           ; SOURCE LINE # 123
+0000 906497            MOV     DPTR,#06497H
+0003 E0                MOVX    A,@DPTR
+0004 FF                MOV     R7,A
+0005 EF                MOV     A,R7
+0006 5410              ANL     A,#010H
+0008 FF                MOV     R7,A
+0009 7E00              MOV     R6,#00H
+000B EF                MOV     A,R7
+000C 4E                ORL     A,R6
+000D 6008              JZ      ?C0003
+                                           ; SOURCE LINE # 124
+                                           ; SOURCE LINE # 125
+000F 900000      R     MOV     DPTR,#UART_PS2_backup
+0012 7401              MOV     A,#01H
+0014 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 126
+0015 8005              SJMP    ?C0004
+0017         ?C0003:
+                                           ; SOURCE LINE # 128
+                                           ; SOURCE LINE # 129
+0017 900000      R     MOV     DPTR,#UART_PS2_backup
+001A E4                CLR     A
+001B F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 130
+001C         ?C0004:
+                                           ; SOURCE LINE # 142
+001C 120000      E     LCALL   UART_PS2_Stop
+                                           ; SOURCE LINE # 143
+001F 120000      R     LCALL   UART_PS2_SaveConfig
+                                           ; SOURCE LINE # 144
+0022 22                RET     
+             ; FUNCTION UART_PS2_Sleep (END)
+
+             ; FUNCTION UART_PS2_Wakeup (BEGIN)
+                                           ; SOURCE LINE # 172
+                                           ; SOURCE LINE # 173
+                                           ; SOURCE LINE # 174
+0000 120000      R     LCALL   UART_PS2_RestoreConfig
+                                           ; SOURCE LINE # 176
+0003 120000      E     LCALL   UART_PS2_ClearRxBuffer
+                                           ; SOURCE LINE # 182
+C51 COMPILER V9.51   UART_PS2_PM                                                           12/03/2015 21:05:12 PAGE 6   
+
+0006 900000      R     MOV     DPTR,#UART_PS2_backup
+0009 E0                MOVX    A,@DPTR
+000A FF                MOV     R7,A
+000B EF                MOV     A,R7
+000C 6003              JZ      ?C0007
+                                           ; SOURCE LINE # 183
+                                           ; SOURCE LINE # 184
+000E 120000      E     LCALL   UART_PS2_Enable
+                                           ; SOURCE LINE # 185
+                                           ; SOURCE LINE # 186
+0011         ?C0007:
+0011 22                RET     
+             ; FUNCTION UART_PS2_Wakeup (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     55    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,515 @@
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 1   
+
+
+C51 COMPILER V9.51, COMPILATION OF MODULE UART_SERVO_INT
+OBJECT MODULE PLACED IN .\DP8051\DP8051_Keil_951\Debug\UART_Servo_INT.obj
+COMPILER INVOKED BY: C:\Program Files (x86)\Cypress\PSoC Creator\3.3\PSoC Creator\import\keil\pk51\9.51\C51\BIN\c51.exe 
+                    -.\Generated_Source\PSoC3\UART_Servo_INT.c NOIV LARGE MODDP2 OMF2 VB(1) NOIP INCDIR(.,Generated_Source\PSoC3) FF(3) DB DF
+                    -(DEBUG) WL(2) PR(.\DP8051\DP8051_Keil_951\Debug/UART_Servo_INT.lst) CD OT(2,SIZE) OJ(.\DP8051\DP8051_Keil_951\Debug\UART
+                    -_Servo_INT.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          * File Name: UART_ServoINT.c
+   3          * Version 2.50
+   4          *
+   5          * Description:
+   6          *  This file provides all Interrupt Service functionality of the UART component
+   7          *
+   8          ********************************************************************************
+   9          * Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  10          * You may use this file only in accordance with the license, terms, conditions,
+  11          * disclaimers, and limitations in the end user license agreement accompanying
+  12          * the software package with which this file was provided.
+  13          *******************************************************************************/
+  14          
+  15          #include "UART_Servo.h"
+  16          #include "cyapicallbacks.h"
+  17          
+  18          
+  19          /***************************************
+  20          * Custom Declarations
+  21          ***************************************/
+  22          /* `#START CUSTOM_DECLARATIONS` Place your declaration here */
+  23          
+  24          /* `#END` */
+  25          
+  26          #if (UART_Servo_RX_INTERRUPT_ENABLED && (UART_Servo_RX_ENABLED || UART_Servo_HD_ENABLED))
+  27              /*******************************************************************************
+  28              * Function Name: UART_Servo_RXISR
+  29              ********************************************************************************
+  30              *
+  31              * Summary:
+  32              *  Interrupt Service Routine for RX portion of the UART
+  33              *
+  34              * Parameters:
+  35              *  None.
+  36              *
+  37              * Return:
+  38              *  None.
+  39              *
+  40              * Global Variables:
+  41              *  UART_Servo_rxBuffer - RAM buffer pointer for save received data.
+  42              *  UART_Servo_rxBufferWrite - cyclic index for write to rxBuffer,
+  43              *     increments after each byte saved to buffer.
+  44              *  UART_Servo_rxBufferRead - cyclic index for read from rxBuffer,
+  45              *     checked to detect overflow condition.
+  46              *  UART_Servo_rxBufferOverflow - software overflow flag. Set to one
+  47              *     when UART_Servo_rxBufferWrite index overtakes
+  48              *     UART_Servo_rxBufferRead index.
+  49              *  UART_Servo_rxBufferLoopDetect - additional variable to detect overflow.
+  50              *     Set to one when UART_Servo_rxBufferWrite is equal to
+  51              *    UART_Servo_rxBufferRead
+  52              *  UART_Servo_rxAddressMode - this variable contains the Address mode,
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 2   
+
+  53              *     selected in customizer or set by UART_SetRxAddressMode() API.
+  54              *  UART_Servo_rxAddressDetected - set to 1 when correct address received,
+  55              *     and analysed to store following addressed data bytes to the buffer.
+  56              *     When not correct address received, set to 0 to skip following data bytes.
+  57              *
+  58              *******************************************************************************/
+  59              CY_ISR(UART_Servo_RXISR)
+  60              {
+  61   1              uint8 readData;
+  62   1              uint8 readStatus;
+  63   1              uint8 increment_pointer = 0u;
+  64   1      
+  65   1          #if(CY_PSOC3)
+  66   1              uint8 int_en;
+  67   1          #endif /* (CY_PSOC3) */
+  68   1      
+  69   1          #ifdef UART_Servo_RXISR_ENTRY_CALLBACK
+                      UART_Servo_RXISR_EntryCallback();
+                  #endif /* UART_Servo_RXISR_ENTRY_CALLBACK */
+  72   1      
+  73   1              /* User code required at start of ISR */
+  74   1              /* `#START UART_Servo_RXISR_START` */
+  75   1      
+  76   1              /* `#END` */
+  77   1      
+  78   1          #if(CY_PSOC3)   /* Make sure nested interrupt is enabled */
+  79   1              int_en = EA;
+  80   1              CyGlobalIntEnable;
+  81   1          #endif /* (CY_PSOC3) */
+  82   1      
+  83   1              do
+  84   1              {
+  85   2                  /* Read receiver status register */
+  86   2                  readStatus = UART_Servo_RXSTATUS_REG;
+  87   2                  /* Copy the same status to readData variable for backward compatibility support 
+  88   2                  *  of the user code in UART_Servo_RXISR_ERROR` section. 
+  89   2                  */
+  90   2                  readData = readStatus;
+  91   2      
+  92   2                  if((readStatus & (UART_Servo_RX_STS_BREAK | 
+  93   2                                  UART_Servo_RX_STS_PAR_ERROR |
+  94   2                                  UART_Servo_RX_STS_STOP_ERROR | 
+  95   2                                  UART_Servo_RX_STS_OVERRUN)) != 0u)
+  96   2                  {
+  97   3                      /* ERROR handling. */
+  98   3                      UART_Servo_errorStatus |= readStatus & ( UART_Servo_RX_STS_BREAK | 
+  99   3                                                                  UART_Servo_RX_STS_PAR_ERROR | 
+ 100   3                                                                  UART_Servo_RX_STS_STOP_ERROR | 
+ 101   3                                                                  UART_Servo_RX_STS_OVERRUN);
+ 102   3                      /* `#START UART_Servo_RXISR_ERROR` */
+ 103   3      
+ 104   3                      /* `#END` */
+ 105   3                      
+ 106   3                  #ifdef UART_Servo_RXISR_ERROR_CALLBACK
+                              UART_Servo_RXISR_ERROR_Callback();
+                          #endif /* UART_Servo_RXISR_ERROR_CALLBACK */
+ 109   3                  }
+ 110   2                  
+ 111   2                  if((readStatus & UART_Servo_RX_STS_FIFO_NOTEMPTY) != 0u)
+ 112   2                  {
+ 113   3                      /* Read data from the RX data register */
+ 114   3                      readData = UART_Servo_RXDATA_REG;
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 3   
+
+ 115   3                  #if (UART_Servo_RXHW_ADDRESS_ENABLED)
+                              if(UART_Servo_rxAddressMode == (uint8)UART_Servo__B_UART__AM_SW_DETECT_TO_BUFFER)
+                              {
+                                  if((readStatus & UART_Servo_RX_STS_MRKSPC) != 0u)
+                                  {
+                                      if ((readStatus & UART_Servo_RX_STS_ADDR_MATCH) != 0u)
+                                      {
+                                          UART_Servo_rxAddressDetected = 1u;
+                                      }
+                                      else
+                                      {
+                                          UART_Servo_rxAddressDetected = 0u;
+                                      }
+                                  }
+                                  if(UART_Servo_rxAddressDetected != 0u)
+                                  {   /* Store only addressed data */
+                                      UART_Servo_rxBuffer[UART_Servo_rxBufferWrite] = readData;
+                                      increment_pointer = 1u;
+                                  }
+                              }
+                              else /* Without software addressing */
+                              {
+                                  UART_Servo_rxBuffer[UART_Servo_rxBufferWrite] = readData;
+                                  increment_pointer = 1u;
+                              }
+                          #else  /* Without addressing */
+ 141   3                      UART_Servo_rxBuffer[UART_Servo_rxBufferWrite] = readData;
+ 142   3                      increment_pointer = 1u;
+ 143   3                  #endif /* (UART_Servo_RXHW_ADDRESS_ENABLED) */
+ 144   3      
+ 145   3                      /* Do not increment buffer pointer when skip not addressed data */
+ 146   3                      if(increment_pointer != 0u)
+ 147   3                      {
+ 148   4                          if(UART_Servo_rxBufferLoopDetect != 0u)
+ 149   4                          {   /* Set Software Buffer status Overflow */
+ 150   5                              UART_Servo_rxBufferOverflow = 1u;
+ 151   5                          }
+ 152   4                          /* Set next pointer. */
+ 153   4                          UART_Servo_rxBufferWrite++;
+ 154   4      
+ 155   4                          /* Check pointer for a loop condition */
+ 156   4                          if(UART_Servo_rxBufferWrite >= UART_Servo_RX_BUFFER_SIZE)
+ 157   4                          {
+ 158   5                              UART_Servo_rxBufferWrite = 0u;
+ 159   5                          }
+ 160   4      
+ 161   4                          /* Detect pre-overload condition and set flag */
+ 162   4                          if(UART_Servo_rxBufferWrite == UART_Servo_rxBufferRead)
+ 163   4                          {
+ 164   5                              UART_Servo_rxBufferLoopDetect = 1u;
+ 165   5                              /* When Hardware Flow Control selected */
+ 166   5                              #if (UART_Servo_FLOW_CONTROL != 0u)
+                                          /* Disable RX interrupt mask, it is enabled when user read data from the buffe
+             -r using APIs */
+                                          UART_Servo_RXSTATUS_MASK_REG  &= (uint8)~UART_Servo_RX_STS_FIFO_NOTEMPTY;
+                                          CyIntClearPending(UART_Servo_RX_VECT_NUM);
+                                          break; /* Break the reading of the FIFO loop, leave the data there for generat
+             -ing RTS signal */
+                                      #endif /* (UART_Servo_FLOW_CONTROL != 0u) */
+ 172   5                          }
+ 173   4                      }
+ 174   3                  }
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 4   
+
+ 175   2              }while((readStatus & UART_Servo_RX_STS_FIFO_NOTEMPTY) != 0u);
+ 176   1      
+ 177   1              /* User code required at end of ISR (Optional) */
+ 178   1              /* `#START UART_Servo_RXISR_END` */
+ 179   1      
+ 180   1              /* `#END` */
+ 181   1      
+ 182   1          #ifdef UART_Servo_RXISR_EXIT_CALLBACK
+                      UART_Servo_RXISR_ExitCallback();
+                  #endif /* UART_Servo_RXISR_EXIT_CALLBACK */
+ 185   1      
+ 186   1          #if(CY_PSOC3)
+ 187   1              EA = int_en;
+ 188   1          #endif /* (CY_PSOC3) */
+ 189   1          }
+ 190              
+ 191          #endif /* (UART_Servo_RX_INTERRUPT_ENABLED && (UART_Servo_RX_ENABLED || UART_Servo_HD_ENABLED)) */
+ 192          
+ 193          
+ 194          #if (UART_Servo_TX_INTERRUPT_ENABLED && UART_Servo_TX_ENABLED)
+                  /*******************************************************************************
+                  * Function Name: UART_Servo_TXISR
+                  ********************************************************************************
+                  *
+                  * Summary:
+                  * Interrupt Service Routine for the TX portion of the UART
+                  *
+                  * Parameters:
+                  *  None.
+                  *
+                  * Return:
+                  *  None.
+                  *
+                  * Global Variables:
+                  *  UART_Servo_txBuffer - RAM buffer pointer for transmit data from.
+                  *  UART_Servo_txBufferRead - cyclic index for read and transmit data
+                  *     from txBuffer, increments after each transmitted byte.
+                  *  UART_Servo_rxBufferWrite - cyclic index for write to txBuffer,
+                  *     checked to detect available for transmission bytes.
+                  *
+                  *******************************************************************************/
+                  CY_ISR(UART_Servo_TXISR)
+                  {
+                  #if(CY_PSOC3)
+                      uint8 int_en;
+                  #endif /* (CY_PSOC3) */
+              
+                  #ifdef UART_Servo_TXISR_ENTRY_CALLBACK
+                      UART_Servo_TXISR_EntryCallback();
+                  #endif /* UART_Servo_TXISR_ENTRY_CALLBACK */
+              
+                      /* User code required at start of ISR */
+                      /* `#START UART_Servo_TXISR_START` */
+              
+                      /* `#END` */
+              
+                  #if(CY_PSOC3)   /* Make sure nested interrupt is enabled */
+                      int_en = EA;
+                      CyGlobalIntEnable;
+                  #endif /* (CY_PSOC3) */
+              
+                      while((UART_Servo_txBufferRead != UART_Servo_txBufferWrite) &&
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 5   
+
+                           ((UART_Servo_TXSTATUS_REG & UART_Servo_TX_STS_FIFO_FULL) == 0u))
+                      {
+                          /* Check pointer wrap around */
+                          if(UART_Servo_txBufferRead >= UART_Servo_TX_BUFFER_SIZE)
+                          {
+                              UART_Servo_txBufferRead = 0u;
+                          }
+              
+                          UART_Servo_TXDATA_REG = UART_Servo_txBuffer[UART_Servo_txBufferRead];
+              
+                          /* Set next pointer */
+                          UART_Servo_txBufferRead++;
+                      }
+              
+                      /* User code required at end of ISR (Optional) */
+                      /* `#START UART_Servo_TXISR_END` */
+              
+                      /* `#END` */
+              
+                  #ifdef UART_Servo_TXISR_EXIT_CALLBACK
+                      UART_Servo_TXISR_ExitCallback();
+                  #endif /* UART_Servo_TXISR_EXIT_CALLBACK */
+              
+                  #if(CY_PSOC3)
+                      EA = int_en;
+                  #endif /* (CY_PSOC3) */
+                 }
+              #endif /* (UART_Servo_TX_INTERRUPT_ENABLED && UART_Servo_TX_ENABLED) */
+ 265          
+ 266          
+ 267          /* [] END OF FILE */
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 6   
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+
+             ; FUNCTION UART_Servo_RXISR (BEGIN)
+0000 C0E0              PUSH    ACC
+0002 C083              PUSH    DPH
+0004 C082              PUSH    DPL
+0006 C085              PUSH    DPH1
+0008 C084              PUSH    DPL1
+000A C086              PUSH    DPS
+000C 758600            MOV     DPS,#00H
+000F C000        E     PUSH    ?C?XPAGE1SFR
+0011 750000      E     MOV     ?C?XPAGE1SFR,#?C?XPAGE1RST
+0014 C0D0              PUSH    PSW
+0016 75D000            MOV     PSW,#00H
+0019 C006              PUSH    AR6
+001B C007              PUSH    AR7
+                                           ; SOURCE LINE # 59
+                                           ; SOURCE LINE # 63
+001D 900000      R     MOV     DPTR,#increment_pointer
+0020 E4                CLR     A
+0021 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 79
+0022 A2AF              MOV     C,EA
+0024 E4                CLR     A
+0025 33                RLC     A
+0026 FF                MOV     R7,A
+0027 900000      R     MOV     DPTR,#int_en
+002A EF                MOV     A,R7
+002B F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 80
+002C D2AF              SETB    EA
+002E 9044F4            MOV     DPTR,#044F4H
+0031 74FD              MOV     A,#0FDH
+0033 F0                MOVX    @DPTR,A
+0034         ?C0003:
+                                           ; SOURCE LINE # 84
+                                           ; SOURCE LINE # 86
+0034 906462            MOV     DPTR,#06462H
+0037 E0                MOVX    A,@DPTR
+0038 FF                MOV     R7,A
+0039 900000      R     MOV     DPTR,#readStatus
+003C EF                MOV     A,R7
+003D F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 90
+003E 900000      R     MOV     DPTR,#readStatus
+0041 E0                MOVX    A,@DPTR
+0042 FF                MOV     R7,A
+0043 900000      R     MOV     DPTR,#readData
+0046 EF                MOV     A,R7
+0047 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 95
+0048 900000      R     MOV     DPTR,#readStatus
+004B E0                MOVX    A,@DPTR
+004C FF                MOV     R7,A
+004D EF                MOV     A,R7
+004E 541E              ANL     A,#01EH
+0050 FF                MOV     R7,A
+0051 7E00              MOV     R6,#00H
+0053 EF                MOV     A,R7
+0054 4E                ORL     A,R6
+0055 6016              JZ      ?C0004
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 7   
+
+                                           ; SOURCE LINE # 96
+                                           ; SOURCE LINE # 101
+0057 900000      E     MOV     DPTR,#UART_Servo_errorStatus
+005A E0                MOVX    A,@DPTR
+005B FF                MOV     R7,A
+005C 900000      R     MOV     DPTR,#readStatus
+005F E0                MOVX    A,@DPTR
+0060 FE                MOV     R6,A
+0061 EE                MOV     A,R6
+0062 541E              ANL     A,#01EH
+0064 FE                MOV     R6,A
+0065 EF                MOV     A,R7
+0066 4E                ORL     A,R6
+0067 FF                MOV     R7,A
+0068 900000      E     MOV     DPTR,#UART_Servo_errorStatus
+006B EF                MOV     A,R7
+006C F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 109
+006D         ?C0004:
+                                           ; SOURCE LINE # 111
+006D 900000      R     MOV     DPTR,#readStatus
+0070 E0                MOVX    A,@DPTR
+0071 FF                MOV     R7,A
+0072 EF                MOV     A,R7
+0073 30E566            JNB     ACC.5,?C0001
+                                           ; SOURCE LINE # 112
+                                           ; SOURCE LINE # 114
+0076 906441            MOV     DPTR,#06441H
+0079 E0                MOVX    A,@DPTR
+007A FF                MOV     R7,A
+007B 900000      R     MOV     DPTR,#readData
+007E EF                MOV     A,R7
+007F F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 141
+0080 900000      R     MOV     DPTR,#readData
+0083 E0                MOVX    A,@DPTR
+0084 FF                MOV     R7,A
+0085 900000      E     MOV     DPTR,#UART_Servo_rxBufferWrite
+0088 E0                MOVX    A,@DPTR
+0089 FE                MOV     R6,A
+008A 7400        E     MOV     A,#LOW UART_Servo_rxBuffer
+008C 2E                ADD     A,R6
+008D F582              MOV     DPL,A
+008F E4                CLR     A
+0090 3400        E     ADDC    A,#HIGH UART_Servo_rxBuffer
+0092 F583              MOV     DPH,A
+0094 EF                MOV     A,R7
+0095 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 142
+0096 900000      R     MOV     DPTR,#increment_pointer
+0099 7401              MOV     A,#01H
+009B F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 146
+009C 900000      R     MOV     DPTR,#increment_pointer
+009F E0                MOVX    A,@DPTR
+00A0 FF                MOV     R7,A
+00A1 EF                MOV     A,R7
+00A2 6038              JZ      ?C0001
+                                           ; SOURCE LINE # 147
+                                           ; SOURCE LINE # 148
+00A4 900000      E     MOV     DPTR,#UART_Servo_rxBufferLoopDetect
+00A7 E0                MOVX    A,@DPTR
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 8   
+
+00A8 FF                MOV     R7,A
+00A9 EF                MOV     A,R7
+00AA 6006              JZ      ?C0007
+                                           ; SOURCE LINE # 149
+                                           ; SOURCE LINE # 150
+00AC 900000      E     MOV     DPTR,#UART_Servo_rxBufferOverflow
+00AF 7401              MOV     A,#01H
+00B1 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 151
+00B2         ?C0007:
+                                           ; SOURCE LINE # 153
+00B2 900000      E     MOV     DPTR,#UART_Servo_rxBufferWrite
+00B5 E0                MOVX    A,@DPTR
+00B6 04                INC     A
+00B7 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 156
+00B8 900000      E     MOV     DPTR,#UART_Servo_rxBufferWrite
+00BB E0                MOVX    A,@DPTR
+00BC FF                MOV     R7,A
+00BD EF                MOV     A,R7
+00BE C3                CLR     C
+00BF 94FF              SUBB    A,#0FFH
+00C1 4005              JC      ?C0008
+                                           ; SOURCE LINE # 157
+                                           ; SOURCE LINE # 158
+00C3 900000      E     MOV     DPTR,#UART_Servo_rxBufferWrite
+00C6 E4                CLR     A
+00C7 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 159
+00C8         ?C0008:
+                                           ; SOURCE LINE # 162
+00C8 900000      E     MOV     DPTR,#UART_Servo_rxBufferRead
+00CB E0                MOVX    A,@DPTR
+00CC FF                MOV     R7,A
+00CD 900000      E     MOV     DPTR,#UART_Servo_rxBufferWrite
+00D0 E0                MOVX    A,@DPTR
+00D1 FE                MOV     R6,A
+00D2 EE                MOV     A,R6
+00D3 B50706            CJNE    A,AR7,?C0001
+                                           ; SOURCE LINE # 163
+                                           ; SOURCE LINE # 164
+00D6 900000      E     MOV     DPTR,#UART_Servo_rxBufferLoopDetect
+00D9 7401              MOV     A,#01H
+00DB F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 172
+                                           ; SOURCE LINE # 173
+                                           ; SOURCE LINE # 174
+                                           ; SOURCE LINE # 175
+00DC         ?C0001:
+00DC 900000      R     MOV     DPTR,#readStatus
+00DF E0                MOVX    A,@DPTR
+00E0 FF                MOV     R7,A
+00E1 EF                MOV     A,R7
+00E2 30E503            JNB     ACC.5,$ + 6H
+00E5 020000      R     LJMP    ?C0003
+                                           ; SOURCE LINE # 187
+00E8 900000      R     MOV     DPTR,#int_en
+00EB E0                MOVX    A,@DPTR
+00EC FF                MOV     R7,A
+00ED EF                MOV     A,R7
+00EE 24FF              ADD     A,#0FFH
+00F0 92AF              MOV     EA,C
+C51 COMPILER V9.51   UART_SERVO_INT                                                        12/03/2015 21:05:11 PAGE 9   
+
+                                           ; SOURCE LINE # 189
+00F2 D007              POP     AR7
+00F4 D006              POP     AR6
+00F6 D0D0              POP     PSW
+00F8 D000        E     POP     ?C?XPAGE1SFR
+00FA D086              POP     DPS
+00FC D084              POP     DPL1
+00FE D085              POP     DPH1
+0100 D082              POP     DPL
+0102 D083              POP     DPH
+0104 D0E0              POP     ACC
+0106 32                RETI    
+             ; FUNCTION UART_Servo_RXISR (END)
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    263    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
