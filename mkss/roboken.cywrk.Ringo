@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="roboken\mkss\Source Files\main.c">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="roboken\mkss\Generated_Source\PSoC3">
 <ExpandedNodeIds>
 <v>roboken</v>
 <v>roboken\mkss</v>
@@ -92,9 +92,6 @@
 <v>roboken\mkss\Generated_Source\PSoC3\project.h</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
-<v>roboken</v>
-<v>roboken\mkss</v>
-<v>roboken\mkss\TopDesign</v>
 <v>roboken\mkss\mkss.cydwr</v>
 <v>roboken\mkss\Header Files</v>
 <v>roboken\mkss\Header Files\cyapicallbacks.h</v>
@@ -139,6 +136,9 @@
 <v>roboken\mkss\Generated_Source\PSoC3\UART_Debug_IntClock\UART_Debug_IntClock.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\UART_PS2</v>
 <v>roboken\mkss\Generated_Source\PSoC3\UART_PS2\UART_PS2.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\UART_PS2\UART_PS2.h</v>
+<v>roboken\mkss\Generated_Source\PSoC3\UART_PS2\UART_PS2_BOOT.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\UART_PS2\UART_PS2_INT.c</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 <CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">

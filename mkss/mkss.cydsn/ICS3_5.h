@@ -1,7 +1,6 @@
 /*
 ICS3.5
 UART_Servoでモジュールを作る
-
 */
 #ifndef ICS3_5_H
 #define ICS3_5_H
