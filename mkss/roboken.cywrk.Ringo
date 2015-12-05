@@ -29,6 +29,9 @@
 <v>roboken\mkss\Source Files\PS2_Controller.c</v>
 <v>roboken\mkss\Generated_Source</v>
 <v>roboken\mkss\Generated_Source\PSoC3</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss\Clock_mkss.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss\Clock_mkss.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\CyBootAsmKeil.a51</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\CyDmac.c</v>
@@ -48,6 +51,9 @@
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\KeilStart.a51</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\PSoC3_8051.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\PSoC3_8051.inc</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss\isr_mkss.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss\isr_mkss.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2\ISR_PS2.c</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2\ISR_PS2.h</v>
@@ -92,17 +98,14 @@
 <v>roboken\mkss\Generated_Source\PSoC3\project.h</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
-<v>roboken\mkss\mkss.cydwr</v>
-<v>roboken\mkss\Header Files</v>
-<v>roboken\mkss\Header Files\cyapicallbacks.h</v>
-<v>roboken\mkss\Header Files\ICS3_5.h</v>
-<v>roboken\mkss\Header Files\PS2_Controller.h</v>
-<v>roboken\mkss\Source Files</v>
 <v>roboken\mkss\Source Files\Kondo_Servo.c</v>
 <v>roboken\mkss\Source Files\main.c</v>
 <v>roboken\mkss\Source Files\PS2_Controller.c</v>
 <v>roboken\mkss\Generated_Source</v>
 <v>roboken\mkss\Generated_Source\PSoC3</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss\Clock_mkss.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\Clock_mkss\Clock_mkss.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\CyBootAsmKeil.a51</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\CyDmac.c</v>
@@ -122,6 +125,9 @@
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\KeilStart.a51</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\PSoC3_8051.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\cy_boot\PSoC3_8051.inc</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss\isr_mkss.c</v>
+<v>roboken\mkss\Generated_Source\PSoC3\isr_mkss\isr_mkss.h</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2\ISR_PS2.c</v>
 <v>roboken\mkss\Generated_Source\PSoC3\ISR_PS2\ISR_PS2.h</v>
@@ -163,6 +169,7 @@
 <v>roboken\mkss\DP8051\DP8051_Keil_951</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files</v>
+<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\Clock_mkss.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyBootAsmKeil.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyDmac.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyfitter_cfg.lst</v>
@@ -172,6 +179,7 @@
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyPm.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CySpc.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyutils.lst</v>
+<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\isr_mkss.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\ISR_PS2.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\KeilStart.lst</v>
 <v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\Kondo_Servo.lst</v>
@@ -211,7 +219,7 @@
 <v>Datasheet</v>
 </TreeKeysV2>
 <TreeStatesV2>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="roboken">
 <ExpandedNodeIds>
 <v>roboken</v>
 <v>roboken\mkss</v>
@@ -219,9 +227,11 @@
 <v>roboken\mkss\CY8C32 Family Datasheet</v>
 <v>roboken\mkss\System Reference Guides</v>
 <v>roboken\mkss\System Reference Guides\cy_boot_v5_20</v>
+<v>roboken\mkss\cy_clock_v2_20.pdf</v>
 <v>roboken\mkss\cy_constant_v1_0</v>
 <v>roboken\mkss\cy_constant_v1_0\cy_constant_v1_0.pdf</v>
-<v>roboken\mkss\cy_isr_v1_70.pdf</v>
+<v>roboken\mkss\cy_isr_v1_70</v>
+<v>roboken\mkss\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
 <v>roboken\mkss\cy_pins_v2_10</v>
 <v>roboken\mkss\cy_pins_v2_10\cy_pins_v2_10.pdf</v>
 <v>roboken\mkss\UART_v2_50</v>
@@ -234,9 +244,11 @@
 <v>roboken\mkss\CY8C32 Family Datasheet</v>
 <v>roboken\mkss\System Reference Guides</v>
 <v>roboken\mkss\System Reference Guides\cy_boot_v5_20</v>
+<v>roboken\mkss\cy_clock_v2_20.pdf</v>
 <v>roboken\mkss\cy_constant_v1_0</v>
 <v>roboken\mkss\cy_constant_v1_0\cy_constant_v1_0.pdf</v>
-<v>roboken\mkss\cy_isr_v1_70.pdf</v>
+<v>roboken\mkss\cy_isr_v1_70</v>
+<v>roboken\mkss\cy_isr_v1_70\cy_isr_v1_70.pdf</v>
 <v>roboken\mkss\cy_pins_v2_10</v>
 <v>roboken\mkss\cy_pins_v2_10\cy_pins_v2_10.pdf</v>
 <v>roboken\mkss\UART_v2_50</v>

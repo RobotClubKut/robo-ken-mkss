@@ -603,6 +603,26 @@
               <FileType>5</FileType>
               <FilePath>.\Generated_Source\PSoC3\project.h</FilePath>
             </File>
+            <File>
+              <FileName>Clock_mkss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC3\Clock_mkss.c</FilePath>
+            </File>
+            <File>
+              <FileName>Clock_mkss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC3\Clock_mkss.h</FilePath>
+            </File>
+            <File>
+              <FileName>isr_mkss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC3\isr_mkss.c</FilePath>
+            </File>
+            <File>
+              <FileName>isr_mkss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC3\isr_mkss.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1207,6 +1227,26 @@
               <FileName>project.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Generated_Source\PSoC3\project.h</FilePath>
+            </File>
+            <File>
+              <FileName>Clock_mkss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC3\Clock_mkss.c</FilePath>
+            </File>
+            <File>
+              <FileName>Clock_mkss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC3\Clock_mkss.h</FilePath>
+            </File>
+            <File>
+              <FileName>isr_mkss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Generated_Source\PSoC3\isr_mkss.c</FilePath>
+            </File>
+            <File>
+              <FileName>isr_mkss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Generated_Source\PSoC3\isr_mkss.h</FilePath>
             </File>
           </Files>
         </Group>

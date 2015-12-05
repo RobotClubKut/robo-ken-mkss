@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 1   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE UART_PS2
@@ -62,7 +62,7 @@ line level    source
   51          ********************************************************************************
   52          *
   53          * Summary:
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 2   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 2   
 
   54          *  This is the preferred method to begin component operation.
   55          *  UART_PS2_Start() sets the initVar variable, calls the
@@ -126,7 +126,7 @@ line level    source
                           CyIntSetPriority(UART_PS2_RX_VECT_NUM, UART_PS2_RX_PRIOR_NUM);
                           UART_PS2_errorStatus = 0u;
                       #endif /* (UART_PS2_RX_INTERRUPT_ENABLED) */
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 3   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 3   
 
  116   1      
  117   1              #if (UART_PS2_RXHW_ADDRESS_ENABLED)
@@ -190,7 +190,7 @@ line level    source
  175          *
  176          * Return:
  177          *  None.
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 4   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 4   
 
  178          *
  179          * Global Variables:
@@ -254,7 +254,7 @@ line level    source
  237          *  None.
  238          *
  239          *******************************************************************************/
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 5   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 5   
 
  240          void UART_PS2_Stop(void) 
  241          {
@@ -318,7 +318,7 @@ line level    source
  299   1          #else
                       return(UART_PS2_CONTROL_REG);
                   #endif /* (UART_PS2_CONTROL_REG_REMOVED) */
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 6   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 6   
 
  302   1      }
  303          
@@ -382,7 +382,7 @@ line level    source
  361   1              UART_PS2_RXSTATUS_MASK_REG  = intSrc;
  362   1          }
  363          
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 7   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 7   
 
  364          
  365              /*******************************************************************************
@@ -446,7 +446,7 @@ line level    source
                                   /* When Hardware Flow Control selected - return RX mask */
                                   #if( UART_PS2_HD_ENABLED )
                                       if((UART_PS2_CONTROL_REG & UART_PS2_CTRL_HD_SEND) == 0u)
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 8   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 8   
 
                                       {   /* In Half duplex mode return RX mask only in RX
                                           *  configuration set, otherwise
@@ -510,7 +510,7 @@ line level    source
  485              uint8 UART_PS2_ReadRxStatus(void) 
  486              {
  487   1              uint8 status;
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 9   
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 9   
 
  488   1      
  489   1              status = UART_PS2_RXSTATUS_REG & UART_PS2_RX_HW_MASK;
@@ -574,7 +574,7 @@ line level    source
                       if( (UART_PS2_rxBufferLoopDetect != 0u) || (locRxBufferRead != locRxBufferWrite) )
                       {
                           rxData = UART_PS2_rxBuffer[locRxBufferRead];
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 10  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 10  
 
                           locRxBufferRead++;
                           if(locRxBufferRead >= UART_PS2_RX_BUFFER_SIZE)
@@ -638,7 +638,7 @@ line level    source
  609   1          #endif /* (UART_PS2_RX_INTERRUPT_ENABLED) */
  610   1      
  611   1              return(rxData);
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 11  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 11  
 
  612   1          }
  613          
@@ -702,7 +702,7 @@ line level    source
  671              * Global Variables:
  672              *  UART_PS2_rxBufferWrite - used to calculate left bytes.
  673              *  UART_PS2_rxBufferRead - used to calculate left bytes.
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 12  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 12  
 
  674              *  UART_PS2_rxBufferLoopDetect - checked to decide left bytes amount.
  675              *
@@ -766,7 +766,7 @@ line level    source
  733              * Parameters:
  734              *  None.
  735              *
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 13  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 13  
 
  736              * Return:
  737              *  None.
@@ -830,7 +830,7 @@ line level    source
  795              *                                               detection
  796              *  UART_PS2__B_UART__AM_SW_DETECT_TO_BUFFER - Software Detect to Buffer
  797              *                                               address detection
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 14  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 14  
 
  798              *  UART_PS2__B_UART__AM_HW_BYTE_BY_BYTE - Hardware Byte-by-Byte address
  799              *                                               detection
@@ -894,7 +894,7 @@ line level    source
  857              void UART_PS2_SetRxAddress1(uint8 address) 
  858              {
  859   1              UART_PS2_RXADDRESS1_REG = address;
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 15  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 15  
 
  860   1          }
  861          
@@ -958,7 +958,7 @@ line level    source
                   *  Places a byte of data into the transmit buffer to be sent when the bus is
                   *  available without checking the TX status register. You must check status
                   *  separately.
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 16  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 16  
 
                   *
                   * Parameters:
@@ -1022,7 +1022,7 @@ line level    source
               
               
                   /*******************************************************************************
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 17  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 17  
 
                   * Function Name: UART_PS2_ReadTxStatus
                   ********************************************************************************
@@ -1086,7 +1086,7 @@ line level    source
                   #if (UART_PS2_TX_INTERRUPT_ENABLED)
                       /* The temporary output pointer is used since it takes two instructions
                       *  to increment with a wrap, and we can't risk doing that with the real
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 18  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 18  
 
                       *  pointer and getting an interrupt in between instructions.
                       */
@@ -1150,7 +1150,7 @@ line level    source
                   #else
               
                       while((UART_PS2_TXSTATUS_REG & UART_PS2_TX_STS_FIFO_FULL) != 0u)
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 19  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 19  
 
                       {
                           /* Wait for room in the FIFO */
@@ -1214,7 +1214,7 @@ line level    source
                   *  Places N bytes of data from a memory array into the TX buffer for
                   *  transmission.
                   *
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 20  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 20  
 
                   * Parameters:
                   *  string[]: Address of the memory array residing in RAM or ROM.
@@ -1278,7 +1278,7 @@ line level    source
                   *******************************************************************************/
                   void UART_PS2_PutCRLF(uint8 txDataByte) 
                   {
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 21  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 21  
 
                       /* If not Initialized then skip this function */
                       if(UART_PS2_initVar != 0u)
@@ -1342,7 +1342,7 @@ line level    source
                       else
                       {
                           size = (UART_PS2_TX_BUFFER_SIZE - UART_PS2_txBufferRead) +
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 22  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 22  
 
                                   UART_PS2_txBufferWrite;
                       }
@@ -1406,7 +1406,7 @@ line level    source
                   *******************************************************************************/
                   void UART_PS2_ClearTxBuffer(void) 
                   {
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 23  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 23  
 
                       uint8 enableInterrupts;
               
@@ -1470,7 +1470,7 @@ line level    source
                   *     configuration returning. Function will block CPU until transmission
                   *     complete.
                   *  2) User may want to use blocking time if UART configured to the low speed
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 24  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 24  
 
                   *     operation
                   *     Example for this case:
@@ -1534,7 +1534,7 @@ line level    source
               
                           if( (retMode == UART_PS2_WAIT_FOR_COMPLETE_REINIT) ||
                               (retMode == UART_PS2_REINIT) ||
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 25  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 25  
 
                               (retMode == UART_PS2_SEND_WAIT_REINIT) )
                           {
@@ -1598,7 +1598,7 @@ line level    source
                           #if( (UART_PS2_PARITY_TYPE != UART_PS2__B_UART__NONE_REVB) || \
                                (UART_PS2_PARITY_TYPE_SW != 0u) )
                               UART_PS2_WriteControlRegister(UART_PS2_ReadControlRegister() &
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 26  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 26  
 
                                                                     (uint8) ~UART_PS2_CTRL_HD_SEND_BREAK);
                           #endif /* End UART_PS2_PARITY_TYPE != NONE */
@@ -1662,7 +1662,7 @@ line level    source
                   *  Loads the receiver configuration in half duplex mode. After calling this
                   *  function, the UART is ready to receive data.
                   *
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 27  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 27  
 
                   * Parameters:
                   *  None.
@@ -1723,7 +1723,7 @@ line level    source
 1660          
 1661          
 1662          /* [] END OF FILE */
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 28  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 28  
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
@@ -1756,11 +1756,11 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 106
                                            ; SOURCE LINE # 107
                                            ; SOURCE LINE # 124
-0000 906486            MOV     DPTR,#06486H
+0000 906487            MOV     DPTR,#06487H
 0003 7472              MOV     A,#072H
 0005 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 126
-0006 906487            MOV     DPTR,#06487H
+0006 906587            MOV     DPTR,#06587H
 0009 742A              MOV     A,#02AH
 000B F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 160
@@ -1776,7 +1776,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0006 EF                MOV     A,R7
 0007 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 190
-0008 906496            MOV     DPTR,#06496H
+0008 906497            MOV     DPTR,#06497H
 000B E0                MOVX    A,@DPTR
 000C FF                MOV     R7,A
 000D EF                MOV     A,R7
@@ -1785,9 +1785,9 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0011 EF                MOV     A,R7
 0012 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 193
-0013 906497            MOV     DPTR,#06497H
+0013 906597            MOV     DPTR,#06597H
 0016 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 29  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 29  
 
 0017 FF                MOV     R7,A
 0018 EF                MOV     A,R7
@@ -1815,7 +1815,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0006 EF                MOV     A,R7
 0007 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 247
-0008 906496            MOV     DPTR,#06496H
+0008 906497            MOV     DPTR,#06497H
 000B E0                MOVX    A,@DPTR
 000C FF                MOV     R7,A
 000D EF                MOV     A,R7
@@ -1826,7 +1826,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 257
 0013 120000      E     LCALL   UART_PS2_IntClock_Stop
                                            ; SOURCE LINE # 262
-0016 906497            MOV     DPTR,#06497H
+0016 906597            MOV     DPTR,#06597H
 0019 E0                MOVX    A,@DPTR
 001A FF                MOV     R7,A
 001B EF                MOV     A,R7
@@ -1851,7 +1851,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 302
 0002         ?C0006:
 0002 22                RET     
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 30  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 30  
 
              ; FUNCTION UART_PS2_ReadControlRegister (END)
 
@@ -1879,7 +1879,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0005 900000      R     MOV     DPTR,#intSrc
 0008 E0                MOVX    A,@DPTR
 0009 FF                MOV     R7,A
-000A 906487            MOV     DPTR,#06487H
+000A 906587            MOV     DPTR,#06587H
 000D EF                MOV     A,R7
 000E F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 362
@@ -1909,13 +1909,13 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 485
                                            ; SOURCE LINE # 486
                                            ; SOURCE LINE # 489
-0000 906467            MOV     DPTR,#06467H
+0000 906567            MOV     DPTR,#06567H
 0003 E0                MOVX    A,@DPTR
 0004 FF                MOV     R7,A
 0005 EF                MOV     A,R7
 0006 547F              ANL     A,#07FH
 0008 FF                MOV     R7,A
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 31  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 31  
 
 0009 900000      R     MOV     DPTR,#status
 000C EF                MOV     A,R7
@@ -1937,7 +1937,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0003 E4                CLR     A
 0004 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 596
-0005 906467            MOV     DPTR,#06467H
+0005 906567            MOV     DPTR,#06567H
 0008 E0                MOVX    A,@DPTR
 0009 FF                MOV     R7,A
 000A 900000      R     MOV     DPTR,#rxStatus
@@ -1979,7 +1979,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 611
 0036 900000      R     MOV     DPTR,#rxData
 0039 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 32  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 32  
 
 003A FF                MOV     R7,A
                                            ; SOURCE LINE # 612
@@ -2013,7 +2013,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 683
                                            ; SOURCE LINE # 685
                                            ; SOURCE LINE # 718
-0000 906467            MOV     DPTR,#06467H
+0000 906567            MOV     DPTR,#06567H
 0003 E0                MOVX    A,@DPTR
 0004 FF                MOV     R7,A
 0005 EF                MOV     A,R7
@@ -2043,7 +2043,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0003 900000      R     MOV     DPTR,#enableInterrupts
 0006 EF                MOV     A,R7
 0007 F0                MOVX    @DPTR,A
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 33  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 33  
 
                                            ; SOURCE LINE # 763
 0008 906597            MOV     DPTR,#06597H
@@ -2107,7 +2107,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 877
 0000 900000      R     MOV     DPTR,#address
 0003 EF                MOV     A,R7
-C51 COMPILER V9.51   UART_PS2                                                              12/03/2015 21:05:12 PAGE 34  
+C51 COMPILER V9.51   UART_PS2                                                              12/05/2015 15:02:20 PAGE 34  
 
 0004 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 878

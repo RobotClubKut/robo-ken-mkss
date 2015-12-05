@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 1   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE CYFLASH
@@ -62,7 +62,7 @@ line level    source
   51          * Parameters:
   52          *  None
   53          *
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 2   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 2   
 
   54          * Return:
   55          *  None
@@ -126,7 +126,7 @@ line level    source
  113          *  None
  114          *
  115          * Return:
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 3   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 3   
 
  116          *  None
  117          *
@@ -190,7 +190,7 @@ line level    source
  174   5                          status = CYRET_SUCCESS;
  175   5      
  176   5                          while(CY_SPC_BUSY)
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 4   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 4   
 
  177   5                          {
  178   6                              /* Spin until idle. */
@@ -254,7 +254,7 @@ line level    source
  236   4                      status = CYRET_SUCCESS;
  237   4                  }
  238   3              }
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 5   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 5   
 
  239   2              CySpcUnlock();
  240   2          }
@@ -318,7 +318,7 @@ line level    source
  298          *   block of memory is CYDEV_FLS_ROW_SIZE + CYDEV_ECC_ROW_SIZE.
  299          *
  300          * Return:
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 6   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 6   
 
  301          *  status:
  302          *   CYRET_SUCCESS if successful.
@@ -382,7 +382,7 @@ line level    source
  360          *   CYRET_SUCCESS if successful.
  361          *   CYRET_LOCKED if the SPC is already in use.
  362          *   CYRET_CANCELED if command not accepted
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 7   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 7   
 
  363          *   CYRET_UNKNOWN if there was an SPC error.
  364          *
@@ -446,7 +446,7 @@ line level    source
  422          
  423          /*******************************************************************************
  424          * Function Name: CyWriteRowFull
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 8   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 8   
 
  425          ********************************************************************************
  426          * Summary:
@@ -510,7 +510,7 @@ line level    source
  482   3              }
  483   2          }
  484   1      
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 9   
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 9   
 
  485   1          if(rowData == NULL)
  486   1          {
@@ -574,7 +574,7 @@ line level    source
  544   2              {
  545   3                  status = CYRET_LOCKED;
  546   3              }
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 10  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 10  
 
  547   2          }
  548   1      
@@ -638,7 +638,7 @@ line level    source
                   {
                       CY_FLASH_CONTROL_REG = (CY_FLASH_CONTROL_REG & (uint8)(~CY_FLASH_CACHE_WS_VALUE_MASK)) |
                                                   CY_FLASH_CACHE_WS_5_VALUE_MASK;
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 11  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 11  
 
                   }
               #endif  /* (CY_PSOC5) */
@@ -702,7 +702,7 @@ line level    source
  668   1          CY_FLASH_PM_ACT_CFG12_REG    |= CY_FLASH_PM_ACT_CFG12_EN_EE;
  669   1          CY_FLASH_PM_ALTACT_CFG12_REG |= CY_FLASH_PM_ALTACT_CFG12_EN_EE;
  670   1      
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 12  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 12  
 
  671   1          while(0u == (CY_FLASH_SPC_FM_EE_CR_REG & CY_FLASH_EE_EE_AWAKE))
  672   1          {
@@ -766,7 +766,7 @@ line level    source
  730   1      }
  731          
  732          
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 13  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 13  
 
  733          /*******************************************************************************
  734          * Function Name: CyEEPROM_ReadRelease
@@ -789,7 +789,7 @@ line level    source
  751          
  752          
  753          /* [] END OF FILE */
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 14  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 14  
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
@@ -853,7 +853,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0043 7E00              MOV     R6,#00H
 0045 EF                MOV     A,R7
 0046 4E                ORL     A,R6
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 15  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 15  
 
 0047 60F1              JZ      ?C0001
                                            ; SOURCE LINE # 97
@@ -917,7 +917,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000C EF                MOV     A,R7
 000D 704A              JNZ     ?C0005
                                            ; SOURCE LINE # 166
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 16  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 16  
 
                                            ; SOURCE LINE # 168
 000F 7F01              MOV     R7,#01H
@@ -981,7 +981,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 188
 0057 8006              SJMP    ?C0013
 0059         ?C0005:
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 17  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 17  
 
                                            ; SOURCE LINE # 190
                                            ; SOURCE LINE # 191
@@ -1045,7 +1045,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 234
 0033 904722            MOV     DPTR,#04722H
 0036 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 18  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 18  
 
 0037 FF                MOV     R7,A
 0038 EF                MOV     A,R7
@@ -1109,7 +1109,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 277
 0008 900000      R     MOV     DPTR,#status
 000B E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 19  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 19  
 
 000C FF                MOV     R7,A
 000D EF                MOV     A,R7
@@ -1173,7 +1173,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 003F 900000      R     MOV     DPTR,#status
 0042 7401              MOV     A,#01H
 0044 F0                MOVX    @DPTR,A
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 20  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 20  
 
                                            ; SOURCE LINE # 318
 0045 8029              SJMP    ?C0027
@@ -1237,7 +1237,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 001A 943F              SUBB    A,#03FH
 001C 4006              JC      ?C0031
 001E 7E00              MOV     R6,#00H
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 21  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 21  
 
 0020 7F10              MOV     R7,#010H
 0022 8004              SJMP    ?C0032
@@ -1301,7 +1301,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000A A3                INC     DPTR
 000B ED                MOV     A,R5
 000C F0                MOVX    @DPTR,A
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 22  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 22  
 
 000D 900000      R     MOV     DPTR,#rowData
 0010 120000      E     LCALL   ?C?PSTXDATA
@@ -1365,7 +1365,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 459
                                            ; SOURCE LINE # 460
 005B 900000      R     MOV     DPTR,#status
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 23  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 23  
 
 005E 7401              MOV     A,#01H
 0060 F0                MOVX    @DPTR,A
@@ -1429,7 +1429,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00A0 FE                MOV     R6,A
 00A1 A3                INC     DPTR
 00A2 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 24  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 24  
 
 00A3 FF                MOV     R7,A
 00A4 EF                MOV     A,R7
@@ -1493,7 +1493,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00F4 C007              PUSH    AR7
 00F6 900000      R     MOV     DPTR,#rowNumber
 00F9 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 25  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 25  
 
 00FA FC                MOV     R4,A
 00FB A3                INC     DPTR
@@ -1557,7 +1557,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 014C 7E00              MOV     R6,#00H
 014E EF                MOV     A,R7
 014F 4E                ORL     A,R6
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 26  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 26  
 
 0150 600D              JZ      ?C0049
 0152 904722            MOV     DPTR,#04722H
@@ -1621,7 +1621,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 019C F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 521
 019D 900000      R     MOV     DPTR,#status
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 27  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 27  
 
 01A0 E0                MOVX    A,@DPTR
 01A1 FF                MOV     R7,A
@@ -1685,7 +1685,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 535
                                            ; SOURCE LINE # 536
 01E7 900000      R     MOV     DPTR,#status
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 28  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 28  
 
 01EA 74FF              MOV     A,#0FFH
 01EC F0                MOVX    @DPTR,A
@@ -1749,7 +1749,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0025 904800            MOV     DPTR,#04800H
 0028 EF                MOV     A,R7
 0029 F0                MOVX    @DPTR,A
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 29  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 29  
 
                                            ; SOURCE LINE # 588
 002A 8043              SJMP    ?C0063
@@ -1813,7 +1813,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
                                            ; SOURCE LINE # 618
 006F 900000      R     MOV     DPTR,#interruptState
 0072 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 30  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 30  
 
 0073 FF                MOV     R7,A
 0074 120000      E     LCALL   _CyExitCriticalSection
@@ -1877,7 +1877,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 003F EF                MOV     A,R7
 0040 5420              ANL     A,#020H
 0042 FF                MOV     R7,A
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 31  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 31  
 
 0043 7E00              MOV     R6,#00H
 0045 EF                MOV     A,R7
@@ -1941,7 +1941,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0006 4401              ORL     A,#01H
 0008 FF                MOV     R7,A
 0009 EF                MOV     A,R7
-C51 COMPILER V9.51   CYFLASH                                                               12/03/2015 21:05:13 PAGE 32  
+C51 COMPILER V9.51   CYFLASH                                                               12/05/2015 15:02:21 PAGE 32  
 
 000A F0                MOVX    @DPTR,A
 000B         ?C0074:

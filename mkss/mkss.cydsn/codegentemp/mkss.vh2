@@ -2,7 +2,7 @@
 --	Conversion of mkss.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Thu Dec 03 21:32:55 2015
+--	Sat Dec 05 15:02:09 2015
 --
 
 USE cypress.cypress.all;
@@ -725,6 +725,7 @@ SIGNAL \UART_PS2:BUART:sRX:MODULE_10:gte\ : bit;
 ATTRIBUTE port_state_att of \UART_PS2:BUART:sRX:MODULE_10:gte\:SIGNAL IS 2;
 SIGNAL \UART_PS2:BUART:sRX:MODULE_10:lte\ : bit;
 ATTRIBUTE port_state_att of \UART_PS2:BUART:sRX:MODULE_10:lte\:SIGNAL IS 2;
+SIGNAL Net_124 : bit;
 SIGNAL \UART_Servo:BUART:reset_reg\\D\ : bit;
 SIGNAL \UART_Servo:BUART:txn\\D\ : bit;
 SIGNAL \UART_Servo:BUART:tx_state_1\\D\ : bit;
@@ -1870,6 +1871,19 @@ PS2_IN:cy_psoc3_pins_v1_10
 ISR_PS2:cy_isr_v1_0
 	GENERIC MAP(int_type=>"10")
 	PORT MAP(int_signal=>Net_117);
+Clock_mkss:cy_clock_v1_0
+	GENERIC MAP(cy_registers=>"",
+		id=>"01a28bc3-0b10-4df8-87d5-9ecb1f1a9068",
+		source_clock_id=>"",
+		divisor=>0,
+		period=>"1000000000000",
+		is_direct=>'0',
+		is_digital=>'1')
+	PORT MAP(clock_out=>Net_124,
+		dig_domain_out=>open);
+isr_mkss:cy_isr_v1_0
+	GENERIC MAP(int_type=>"10")
+	PORT MAP(int_signal=>Net_124);
 \UART_Servo:BUART:reset_reg\:cy_dff
 	PORT MAP(d=>Net_41,
 		clk=>\UART_Servo:BUART:clock_op\,

@@ -23,6 +23,8 @@
 #include "UART_Debug.h"
 #include "UART_PS2.h"
 #include "ISR_PS2.h"
+#include "Clock_mkss.h"
+#include "isr_mkss.h"
 #include "UART_Servo_IntClock.h"
 #include "UART_Debug_IntClock.h"
 #include "UART_PS2_IntClock.h"

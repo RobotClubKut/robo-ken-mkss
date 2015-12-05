@@ -1,6 +1,6 @@
 // ======================================================================
 // mkss.v generated from TopDesign.cysch
-// 12/03/2015 at 21:32
+// 12/05/2015 at 15:02
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -441,6 +441,7 @@ endmodule
 // top
 module top ;
 
+          wire  Net_128;
           wire  Net_121;
           wire  Net_120;
           wire  Net_119;
@@ -476,6 +477,7 @@ module top ;
           wire  Net_39;
           wire  Net_38;
           wire  Net_37;
+          wire  Net_124;
           wire  Net_104;
           wire  Net_92;
           wire  Net_25;
@@ -790,6 +792,25 @@ module top ;
 		#(.int_type(2'b10))
 		ISR_PS2
 		 (.int_signal(Net_117));
+
+
+
+	cy_clock_v1_0
+		#(.id("01a28bc3-0b10-4df8-87d5-9ecb1f1a9068"),
+		  .source_clock_id(""),
+		  .divisor(0),
+		  .period("1000000000000"),
+		  .is_direct(0),
+		  .is_digital(1))
+		Clock_mkss
+		 (.clock_out(Net_124));
+
+
+
+	cy_isr_v1_0
+		#(.int_type(2'b10))
+		isr_mkss
+		 (.int_signal(Net_124));
 
 
 

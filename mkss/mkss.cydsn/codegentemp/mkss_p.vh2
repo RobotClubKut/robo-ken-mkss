@@ -1,5 +1,5 @@
 -- Project:   mkss
--- Generated: 12/03/2015 21:32:57
+-- Generated: 12/05/2015 15:02:10
 -- PSoC Creator  3.3
 
 ENTITY mkss IS
@@ -37,6 +37,9 @@ ARCHITECTURE __DEFAULT__ OF mkss IS
     SIGNAL MODIN4_5 : bit;
     SIGNAL MODIN4_6 : bit;
     SIGNAL Net_117 : bit;
+    SIGNAL Net_124 : bit;
+    ATTRIBUTE global_signal OF Net_124 : SIGNAL IS true;
+    SIGNAL Net_124_local : bit;
     SIGNAL Net_2 : bit;
     SIGNAL Net_25 : bit;
     SIGNAL Net_41 : bit;
@@ -537,7 +540,9 @@ BEGIN
             dclk_glb_1 => \UART_PS2:Net_9\,
             dclk_1 => \UART_PS2:Net_9_local\,
             dclk_glb_2 => \UART_Debug:Net_9\,
-            dclk_2 => \UART_Debug:Net_9_local\);
+            dclk_2 => \UART_Debug:Net_9_local\,
+            dclk_glb_3 => Net_124,
+            dclk_3 => Net_124_local);
 
     Tx_1:logicalport
         GENERIC MAP(
@@ -1338,6 +1343,13 @@ BEGIN
             int_type => "10")
         PORT MAP(
             interrupt => Net_117,
+            clock => ClockBlock_BUS_CLK);
+
+    isr_mkss:interrupt
+        GENERIC MAP(
+            int_type => "10")
+        PORT MAP(
+            interrupt => Net_124_local,
             clock => ClockBlock_BUS_CLK);
 
     \UART_Servo:BUART:txn\:macrocell

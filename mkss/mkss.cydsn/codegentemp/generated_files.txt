@@ -30,6 +30,10 @@
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\UART_PS2_BOOT.c" value="DP8051_C_FILE;UART_PS2" />
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\ISR_PS2.c" value="DP8051_C_FILE;ISR_PS2" />
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\ISR_PS2.h" value="NONE;ISR_PS2" />
+  <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\Clock_mkss.c" value="DP8051_C_FILE;Clock_mkss" />
+  <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\Clock_mkss.h" value="NONE;Clock_mkss" />
+  <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\isr_mkss.c" value="DP8051_C_FILE;isr_mkss" />
+  <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\isr_mkss.h" value="NONE;isr_mkss" />
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\UART_Servo_IntClock.c" value="DP8051_C_FILE;UART_Servo_IntClock" />
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\UART_Servo_IntClock.h" value="NONE;UART_Servo_IntClock" />
   <file name="C:\Users\Ringo\Documents\robot\robo-ken-mkss\mkss\mkss.cydsn\codegentemp\UART_Debug_IntClock.c" value="DP8051_C_FILE;UART_Debug_IntClock" />
