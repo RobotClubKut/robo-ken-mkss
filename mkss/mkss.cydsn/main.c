@@ -22,6 +22,7 @@ CY_ISR(timer_isr)
 
 void kamae(void);
 void karimen(void);
+void move(uint8 ID);
 
 int main()
 {
@@ -65,10 +66,10 @@ int main()
                 circleFlag = 1;
             }
             if(flag){
-                Pos_Set(4,0); 
+                Pos_Set(4,0);
             }
             else{
-                Pos_Set(4,30);
+                move(4);
             }
                 
             //sprintf(buffer,"%d\n", (int)Free(0));
@@ -76,6 +77,21 @@ int main()
             g_timerFlag = 0;
         }
     }
+}
+void move (uint8 ID){            
+    static uint16 count = 0;
+    static uint16 step = 0;
+    if(step==0){
+        Pos_Set(ID,count*0.2);
+        if(count*0.1==55){
+            step++;
+        }
+    }
+    else if(step==1){
+        Pos_Set(ID,60);
+        count=0;
+    }
+    count++;
 }
 
 void kamae(void){
