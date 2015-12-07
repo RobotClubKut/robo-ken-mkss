@@ -1,6 +1,6 @@
 // ======================================================================
 // mkss.v generated from TopDesign.cysch
-// 12/05/2015 at 15:02
+// 12/08/2015 at 03:13
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -799,7 +799,7 @@ module top ;
 		#(.id("01a28bc3-0b10-4df8-87d5-9ecb1f1a9068"),
 		  .source_clock_id(""),
 		  .divisor(0),
-		  .period("1000000000000"),
+		  .period("10000000000000"),
 		  .is_direct(0),
 		  .is_digital(1))
 		Clock_mkss

@@ -15,7 +15,7 @@
 #include "ICS3_5.h"
 
 uint8 g_timerFlag;
-CY_ISR(timer_isr)
+CY_ISR(add_isr)
 {    
     g_timerFlag = 1;    
 }
@@ -26,13 +26,12 @@ void move(uint8 ID);
 
 int main()
 {
-    uint8 circleFlag = 1, flag = 1;
-    int16 kakudo=0;
-//    int16 value,a;
+    uint8 circleFlag = 1, status = 1;
+    int16 kakudo=0,count=0;
     char buffer[100];
     PS2Controller psData;
     CyGlobalIntEnable; /* Enable global interrupts. */
-    isr_mkss_StartEx(timer_isr);
+    isr_mkss_StartEx(add_isr);
     UART_Servo_Start();
     PS2_Start();
     //UART_Debug_Start();
@@ -43,20 +42,25 @@ int main()
     for(;;)
     {
         /* Place your application code here. */
-        if(g_timerFlag == 1){
-            
+        /*---10msごとにフラグ---*/
+        if(g_timerFlag == 1)
+        {
+            ////実験            
+            count++;
+            Pos_Set(4,count*count*0.2);
+            if(count==20){
+                return 0;
+            }
+            /////
             psData = PS2_Controller_get();
             
+            /*---コントローラー処理---*/
             if(psData.CIRCLE)
             {
                 if(circleFlag)
                 {
-                    if(flag){
-                        flag = 0;
-                    }
-                    else
-                    {
-                        flag = 1;
+                    if(status){
+                        status = !status;
                     }
                     circleFlag = 0;
                 }
@@ -65,13 +69,17 @@ int main()
             {
                 circleFlag = 1;
             }
-            if(flag){
+            
+            /*---状態変化---*/
+            if(status){
                 Pos_Set(4,0);
+                //status=Pos_Set(4,0);みたいな感じにしたい
             }
             else{
                 move(4);
             }
                 
+            /*---デバッグ---*/
             //sprintf(buffer,"%d\n", (int)Free(0));
             //UART_Debug_PutString(buffer);
             g_timerFlag = 0;
