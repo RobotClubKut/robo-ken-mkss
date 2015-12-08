@@ -17,12 +17,15 @@
 uint8 g_timerFlag;
 CY_ISR(add_isr)
 {    
-    g_timerFlag = 1;    
+    g_timerFlag = 1;
 }
 
-void kamae(void);
+void jodan(void);
+void tyudan(void);
 void karimen(void);
 void move(uint8 ID);
+void antei(void);
+void karimen2(void);
 
 int main()
 {
@@ -31,27 +34,35 @@ int main()
     char buffer[100];
     PS2Controller psData;
     CyGlobalIntEnable; /* Enable global interrupts. */
-    isr_mkss_StartEx(add_isr);
+    //isr_mkss_StartEx(add_isr);
     UART_Servo_Start();
     PS2_Start();
     //UART_Debug_Start();
     CyDelay(1000);
     while(!PS2_Analog_Flag());
+    tyudan();
     while(!PS2_Controller_get().START);
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
         /* Place your application code here. */
         /*---10msごとにフラグ---*/
+        //karimen();
+        //karimen2();
+        
+        return 0;
+        
         if(g_timerFlag == 1)
         {
-            ////実験            
-            count++;
-            Pos_Set(4,count*count*0.2);
-            if(count==20){
-                return 0;
-            }
-            /////
+            ////実験       
+            
+//            count++;
+//            Pos_Set(4,count*count*0.2);
+//            if(count==20){
+//                return 0;
+//            }
+//            
+//            /////
             psData = PS2_Controller_get();
             
             /*---コントローラー処理---*/
@@ -72,13 +83,16 @@ int main()
             
             /*---状態変化---*/
             if(status){
-                Pos_Set(4,0);
+                tyudan();
                 //status=Pos_Set(4,0);みたいな感じにしたい
             }
             else{
-                move(4);
+                karimen();
+                karimen2();
+                //move(4);
             }
                 
+            
             /*---デバッグ---*/
             //sprintf(buffer,"%d\n", (int)Free(0));
             //UART_Debug_PutString(buffer);
@@ -102,20 +116,43 @@ void move (uint8 ID){
     count++;
 }
 
-void kamae(void){
+void jodan(void){
     Pos_Set(0,0);
     Pos_Set(1,30);
-    Pos_Set(2,-20);
+    Pos_Set(2,-35);
     Pos_Set(3,-10);
     Pos_Set(4,0);
 }
 
 void karimen(void){
     Pos_Set(0,0);
-    Pos_Set(1,-30);
-    Pos_Set(2,-20);
+    Pos_Set(1,-15);
+    Pos_Set(2,-90);
     Pos_Set(3,-10);
-    Pos_Set(4,-30);
+    Pos_Set(4,20);
 }
+void karimen2(void){
+    Pos_Set(0,0);
+    Pos_Set(1,-60);
+    Pos_Set(2,0);
+    Pos_Set(3,-10);
+    Pos_Set(4,-15);
+}
+
+void antei(void){
+    Pos_Set(0,0);
+    Pos_Set(1,5);
+    Pos_Set(2,4);
+    Pos_Set(3,0);
+    Pos_Set(4,-35);
+}
+void tyudan(void){
+    Pos_Set(0,0);
+    Pos_Set(1,25);
+    Pos_Set(2,-110);
+    Pos_Set(3,-10);
+    Pos_Set(4,0);
+}
+
 
 /* [] END OF FILE */
