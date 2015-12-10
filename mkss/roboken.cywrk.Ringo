@@ -210,45 +210,6 @@
 <VisibleNodeIds>
 <v>roboken</v>
 <v>roboken\mkss</v>
-<v>roboken\mkss\DP8051</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\Clock_mkss.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyBootAsmKeil.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyDmac.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyFlash.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CyLib.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cymem.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyPm.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\CySpc.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\cyutils.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\isr_mkss.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\ISR_PS2.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\KeilStart.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\Kondo_Servo.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\main.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\PS2_Controller.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Debug.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Debug_BOOT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Debug_INT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Debug_IntClock.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Debug_PM.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_PS2.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_PS2_BOOT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_PS2_INT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_PS2_IntClock.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_PS2_PM.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Servo.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Servo_BOOT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Servo_INT.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Servo_IntClock.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\Listing Files\UART_Servo_PM.lst</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\mkss.elf</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\mkss.hex</v>
-<v>roboken\mkss\DP8051\DP8051_Keil_951\Debug\mkss.map</v>
-<v>roboken\mkss\mkss.gpdsc</v>
 <v>roboken\mkss\mkss.rpt</v>
 <v>roboken\mkss\mkss_timing.html</v>
 </VisibleNodeIds>
