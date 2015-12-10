@@ -14,6 +14,10 @@
 #include "PS2_Controller.h"
 #include "ICS3_5.h"
 
+#define MODE_TYUDAN 0
+#define MODE_MEN    1
+#define MODE_JODAN  2
+
 uint8 g_timerFlag;
 CY_ISR(clock_isr)
 {    
@@ -31,7 +35,7 @@ int main()
 {
     uint8 menflag = 0;
     uint8 triangleflg = 1;
-    uint8 circleFlag = 1, status = 1;
+    uint8 circleFlag = 1, status = 0;
     uint8 kensei = 1;
     int16 kakudo=0,count=0;
     char buffer[100];
@@ -53,9 +57,11 @@ int main()
         
             //sprintf(buffer,"ID0:%d ID1:%d ID:2%d ID3:%d ID4:%d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (int)Free(4));
             //UART_Debug_PutString(buffer);
+
+        //tyudan();
         if(g_timerFlag == 1)
         {
-            ////実験       
+            ////実験
 //
 //            count++;
 //            Pos_Set(4,count*count*0.2);
@@ -71,11 +77,11 @@ int main()
                 if(circleFlag)
                 {
                     if(status){
-                        status = 0;
+                        status = MODE_TYUDAN;
                     }
                     else
                     {
-                        status = 1;
+                        status = MODE_JODAN;
                     }
                     circleFlag = 0;
                 }
@@ -89,13 +95,9 @@ int main()
             {
                 if(triangleflg)
                 {
-                    if(kensei)
+                    if(status==MODE_TYUDAN)
                     {
-                        kensei = 0;
-                    }
-                    else
-                    {
-                        kensei = 1;
+                        status = MODE_MEN;
                     }
                     triangleflg = 0;
                 }
@@ -105,25 +107,13 @@ int main()
                 triangleflg = 1;
             }
             
-            /*---状態変化---*/
-            if(kensei==0)
+            /*---状態変化---*/            
+            if(status==MODE_TYUDAN)
             {
-                Pos_Set(0,0);
-                Pos_Set(1,25);
-                Pos_Set(2,-110);
-                Pos_Set(3,-10);
-                Pos_Set(4,-10);
-                CyDelay(80);
-                kensei = 1;
-            }
-
-            if(status){
                 tyudan();
-                menflag = 0;
-                //status=Pos_Set(4,0);みたいな感じにしたい
+                menflag=0;
             }
-            else{
-                //Pos_Set(4,40);
+            else if(status==MODE_MEN){
                 if(menflag==0){
                     karimen();
                     menflag=1;
@@ -131,8 +121,16 @@ int main()
                 }
                 else{
                     karimen2();
+                    CyDelay(300);
+                    jodan();
+                    CyDelay(600);
+                    status=MODE_TYUDAN;
                 }
                 //move(4);
+            }
+            else if(status==MODE_JODAN)
+            {
+                jodan();
             }
             
             /*---デバッグ---*/
@@ -160,40 +158,40 @@ void move (uint8 ID){
 }
 
 void jodan(void){
-    Pos_Set(0,0);
-    Pos_Set(1,30);
-    Pos_Set(2,-35);
-    Pos_Set(3,-10);
+    Pos_Set(0,-70);
+    Pos_Set(1,5);
+    Pos_Set(2,-45);
+    Pos_Set(3,5);
     Pos_Set(4,0);
 }
 
 void karimen(void){
-    Pos_Set(0,0);
-    Pos_Set(1,-25);
+    Pos_Set(0,-70);
+    Pos_Set(1,-45);
     Pos_Set(2,-90);
-    Pos_Set(3,-10);
+    Pos_Set(3,5);
     Pos_Set(4,45);
 }
 void karimen2(void){
-    Pos_Set(0,0);
-    Pos_Set(1,-60);
+    Pos_Set(0,-70);
+    Pos_Set(1,-80);
     Pos_Set(2,0);
-    Pos_Set(3,-10);
+    Pos_Set(3,5);
     Pos_Set(4,-15);
 }
 
 void antei(void){
-    Pos_Set(0,0);
-    Pos_Set(1,5);
+    Pos_Set(0,-70);
+    Pos_Set(1,-10);
     Pos_Set(2,4);
     Pos_Set(3,0);
     Pos_Set(4,-35);
 }
 void tyudan(void){
-    Pos_Set(0,0);
-    Pos_Set(1,25);
+    Pos_Set(0,-70);
+    Pos_Set(1,5);
     Pos_Set(2,-110);
-    Pos_Set(3,-10);
+    Pos_Set(3,5);
     Pos_Set(4,0);
 }
 

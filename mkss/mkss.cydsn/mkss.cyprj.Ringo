@@ -65,20 +65,6 @@
 <file name=".\ICS3_5.h" />
 <file name=".\PS2_Controller.h" />
 <file name=".\main.c" />
-<file name=".\DP8051\DP8051_Keil_951\Debug\cyfitter_cfg.obj">
-<dep name=".\Generated_Source\PSoC3\CyFlash.h" />
-<dep name=".\Generated_Source\PSoC3\CyLib.h" />
-<dep name=".\Generated_Source\PSoC3\CySpc.h" />
-<dep name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
-<dep name=".\Generated_Source\PSoC3\cyPm.h" />
-<dep name=".\Generated_Source\PSoC3\cydevice.h" />
-<dep name=".\Generated_Source\PSoC3\cydevice_trm.h" />
-<dep name=".\Generated_Source\PSoC3\cyfitter.h" />
-<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.c" />
-<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
-<dep name=".\Generated_Source\PSoC3\cytypes.h" />
-</file>
-<file name=".\Generated_Source\PSoC3\cyfitter_cfg.c" />
 <file name=".\DP8051\DP8051_Keil_951\Debug\Kondo_Servo.obj">
 <dep name=".\Generated_Source\PSoC3\Clock_mkss.h" />
 <dep name=".\Generated_Source\PSoC3\CyDmac.h" />
@@ -107,6 +93,20 @@
 <dep name=".\Kondo_Servo.c" />
 </file>
 <file name=".\Kondo_Servo.c" />
+<file name=".\DP8051\DP8051_Keil_951\Debug\cyfitter_cfg.obj">
+<dep name=".\Generated_Source\PSoC3\CyFlash.h" />
+<dep name=".\Generated_Source\PSoC3\CyLib.h" />
+<dep name=".\Generated_Source\PSoC3\CySpc.h" />
+<dep name=".\Generated_Source\PSoC3\PSoC3_8051.h" />
+<dep name=".\Generated_Source\PSoC3\cyPm.h" />
+<dep name=".\Generated_Source\PSoC3\cydevice.h" />
+<dep name=".\Generated_Source\PSoC3\cydevice_trm.h" />
+<dep name=".\Generated_Source\PSoC3\cyfitter.h" />
+<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.c" />
+<dep name=".\Generated_Source\PSoC3\cyfitter_cfg.h" />
+<dep name=".\Generated_Source\PSoC3\cytypes.h" />
+</file>
+<file name=".\Generated_Source\PSoC3\cyfitter_cfg.c" />
 <file name=".\DP8051\DP8051_Keil_951\Debug\PS2_Controller.obj">
 <dep name=".\Generated_Source\PSoC3\Clock_mkss.h" />
 <dep name=".\Generated_Source\PSoC3\CyDmac.h" />
@@ -1019,7 +1019,7 @@
 </dataGuid>
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
-<deps_time v="130940673709701435" />
+<deps_time v="130942357653072578" />
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>
 </userData>

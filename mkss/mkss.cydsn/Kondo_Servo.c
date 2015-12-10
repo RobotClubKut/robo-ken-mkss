@@ -1,5 +1,14 @@
 #include "ICS3_5.h"
 
+void speed(uint8 ID, uint8 speed){
+    unsigned char tx[3];
+    tx[0] = 0xC0 | ID;
+    tx[1] = 0x02;
+    tx[2] = (unsigned char)speed;
+    UART_Servo_PutArray(tx, 3);
+    CyDelay(1);
+}
+
 int16 Free(uint8 ID)
 {
     int16 kakudo,Data,pos_h,pos_l,pos;
@@ -11,7 +20,7 @@ int16 Free(uint8 ID)
     tx[2]=0x00;
     //送信
     UART_Servo_PutArray(tx,3);
-    CyDelay(1);
+    CyDelayUs(500);
     //受信
     for (i = 0;i < 6;i++){
         rx[i] = UART_Servo_GetChar(); // モーターからの返値を受け取り、rxに代入する
