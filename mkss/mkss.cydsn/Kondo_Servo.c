@@ -28,7 +28,7 @@ int16 Free(uint8 ID)
     pos_h=((int)rx[4]<<7)&0x3f80; 
     pos_l=(int)rx[5]&0x7f;
     pos=pos_h|pos_l; //値に変換
-    pos=(7500-pos)*0.0333333; //角度に変換
+    pos=(7500-pos)*0.0333333f; //角度に変換
     return pos;
 }
 

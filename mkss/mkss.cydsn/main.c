@@ -24,6 +24,8 @@
 #define MODE_KAIHI2     7
 #define MODE_NOBI2      8
 #define MODE_KAITEN2    9 
+#define MODE_DOU        10
+#define MODE_MEN2       11
 
 uint8 g_timerFlag;
 CY_ISR(clock_isr)
@@ -37,6 +39,10 @@ void karimen(void);
 void move(uint8 ID);
 void antei(void);
 void karimen2(void);
+void dou(void);
+void dou2(void);
+void dou3(void);
+void men(void);
 
 int main()
 {
@@ -45,6 +51,8 @@ int main()
     uint8 triangleflg = 1;
     uint8 circleFlag = 1;
     uint8 status = 0;
+    uint8 squareFlag = 1;
+    uint8 crossFlag = 1;
     uint8 l1Flag = 1;
     uint8 l2Flag = 1;
     uint8 r1Flag = 1;
@@ -63,6 +71,7 @@ int main()
     while(!PS2_Analog_Flag());
     while(!PS2_Controller_get().START);
     speed(0,127);
+    speed(2,70);
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
@@ -70,8 +79,6 @@ int main()
         /*---10msごとにフラグ---*/
             //sprintf(buffer,"ID0:%d ID1:%d ID2:%d ID3:%d ID4:%d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (int)Free(4));
             //UART_Debug_PutString(buffer);
-
-        //tyudan();
         if(g_timerFlag == 1)
         {
             ////実験
@@ -204,6 +211,44 @@ int main()
                 r2Flag = 1;
             }
 
+            if(psData.SQUARE)
+            {
+                if(squareFlag)
+                {
+                    if(status==MODE_TYUDAN)
+                    {
+                        status = MODE_DOU;
+                    }
+                    else if(status==MODE_DOU)
+                    {
+                        status = MODE_TYUDAN;
+                    }
+                    squareFlag = 0;
+                }   
+            }
+            else
+            {
+                squareFlag = 1;
+            }
+            if(psData.CROSS)
+            {
+                if(crossFlag)
+                {
+                    if(status==MODE_JODAN)
+                    {
+                        status = MODE_MEN2;
+                    }
+                    else if(status==MODE_MEN2)
+                    {
+                        status = MODE_JODAN;
+                    }
+                    crossFlag = 0;
+                }   
+            }
+            else
+            {
+                crossFlag = 1;
+            }
             /*---状態変化---*/            
             if(status==MODE_TYUDAN)
             {
@@ -220,7 +265,7 @@ int main()
                     karimen2();
                     CyDelay(300);
                     jodan();
-                    CyDelay(600);
+                    CyDelay(800);
                     status=MODE_TYUDAN;
                 }
                 //move(4);
@@ -277,7 +322,24 @@ int main()
             {
                 Pos_Set(0,-70);
             }
-
+            else if(status==MODE_DOU)
+            {
+                dou();
+                while(!PS2_Controller_get().LEFT);
+                dou2();
+                while(!PS2_Controller_get().RIGHT);
+                dou3();
+                while(!PS2_Controller_get().DOWN);
+            }
+            else if(status==MODE_MEN2)
+            {         
+                Pos_Set(0,-70);
+                Pos_Set(1,-45);
+                Pos_Set(2,-45);
+                Pos_Set(3,5);
+                Pos_Set(4,45);
+            }
+            
             /*---デバッグ---*/
             //sprintf(buffer,"%d %d %d %d %d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (int)Free(4));
             //UART_Debug_PutString(buffer);
@@ -319,7 +381,7 @@ void karimen(void){
 }
 void karimen2(void){
     Pos_Set(0,-70);
-    Pos_Set(1,-80);
+    Pos_Set(1,-60);
     Pos_Set(2,0);
     Pos_Set(3,5);
     Pos_Set(4,-15);
@@ -335,10 +397,29 @@ void antei(void){
 void tyudan(void){
     Pos_Set(0,-70);
     Pos_Set(1,5);
-    Pos_Set(2,-110);
+    Pos_Set(2,-100);
     Pos_Set(3,5);
     Pos_Set(4,0);
 }
-
+void dou(void){
+    Pos_Set(0,-45);
+    Pos_Set(2,-70);
+    Pos_Set(3,55);
+    Pos_Set(4,70);
+}
+void dou2(void){
+    Pos_Set(0,-70);
+    Pos_Set(1,-30);
+    Pos_Set(2,-45);
+    Pos_Set(3,-35);
+    Pos_Set(4,45);
+}
+void dou3(void){
+    Pos_Set(0,-70);
+    Pos_Set(1,-75);
+    Pos_Set(2,0);//変更有り
+    Pos_Set(3,-45);
+    Pos_Set(4,-40);
+}
 
 /* [] END OF FILE */

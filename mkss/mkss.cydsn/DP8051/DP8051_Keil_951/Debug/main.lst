@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 1   
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE MAIN
@@ -35,338 +35,423 @@ line level    source
   24          #define MODE_KAIHI2     7
   25          #define MODE_NOBI2      8
   26          #define MODE_KAITEN2    9 
-  27          
-  28          uint8 g_timerFlag;
-  29          CY_ISR(clock_isr)
-  30          {    
-  31   1          g_timerFlag = 1;
-  32   1      }
-  33          
-  34          void jodan(void);
-  35          void tyudan(void);
-  36          void karimen(void);
-  37          void move(uint8 ID);
-  38          void antei(void);
-  39          void karimen2(void);
-  40          
-  41          int main()
-  42          {
-  43   1          uint8 menflag = 0;
-  44   1          uint8 kaihiFlag = 0;
-  45   1          uint8 triangleflg = 1;
-  46   1          uint8 circleFlag = 1;
-  47   1          uint8 status = 0;
-  48   1          uint8 l1Flag = 1;
-  49   1          uint8 l2Flag = 1;
-  50   1          uint8 r1Flag = 1;
-  51   1          uint8 r2Flag = 1;
-  52   1          uint8 kensei = 1;
-  53   1          int16 kakudo=0,count=0;
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 2   
+  27          #define MODE_DOU        10
+  28          #define MODE_MEN2       11
+  29          
+  30          uint8 g_timerFlag;
+  31          CY_ISR(clock_isr)
+  32          {    
+  33   1          g_timerFlag = 1;
+  34   1      }
+  35          
+  36          void jodan(void);
+  37          void tyudan(void);
+  38          void karimen(void);
+  39          void move(uint8 ID);
+  40          void antei(void);
+  41          void karimen2(void);
+  42          void dou(void);
+  43          void dou2(void);
+  44          void dou3(void);
+  45          void men(void);
+  46          
+  47          int main()
+  48          {
+  49   1          uint8 menflag = 0;
+  50   1          uint8 kaihiFlag = 0;
+  51   1          uint8 triangleflg = 1;
+  52   1          uint8 circleFlag = 1;
+  53   1          uint8 status = 0;
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 2   
 
-  54   1          char buffer[100];
-  55   1          PS2Controller psData;
-  56   1      
-  57   1          CyGlobalIntEnable; /* Enable global interrupts. */
-  58   1          isr_mkss_StartEx(clock_isr);
-  59   1          UART_Servo_Start();
-  60   1          PS2_Start();
-  61   1          UART_Debug_Start();
-  62   1          CyDelay(1000);
-  63   1          while(!PS2_Analog_Flag());
-  64   1          while(!PS2_Controller_get().START);
-  65   1          speed(0,127);
-  66   1          /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-  67   1          for(;;)
-  68   1          {
-  69   2              /* Place your application code here. */
-  70   2              /*---10msごとにフラグ---*/
-  71   2                  //sprintf(buffer,"ID0:%d ID1:%d ID2:%d ID3:%d ID4:%d\n", (int)Free(0), (int)Free(1), (int)Free
+  54   1          uint8 squareFlag = 1;
+  55   1          uint8 crossFlag = 1;
+  56   1          uint8 l1Flag = 1;
+  57   1          uint8 l2Flag = 1;
+  58   1          uint8 r1Flag = 1;
+  59   1          uint8 r2Flag = 1;
+  60   1          uint8 kensei = 1;
+  61   1          int16 kakudo=0,count=0;
+  62   1          char buffer[100];
+  63   1          PS2Controller psData;
+  64   1      
+  65   1          CyGlobalIntEnable; /* Enable global interrupts. */
+  66   1          isr_mkss_StartEx(clock_isr);
+  67   1          UART_Servo_Start();
+  68   1          PS2_Start();
+  69   1          UART_Debug_Start();
+  70   1          CyDelay(1000);
+  71   1          while(!PS2_Analog_Flag());
+  72   1          while(!PS2_Controller_get().START);
+  73   1          speed(0,127);
+  74   1          speed(2,70);
+  75   1          /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+  76   1          for(;;)
+  77   1          {
+  78   2              /* Place your application code here. */
+  79   2              /*---10msごとにフラグ---*/
+  80   2                  //sprintf(buffer,"ID0:%d ID1:%d ID2:%d ID3:%d ID4:%d\n", (int)Free(0), (int)Free(1), (int)Free
              -(2), (int)Free(3), (int)Free(4));
-  72   2                  //UART_Debug_PutString(buffer);
-  73   2      
-  74   2              //tyudan();
-  75   2              if(g_timerFlag == 1)
-  76   2              {
-  77   3                  ////実験
-  78   3      //
-  79   3      //            count++;
-  80   3      //            Pos_Set(4,count*count*0.2);
-  81   3      //            if(count==20){
-  82   3      //                return 0;
-  83   3      //            } 
-  84   3                  /////
-  85   3                  psData = PS2_Controller_get();
-  86   3                  
-  87   3                  /*---コントローラー処理---*/
-  88   3                  if(psData.CIRCLE)
-  89   3                  {
-  90   4                      if(circleFlag)
-  91   4                      {
-  92   5                          if(status==MODE_JODAN){
-  93   6                              status = MODE_TYUDAN;
-  94   6                          }
-  95   5                          else if(status==MODE_TYUDAN)
-  96   5                          {
-  97   6                              status = MODE_JODAN;
-  98   6                          }
-  99   5                          circleFlag = 0;
- 100   5                      }
- 101   4                  }
- 102   3                  else
- 103   3                  {
- 104   4                      circleFlag = 1;
- 105   4                  }
- 106   3                  
- 107   3                  if(psData.TRIANGLE)
- 108   3                  {
- 109   4                      if(triangleflg)
- 110   4                      {
- 111   5                          if(status==MODE_TYUDAN)
- 112   5                          {
- 113   6                              status = MODE_MEN;
- 114   6                          }
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 3   
+  81   2                  //UART_Debug_PutString(buffer);
+  82   2              if(g_timerFlag == 1)
+  83   2              {
+  84   3                  ////実験
+  85   3      //
+  86   3      //            count++;
+  87   3      //            Pos_Set(4,count*count*0.2);
+  88   3      //            if(count==20){
+  89   3      //                return 0;
+  90   3      //            } 
+  91   3                  /////
+  92   3                  psData = PS2_Controller_get();
+  93   3                  
+  94   3                  /*---コントローラー処理---*/
+  95   3                  if(psData.CIRCLE)
+  96   3                  {
+  97   4                      if(circleFlag)
+  98   4                      {
+  99   5                          if(status==MODE_JODAN){
+ 100   6                              status = MODE_TYUDAN;
+ 101   6                          }
+ 102   5                          else if(status==MODE_TYUDAN)
+ 103   5                          {
+ 104   6                              status = MODE_JODAN;
+ 105   6                          }
+ 106   5                          circleFlag = 0;
+ 107   5                      }
+ 108   4                  }
+ 109   3                  else
+ 110   3                  {
+ 111   4                      circleFlag = 1;
+ 112   4                  }
+ 113   3                  
+ 114   3                  if(psData.TRIANGLE)
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 3   
 
- 115   5                          triangleflg = 0;
- 116   5                      }
- 117   4                  }
- 118   3                  else
- 119   3                  {
- 120   4                      triangleflg = 1;
- 121   4                  }
- 122   3                  if(psData.L1)
- 123   3                  {
- 124   4                      if(l1Flag)
- 125   4                      {
- 126   5                          if(status==MODE_JODAN)
- 127   5                          {
- 128   6                              status = MODE_KAIHI;
- 129   6                          }
- 130   5                          else if(status==MODE_KAIHI)
- 131   5                          {
- 132   6                              status = MODE_JODAN;
- 133   6                          }
- 134   5                          else if(status==MODE_JODAN2)
- 135   5                          {
- 136   6                              status = MODE_KAIHI2;
- 137   6                          }
- 138   5                          else if(status==MODE_KAITEN2)
- 139   5                          {
- 140   6                              status = MODE_JODAN;
- 141   6                          }
- 142   5                          l1Flag = 0;
- 143   5                      }
- 144   4                  }
- 145   3                  else
- 146   3                  {
- 147   4                      l1Flag = 1;
- 148   4                  }
- 149   3                  if(psData.L2)
- 150   3                  {
- 151   4                      if(l2Flag)
- 152   4                      {
- 153   5                          if(status==MODE_KAIHI)
- 154   5                          {
- 155   6                              status = MODE_NOBI;
- 156   6                          }
- 157   5                          else if(status==MODE_NOBI)
- 158   5                          {
- 159   6                              status = MODE_KAIHI;
- 160   6                          }
- 161   5                          else if(status==MODE_KAIHI2)
- 162   5                          {
- 163   6                              status = MODE_NOBI2;
- 164   6                          }
- 165   5                          l2Flag = 0;
- 166   5                      }
- 167   4                  }
- 168   3                  else
- 169   3                  {
- 170   4                      l2Flag = 1;
- 171   4                  }
- 172   3                  if(psData.R1)
- 173   3                  {
- 174   4                      if(r1Flag)
- 175   4                      {
- 176   5                          if(status==MODE_NOBI)
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 4   
+ 115   3                  {
+ 116   4                      if(triangleflg)
+ 117   4                      {
+ 118   5                          if(status==MODE_TYUDAN)
+ 119   5                          {
+ 120   6                              status = MODE_MEN;
+ 121   6                          }
+ 122   5                          triangleflg = 0;
+ 123   5                      }
+ 124   4                  }
+ 125   3                  else
+ 126   3                  {
+ 127   4                      triangleflg = 1;
+ 128   4                  }
+ 129   3                  if(psData.L1)
+ 130   3                  {
+ 131   4                      if(l1Flag)
+ 132   4                      {
+ 133   5                          if(status==MODE_JODAN)
+ 134   5                          {
+ 135   6                              status = MODE_KAIHI;
+ 136   6                          }
+ 137   5                          else if(status==MODE_KAIHI)
+ 138   5                          {
+ 139   6                              status = MODE_JODAN;
+ 140   6                          }
+ 141   5                          else if(status==MODE_JODAN2)
+ 142   5                          {
+ 143   6                              status = MODE_KAIHI2;
+ 144   6                          }
+ 145   5                          else if(status==MODE_KAITEN2)
+ 146   5                          {
+ 147   6                              status = MODE_JODAN;
+ 148   6                          }
+ 149   5                          l1Flag = 0;
+ 150   5                      }
+ 151   4                  }
+ 152   3                  else
+ 153   3                  {
+ 154   4                      l1Flag = 1;
+ 155   4                  }
+ 156   3                  if(psData.L2)
+ 157   3                  {
+ 158   4                      if(l2Flag)
+ 159   4                      {
+ 160   5                          if(status==MODE_KAIHI)
+ 161   5                          {
+ 162   6                              status = MODE_NOBI;
+ 163   6                          }
+ 164   5                          else if(status==MODE_NOBI)
+ 165   5                          {
+ 166   6                              status = MODE_KAIHI;
+ 167   6                          }
+ 168   5                          else if(status==MODE_KAIHI2)
+ 169   5                          {
+ 170   6                              status = MODE_NOBI2;
+ 171   6                          }
+ 172   5                          l2Flag = 0;
+ 173   5                      }
+ 174   4                  }
+ 175   3                  else
+ 176   3                  {
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 4   
 
- 177   5                          {
- 178   6                              status = MODE_KAITEN;
- 179   6                          }
- 180   5                          else if(status==MODE_NOBI2)
- 181   5                          {
- 182   6                              status = MODE_KAITEN2;
- 183   6                          }
- 184   5                          r1Flag = 0;
- 185   5                      }   
- 186   4                  }
- 187   3                  else
- 188   3                  {
- 189   4                      r1Flag = 1;
- 190   4                  }
- 191   3                  if(psData.R2)
- 192   3                  {
- 193   4                      if(r2Flag)
- 194   4                      {
- 195   5                          if(status==MODE_KAITEN)
- 196   5                          {
- 197   6                              status = MODE_JODAN2;
- 198   6                          }
- 199   5                          r2Flag = 0;
- 200   5                      }   
- 201   4                  }
- 202   3                  else
- 203   3                  {
- 204   4                      r2Flag = 1;
- 205   4                  }
- 206   3      
- 207   3                  /*---状態変化---*/            
- 208   3                  if(status==MODE_TYUDAN)
- 209   3                  {
- 210   4                      tyudan();
- 211   4                      menflag=0;
+ 177   4                      l2Flag = 1;
+ 178   4                  }
+ 179   3                  if(psData.R1)
+ 180   3                  {
+ 181   4                      if(r1Flag)
+ 182   4                      {
+ 183   5                          if(status==MODE_NOBI)
+ 184   5                          {
+ 185   6                              status = MODE_KAITEN;
+ 186   6                          }
+ 187   5                          else if(status==MODE_NOBI2)
+ 188   5                          {
+ 189   6                              status = MODE_KAITEN2;
+ 190   6                          }
+ 191   5                          r1Flag = 0;
+ 192   5                      }   
+ 193   4                  }
+ 194   3                  else
+ 195   3                  {
+ 196   4                      r1Flag = 1;
+ 197   4                  }
+ 198   3                  if(psData.R2)
+ 199   3                  {
+ 200   4                      if(r2Flag)
+ 201   4                      {
+ 202   5                          if(status==MODE_KAITEN)
+ 203   5                          {
+ 204   6                              status = MODE_JODAN2;
+ 205   6                          }
+ 206   5                          r2Flag = 0;
+ 207   5                      }   
+ 208   4                  }
+ 209   3                  else
+ 210   3                  {
+ 211   4                      r2Flag = 1;
  212   4                  }
- 213   3                  else if(status==MODE_MEN){
- 214   4                      if(menflag==0){
- 215   5                          karimen();
- 216   5                          menflag=1;
- 217   5                          CyDelay(30);
- 218   5                      }
- 219   4                      else{
- 220   5                          karimen2();
- 221   5                          CyDelay(300);
- 222   5                          jodan();
- 223   5                          CyDelay(600);
- 224   5                          status=MODE_TYUDAN;
- 225   5                      }
- 226   4                      //move(4);
- 227   4                  }
- 228   3                  else if(status==MODE_JODAN)
- 229   3                  {
- 230   4                      jodan();
- 231   4                      if(kaihiFlag==1)
- 232   4                      {
- 233   5                          CyDelay(50);
- 234   5                          speed(1,127);
- 235   5                          kaihiFlag=0;
- 236   5                      }
- 237   4                  }
- 238   3                  else if(status==MODE_KAIHI)
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 5   
+ 213   3      
+ 214   3                  if(psData.SQUARE)
+ 215   3                  {
+ 216   4                      if(squareFlag)
+ 217   4                      {
+ 218   5                          if(status==MODE_TYUDAN)
+ 219   5                          {
+ 220   6                              status = MODE_DOU;
+ 221   6                          }
+ 222   5                          else if(status==MODE_DOU)
+ 223   5                          {
+ 224   6                              status = MODE_TYUDAN;
+ 225   6                          }
+ 226   5                          squareFlag = 0;
+ 227   5                      }   
+ 228   4                  }
+ 229   3                  else
+ 230   3                  {
+ 231   4                      squareFlag = 1;
+ 232   4                  }
+ 233   3                  if(psData.CROSS)
+ 234   3                  {
+ 235   4                      if(crossFlag)
+ 236   4                      {
+ 237   5                          if(status==MODE_JODAN)
+ 238   5                          {
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 5   
 
- 239   3                  {
- 240   4                      kaihiFlag=1;
- 241   4                      speed(1,30);
- 242   4                      Pos_Set(1,75);
- 243   4                  }
- 244   3                  else if(status==MODE_NOBI)
- 245   3                  {
- 246   4                      Pos_Set(2,4);
- 247   4                      Pos_Set(3,0);
- 248   4                      Pos_Set(4,-60);
- 249   4                  }
- 250   3                  else if(status==MODE_KAITEN)
- 251   3                  {
- 252   4                      speed(0,100);
- 253   4                      Pos_Set(0,135);
- 254   4                  }
- 255   3                  else if(status==MODE_JODAN2)
- 256   3                  {
- 257   4                      speed(1,40);
- 258   4                      Pos_Set(1,5);
- 259   4                      Pos_Set(2,-45);
- 260   4                      Pos_Set(3,5);
- 261   4                      Pos_Set(4,0);
- 262   4                      CyDelay(200);
- 263   4                      speed(1,127);
- 264   4                  }
- 265   3                  else if(status==MODE_KAIHI2)
- 266   3                  {
- 267   4                      speed(1,30);
- 268   4                      Pos_Set(1,-100);
- 269   4                  }
- 270   3                  else if(status==MODE_NOBI2)
- 271   3                  {
- 272   4                      Pos_Set(2,0);
- 273   4                      Pos_Set(3,0);
- 274   4                      Pos_Set(4,30);
- 275   4                  }
- 276   3                  else if(status==MODE_KAITEN2)
- 277   3                  {
- 278   4                      Pos_Set(0,-70);
- 279   4                  }
- 280   3      
- 281   3                  /*---デバッグ---*/
- 282   3                  //sprintf(buffer,"%d %d %d %d %d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (
+ 239   6                              status = MODE_MEN2;
+ 240   6                          }
+ 241   5                          else if(status==MODE_MEN2)
+ 242   5                          {
+ 243   6                              status = MODE_JODAN;
+ 244   6                          }
+ 245   5                          crossFlag = 0;
+ 246   5                      }   
+ 247   4                  }
+ 248   3                  else
+ 249   3                  {
+ 250   4                      crossFlag = 1;
+ 251   4                  }
+ 252   3                  /*---状態変化---*/            
+ 253   3                  if(status==MODE_TYUDAN)
+ 254   3                  {
+ 255   4                      tyudan();
+ 256   4                      menflag=0;
+ 257   4                  }
+ 258   3                  else if(status==MODE_MEN){
+ 259   4                      if(menflag==0){
+ 260   5                          karimen();
+ 261   5                          menflag=1;
+ 262   5                          CyDelay(30);
+ 263   5                      }
+ 264   4                      else{
+ 265   5                          karimen2();
+ 266   5                          CyDelay(300);
+ 267   5                          jodan();
+ 268   5                          CyDelay(800);
+ 269   5                          status=MODE_TYUDAN;
+ 270   5                      }
+ 271   4                      //move(4);
+ 272   4                  }
+ 273   3                  else if(status==MODE_JODAN)
+ 274   3                  {
+ 275   4                      jodan();
+ 276   4                      if(kaihiFlag==1)
+ 277   4                      {
+ 278   5                          CyDelay(50);
+ 279   5                          speed(1,127);
+ 280   5                          kaihiFlag=0;
+ 281   5                      }
+ 282   4                  }
+ 283   3                  else if(status==MODE_KAIHI)
+ 284   3                  {
+ 285   4                      kaihiFlag=1;
+ 286   4                      speed(1,30);
+ 287   4                      Pos_Set(1,75);
+ 288   4                  }
+ 289   3                  else if(status==MODE_NOBI)
+ 290   3                  {
+ 291   4                      Pos_Set(2,4);
+ 292   4                      Pos_Set(3,0);
+ 293   4                      Pos_Set(4,-60);
+ 294   4                  }
+ 295   3                  else if(status==MODE_KAITEN)
+ 296   3                  {
+ 297   4                      speed(0,100);
+ 298   4                      Pos_Set(0,135);
+ 299   4                  }
+ 300   3                  else if(status==MODE_JODAN2)
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 6   
+
+ 301   3                  {
+ 302   4                      speed(1,40);
+ 303   4                      Pos_Set(1,5);
+ 304   4                      Pos_Set(2,-45);
+ 305   4                      Pos_Set(3,5);
+ 306   4                      Pos_Set(4,0);
+ 307   4                      CyDelay(200);
+ 308   4                      speed(1,127);
+ 309   4                  }
+ 310   3                  else if(status==MODE_KAIHI2)
+ 311   3                  {
+ 312   4                      speed(1,30);
+ 313   4                      Pos_Set(1,-100);
+ 314   4                  }
+ 315   3                  else if(status==MODE_NOBI2)
+ 316   3                  {
+ 317   4                      Pos_Set(2,0);
+ 318   4                      Pos_Set(3,0);
+ 319   4                      Pos_Set(4,30);
+ 320   4                  }
+ 321   3                  else if(status==MODE_KAITEN2)
+ 322   3                  {
+ 323   4                      Pos_Set(0,-70);
+ 324   4                  }
+ 325   3                  else if(status==MODE_DOU)
+ 326   3                  {
+ 327   4                      dou();
+ 328   4                      while(!PS2_Controller_get().LEFT);
+ 329   4                      dou2();
+ 330   4                      while(!PS2_Controller_get().RIGHT);
+ 331   4                      dou3();
+ 332   4                      while(!PS2_Controller_get().DOWN);
+ 333   4                  }
+ 334   3                  else if(status==MODE_MEN2)
+ 335   3                  {         
+ 336   4                      Pos_Set(0,-70);
+ 337   4                      Pos_Set(1,-45);
+ 338   4                      Pos_Set(2,-45);
+ 339   4                      Pos_Set(3,5);
+ 340   4                      Pos_Set(4,45);
+ 341   4                  }
+ 342   3                  
+ 343   3                  /*---デバッグ---*/
+ 344   3                  //sprintf(buffer,"%d %d %d %d %d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (
              -int)Free(4));
- 283   3                  //UART_Debug_PutString(buffer);
- 284   3                  g_timerFlag = 0;
- 285   3              }
- 286   2          }
- 287   1      }
-*** WARNING C280 IN LINE 54 OF .\main.c: 'buffer': unreferenced local variable
- 288          
- 289          void move (uint8 ID){            
- 290   1          static uint16 count = 0;
- 291   1          static uint16 step = 0;
- 292   1          if(step==0){
- 293   2              Pos_Set(ID,count*0.2);
- 294   2              if(count*0.1==55){
- 295   3                  step++;
- 296   3              }
- 297   2          }
- 298   1          else if(step==1){
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 6   
+ 345   3                  //UART_Debug_PutString(buffer);
+ 346   3                  g_timerFlag = 0;
+ 347   3              }
+ 348   2          }
+ 349   1      }
+*** WARNING C280 IN LINE 62 OF .\main.c: 'buffer': unreferenced local variable
+ 350          
+ 351          void move (uint8 ID){            
+ 352   1          static uint16 count = 0;
+ 353   1          static uint16 step = 0;
+ 354   1          if(step==0){
+ 355   2              Pos_Set(ID,count*0.2);
+ 356   2              if(count*0.1==55){
+ 357   3                  step++;
+ 358   3              }
+ 359   2          }
+ 360   1          else if(step==1){
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 7   
 
- 299   2              Pos_Set(ID,60);
- 300   2              count=0;
- 301   2          }
- 302   1          count++;
- 303   1      }
- 304          
- 305          void jodan(void){
- 306   1          Pos_Set(0,-70);
- 307   1          Pos_Set(1,5);
- 308   1          Pos_Set(2,-45);
- 309   1          Pos_Set(3,5);
- 310   1          Pos_Set(4,0);
- 311   1      }
- 312          
- 313          void karimen(void){
- 314   1          Pos_Set(0,-70);
- 315   1          Pos_Set(1,-45);
- 316   1          Pos_Set(2,-90);
- 317   1          Pos_Set(3,5);
- 318   1          Pos_Set(4,45);
- 319   1      }
- 320          void karimen2(void){
- 321   1          Pos_Set(0,-70);
- 322   1          Pos_Set(1,-80);
- 323   1          Pos_Set(2,0);
- 324   1          Pos_Set(3,5);
- 325   1          Pos_Set(4,-15);
- 326   1      }
- 327          
- 328          void antei(void){
- 329   1          Pos_Set(0,-70);
- 330   1          Pos_Set(1,-10);
- 331   1          Pos_Set(2,4);
- 332   1          Pos_Set(3,0);
- 333   1          Pos_Set(4,-35);
- 334   1      }
- 335          void tyudan(void){
- 336   1          Pos_Set(0,-70);
- 337   1          Pos_Set(1,5);
- 338   1          Pos_Set(2,-110);
- 339   1          Pos_Set(3,5);
- 340   1          Pos_Set(4,0);
- 341   1      }
- 342          
- 343          
- 344          /* [] END OF FILE */
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 7   
+ 361   2              Pos_Set(ID,60);
+ 362   2              count=0;
+ 363   2          }
+ 364   1          count++;
+ 365   1      }
+ 366          
+ 367          void jodan(void){
+ 368   1          Pos_Set(0,-70);
+ 369   1          Pos_Set(1,5);
+ 370   1          Pos_Set(2,-45);
+ 371   1          Pos_Set(3,5);
+ 372   1          Pos_Set(4,0);
+ 373   1      }
+ 374          
+ 375          void karimen(void){
+ 376   1          Pos_Set(0,-70);
+ 377   1          Pos_Set(1,-45);
+ 378   1          Pos_Set(2,-90);
+ 379   1          Pos_Set(3,5);
+ 380   1          Pos_Set(4,45);
+ 381   1      }
+ 382          void karimen2(void){
+ 383   1          Pos_Set(0,-70);
+ 384   1          Pos_Set(1,-60);
+ 385   1          Pos_Set(2,0);
+ 386   1          Pos_Set(3,5);
+ 387   1          Pos_Set(4,-15);
+ 388   1      }
+ 389          
+ 390          void antei(void){
+ 391   1          Pos_Set(0,-70);
+ 392   1          Pos_Set(1,-10);
+ 393   1          Pos_Set(2,4);
+ 394   1          Pos_Set(3,0);
+ 395   1          Pos_Set(4,-35);
+ 396   1      }
+ 397          void tyudan(void){
+ 398   1          Pos_Set(0,-70);
+ 399   1          Pos_Set(1,5);
+ 400   1          Pos_Set(2,-100);
+ 401   1          Pos_Set(3,5);
+ 402   1          Pos_Set(4,0);
+ 403   1      }
+ 404          void dou(void){
+ 405   1          Pos_Set(0,-45);
+ 406   1          Pos_Set(2,-70);
+ 407   1          Pos_Set(3,55);
+ 408   1          Pos_Set(4,70);
+ 409   1      }
+ 410          void dou2(void){
+ 411   1          Pos_Set(0,-70);
+ 412   1          Pos_Set(1,-30);
+ 413   1          Pos_Set(2,-45);
+ 414   1          Pos_Set(3,-35);
+ 415   1          Pos_Set(4,45);
+ 416   1      }
+ 417          void dou3(void){
+ 418   1          Pos_Set(0,-70);
+ 419   1          Pos_Set(1,-75);
+ 420   1          Pos_Set(2,0);//変更有り
+ 421   1          Pos_Set(3,-45);
+ 422   1          Pos_Set(4,-40);
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 8   
+
+ 423   1      }
+ 424          
+ 425          /* [] END OF FILE */
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 9   
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
@@ -381,12 +466,12 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000C 758600            MOV     DPS,#00H
 000F C000        E     PUSH    ?C?XPAGE1SFR
 0011 750000      E     MOV     ?C?XPAGE1SFR,#?C?XPAGE1RST
-                                           ; SOURCE LINE # 29
                                            ; SOURCE LINE # 31
+                                           ; SOURCE LINE # 33
 0014 900000      R     MOV     DPTR,#g_timerFlag
 0017 7401              MOV     A,#01H
 0019 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 32
+                                           ; SOURCE LINE # 34
 001A D000        E     POP     ?C?XPAGE1SFR
 001C D086              POP     DPS
 001E D084              POP     DPL1
@@ -398,796 +483,1024 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
              ; FUNCTION clock_isr (END)
 
              ; FUNCTION main (BEGIN)
-                                           ; SOURCE LINE # 41
-                                           ; SOURCE LINE # 42
-                                           ; SOURCE LINE # 43
+                                           ; SOURCE LINE # 47
+                                           ; SOURCE LINE # 48
+                                           ; SOURCE LINE # 49
 0000 900000      R     MOV     DPTR,#menflag
 0003 E4                CLR     A
 0004 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 44
+                                           ; SOURCE LINE # 50
 0005 900000      R     MOV     DPTR,#kaihiFlag
 0008 E4                CLR     A
 0009 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 45
+                                           ; SOURCE LINE # 51
 000A 900000      R     MOV     DPTR,#triangleflg
 000D 7401              MOV     A,#01H
 000F F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 46
+                                           ; SOURCE LINE # 52
 0010 900000      R     MOV     DPTR,#circleFlag
 0013 7401              MOV     A,#01H
 0015 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 47
+                                           ; SOURCE LINE # 53
 0016 900000      R     MOV     DPTR,#status
 0019 E4                CLR     A
 001A F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 48
-001B 900000      R     MOV     DPTR,#l1Flag
+                                           ; SOURCE LINE # 54
+001B 900000      R     MOV     DPTR,#squareFlag
 001E 7401              MOV     A,#01H
 0020 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 49
-0021 900000      R     MOV     DPTR,#l2Flag
+                                           ; SOURCE LINE # 55
+0021 900000      R     MOV     DPTR,#crossFlag
 0024 7401              MOV     A,#01H
 0026 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 50
-0027 900000      R     MOV     DPTR,#r1Flag
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 8   
+                                           ; SOURCE LINE # 56
+0027 900000      R     MOV     DPTR,#l1Flag
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 10  
 
 002A 7401              MOV     A,#01H
 002C F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 51
-002D 900000      R     MOV     DPTR,#r2Flag
+                                           ; SOURCE LINE # 57
+002D 900000      R     MOV     DPTR,#l2Flag
 0030 7401              MOV     A,#01H
 0032 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 52
-0033 900000      R     MOV     DPTR,#kensei
+                                           ; SOURCE LINE # 58
+0033 900000      R     MOV     DPTR,#r1Flag
 0036 7401              MOV     A,#01H
 0038 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 53
-0039 900000      R     MOV     DPTR,#kakudo
-003C E4                CLR     A
-003D F0                MOVX    @DPTR,A
-003E A3                INC     DPTR
-003F E4                CLR     A
-0040 F0                MOVX    @DPTR,A
-0041 900000      R     MOV     DPTR,#count
-0044 E4                CLR     A
-0045 F0                MOVX    @DPTR,A
-0046 A3                INC     DPTR
-0047 E4                CLR     A
-0048 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 57
-0049 D2AF              SETB    EA
-004B 9044F4            MOV     DPTR,#044F4H
-004E 74FD              MOV     A,#0FDH
-0050 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 58
-0051 7E00        R     MOV     R6,#HIGH clock_isr
-0053 7F00        R     MOV     R7,#LOW clock_isr
-0055 120000      E     LCALL   _isr_mkss_StartEx
                                            ; SOURCE LINE # 59
-0058 120000      E     LCALL   UART_Servo_Start
+0039 900000      R     MOV     DPTR,#r2Flag
+003C 7401              MOV     A,#01H
+003E F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 60
-005B 120000      E     LCALL   PS2_Start
+003F 900000      R     MOV     DPTR,#kensei
+0042 7401              MOV     A,#01H
+0044 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 61
-005E 120000      E     LCALL   UART_Debug_Start
-                                           ; SOURCE LINE # 62
-0061 7FE8              MOV     R7,#0E8H
-0063 7E03              MOV     R6,#03H
-0065 7D00              MOV     R5,#00H
-0067 7C00              MOV     R4,#00H
-0069 120000      E     LCALL   _?CyDelay
-006C         ?C0002:
-                                           ; SOURCE LINE # 63
-006C 120000      E     LCALL   PS2_Analog_Flag
-006F 50FB              JNC     ?C0002
-0071         ?C0003:
-0071         ?C0004:
-                                           ; SOURCE LINE # 64
-0071 120000      E     LCALL   PS2_Controller_get
-0074 120000      E     LCALL   ?C?CLDPTR
-0077 FF                MOV     R7,A
-0078 EF                MOV     A,R7
-0079 13                RRC     A
-007A 13                RRC     A
-007B 13                RRC     A
-007C 541F              ANL     A,#01FH
-007E FF                MOV     R7,A
-007F EF                MOV     A,R7
-0080 30E0EE            JNB     ACC.0,?C0004
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 9   
-
-0083         ?C0005:
+0045 900000      R     MOV     DPTR,#kakudo
+0048 E4                CLR     A
+0049 F0                MOVX    @DPTR,A
+004A A3                INC     DPTR
+004B E4                CLR     A
+004C F0                MOVX    @DPTR,A
+004D 900000      R     MOV     DPTR,#count
+0050 E4                CLR     A
+0051 F0                MOVX    @DPTR,A
+0052 A3                INC     DPTR
+0053 E4                CLR     A
+0054 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 65
-0083 7D7F              MOV     R5,#07FH
-0085 7F00              MOV     R7,#00H
-0087 120000      E     LCALL   _speed
+0055 D2AF              SETB    EA
+0057 9044F4            MOV     DPTR,#044F4H
+005A 74FD              MOV     A,#0FDH
+005C F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 66
+005D 7E00        R     MOV     R6,#HIGH clock_isr
+005F 7F00        R     MOV     R7,#LOW clock_isr
+0061 120000      E     LCALL   _isr_mkss_StartEx
                                            ; SOURCE LINE # 67
-008A         ?C0006:
+0064 120000      E     LCALL   UART_Servo_Start
                                            ; SOURCE LINE # 68
-                                           ; SOURCE LINE # 75
-008A 900000      R     MOV     DPTR,#g_timerFlag
-008D E0                MOVX    A,@DPTR
-008E FF                MOV     R7,A
-008F EF                MOV     A,R7
-0090 B401F7            CJNE    A,#01H,?C0006
-                                           ; SOURCE LINE # 76
-                                           ; SOURCE LINE # 85
-0093 120000      E     LCALL   PS2_Controller_get
-0096 C003              PUSH    AR3
-0098 C002              PUSH    AR2
-009A C001              PUSH    AR1
-009C 7B01              MOV     R3,#01H
-009E 7A00        R     MOV     R2,#HIGH psData
-00A0 7900        R     MOV     R1,#LOW psData
-00A2 A801              MOV     R0,AR1
-00A4 AC02              MOV     R4,AR2
-00A6 AD03              MOV     R5,AR3
-00A8 D001              POP     AR1
-00AA D002              POP     AR2
-00AC D003              POP     AR3
-00AE 7E00              MOV     R6,#00H
-00B0 7F06              MOV     R7,#06H
-00B2 120000      E     LCALL   ?C?COPYAMD
-                                           ; SOURCE LINE # 88
-00B5 900000      R     MOV     DPTR,#psData+01H
-00B8 E0                MOVX    A,@DPTR
-00B9 FF                MOV     R7,A
-00BA EF                MOV     A,R7
-00BB 30E52D            JNB     ACC.5,?C0009
-                                           ; SOURCE LINE # 89
-                                           ; SOURCE LINE # 90
-00BE 900000      R     MOV     DPTR,#circleFlag
-00C1 E0                MOVX    A,@DPTR
-00C2 FF                MOV     R7,A
-00C3 EF                MOV     A,R7
-00C4 602B              JZ      ?C0014
-                                           ; SOURCE LINE # 91
-                                           ; SOURCE LINE # 92
-00C6 900000      R     MOV     DPTR,#status
-00C9 E0                MOVX    A,@DPTR
-00CA FF                MOV     R7,A
-00CB EF                MOV     A,R7
-00CC B40207            CJNE    A,#02H,?C0011
-                                           ; SOURCE LINE # 93
-00CF 900000      R     MOV     DPTR,#status
-00D2 E4                CLR     A
-00D3 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 94
-00D4 800E              SJMP    ?C0012
-00D6         ?C0011:
-                                           ; SOURCE LINE # 95
-00D6 900000      R     MOV     DPTR,#status
-00D9 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 10  
+0067 120000      E     LCALL   PS2_Start
+                                           ; SOURCE LINE # 69
+006A 120000      E     LCALL   UART_Debug_Start
+                                           ; SOURCE LINE # 70
+006D 7FE8              MOV     R7,#0E8H
+006F 7E03              MOV     R6,#03H
+0071 7D00              MOV     R5,#00H
+0073 7C00              MOV     R4,#00H
+0075 120000      E     LCALL   _?CyDelay
+0078         ?C0002:
+                                           ; SOURCE LINE # 71
+0078 120000      E     LCALL   PS2_Analog_Flag
+007B 50FB              JNC     ?C0002
+007D         ?C0003:
+007D         ?C0004:
+                                           ; SOURCE LINE # 72
+007D 120000      E     LCALL   PS2_Controller_get
+0080 120000      E     LCALL   ?C?CLDPTR
+0083 FF                MOV     R7,A
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 11  
 
-00DA FF                MOV     R7,A
-00DB EF                MOV     A,R7
-00DC 7006              JNZ     ?C0012
+0084 EF                MOV     A,R7
+0085 13                RRC     A
+0086 13                RRC     A
+0087 13                RRC     A
+0088 541F              ANL     A,#01FH
+008A FF                MOV     R7,A
+008B EF                MOV     A,R7
+008C 30E0EE            JNB     ACC.0,?C0004
+008F         ?C0005:
+                                           ; SOURCE LINE # 73
+008F 7D7F              MOV     R5,#07FH
+0091 7F00              MOV     R7,#00H
+0093 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 74
+0096 7D46              MOV     R5,#046H
+0098 7F02              MOV     R7,#02H
+009A 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 76
+009D         ?C0006:
+                                           ; SOURCE LINE # 77
+                                           ; SOURCE LINE # 82
+009D 900000      R     MOV     DPTR,#g_timerFlag
+00A0 E0                MOVX    A,@DPTR
+00A1 FF                MOV     R7,A
+00A2 EF                MOV     A,R7
+00A3 B401F7            CJNE    A,#01H,?C0006
+                                           ; SOURCE LINE # 83
+                                           ; SOURCE LINE # 92
+00A6 120000      E     LCALL   PS2_Controller_get
+00A9 C003              PUSH    AR3
+00AB C002              PUSH    AR2
+00AD C001              PUSH    AR1
+00AF 7B01              MOV     R3,#01H
+00B1 7A00        R     MOV     R2,#HIGH psData
+00B3 7900        R     MOV     R1,#LOW psData
+00B5 A801              MOV     R0,AR1
+00B7 AC02              MOV     R4,AR2
+00B9 AD03              MOV     R5,AR3
+00BB D001              POP     AR1
+00BD D002              POP     AR2
+00BF D003              POP     AR3
+00C1 7E00              MOV     R6,#00H
+00C3 7F06              MOV     R7,#06H
+00C5 120000      E     LCALL   ?C?COPYAMD
+                                           ; SOURCE LINE # 95
+00C8 900000      R     MOV     DPTR,#psData+01H
+00CB E0                MOVX    A,@DPTR
+00CC FF                MOV     R7,A
+00CD EF                MOV     A,R7
+00CE 30E52D            JNB     ACC.5,?C0009
                                            ; SOURCE LINE # 96
                                            ; SOURCE LINE # 97
-00DE 900000      R     MOV     DPTR,#status
-00E1 7402              MOV     A,#02H
-00E3 F0                MOVX    @DPTR,A
+00D1 900000      R     MOV     DPTR,#circleFlag
+00D4 E0                MOVX    A,@DPTR
+00D5 FF                MOV     R7,A
+00D6 EF                MOV     A,R7
+00D7 602B              JZ      ?C0014
                                            ; SOURCE LINE # 98
-00E4         ?C0012:
                                            ; SOURCE LINE # 99
-00E4 900000      R     MOV     DPTR,#circleFlag
-00E7 E4                CLR     A
-00E8 F0                MOVX    @DPTR,A
+00D9 900000      R     MOV     DPTR,#status
+00DC E0                MOVX    A,@DPTR
+00DD FF                MOV     R7,A
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 12  
+
+00DE EF                MOV     A,R7
+00DF B40207            CJNE    A,#02H,?C0011
                                            ; SOURCE LINE # 100
+00E2 900000      R     MOV     DPTR,#status
+00E5 E4                CLR     A
+00E6 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 101
-00E9 8006              SJMP    ?C0014
-00EB         ?C0009:
+00E7 800E              SJMP    ?C0012
+00E9         ?C0011:
+                                           ; SOURCE LINE # 102
+00E9 900000      R     MOV     DPTR,#status
+00EC E0                MOVX    A,@DPTR
+00ED FF                MOV     R7,A
+00EE EF                MOV     A,R7
+00EF 7006              JNZ     ?C0012
                                            ; SOURCE LINE # 103
                                            ; SOURCE LINE # 104
-00EB 900000      R     MOV     DPTR,#circleFlag
-00EE 7401              MOV     A,#01H
-00F0 F0                MOVX    @DPTR,A
+00F1 900000      R     MOV     DPTR,#status
+00F4 7402              MOV     A,#02H
+00F6 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 105
-00F1         ?C0014:
+00F7         ?C0012:
+                                           ; SOURCE LINE # 106
+00F7 900000      R     MOV     DPTR,#circleFlag
+00FA E4                CLR     A
+00FB F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 107
-00F1 900000      R     MOV     DPTR,#psData+01H
-00F4 E0                MOVX    A,@DPTR
-00F5 FF                MOV     R7,A
-00F6 EF                MOV     A,R7
-00F7 30E41D            JNB     ACC.4,?C0015
                                            ; SOURCE LINE # 108
-                                           ; SOURCE LINE # 109
-00FA 900000      R     MOV     DPTR,#triangleflg
-00FD E0                MOVX    A,@DPTR
-00FE FF                MOV     R7,A
-00FF EF                MOV     A,R7
-0100 601B              JZ      ?C0018
+00FC 8006              SJMP    ?C0014
+00FE         ?C0009:
                                            ; SOURCE LINE # 110
                                            ; SOURCE LINE # 111
-0102 900000      R     MOV     DPTR,#status
-0105 E0                MOVX    A,@DPTR
-0106 FF                MOV     R7,A
-0107 EF                MOV     A,R7
-0108 7006              JNZ     ?C0017
+00FE 900000      R     MOV     DPTR,#circleFlag
+0101 7401              MOV     A,#01H
+0103 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 112
-                                           ; SOURCE LINE # 113
-010A 900000      R     MOV     DPTR,#status
-010D 7401              MOV     A,#01H
-010F F0                MOVX    @DPTR,A
+0104         ?C0014:
                                            ; SOURCE LINE # 114
-0110         ?C0017:
+0104 900000      R     MOV     DPTR,#psData+01H
+0107 E0                MOVX    A,@DPTR
+0108 FF                MOV     R7,A
+0109 EF                MOV     A,R7
+010A 30E41D            JNB     ACC.4,?C0015
                                            ; SOURCE LINE # 115
-0110 900000      R     MOV     DPTR,#triangleflg
-0113 E4                CLR     A
-0114 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 116
+010D 900000      R     MOV     DPTR,#triangleflg
+0110 E0                MOVX    A,@DPTR
+0111 FF                MOV     R7,A
+0112 EF                MOV     A,R7
+0113 601B              JZ      ?C0018
                                            ; SOURCE LINE # 117
-0115 8006              SJMP    ?C0018
-0117         ?C0015:
+                                           ; SOURCE LINE # 118
+0115 900000      R     MOV     DPTR,#status
+0118 E0                MOVX    A,@DPTR
+0119 FF                MOV     R7,A
+011A EF                MOV     A,R7
+011B 7006              JNZ     ?C0017
                                            ; SOURCE LINE # 119
                                            ; SOURCE LINE # 120
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 11  
+011D 900000      R     MOV     DPTR,#status
+0120 7401              MOV     A,#01H
+0122 F0                MOVX    @DPTR,A
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 13  
 
-0117 900000      R     MOV     DPTR,#triangleflg
-011A 7401              MOV     A,#01H
-011C F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 121
-011D         ?C0018:
+0123         ?C0017:
                                            ; SOURCE LINE # 122
-011D 900000      R     MOV     DPTR,#psData+01H
-0120 E0                MOVX    A,@DPTR
-0121 FF                MOV     R7,A
-0122 EF                MOV     A,R7
-0123 30E251            JNB     ACC.2,?C0019
+0123 900000      R     MOV     DPTR,#triangleflg
+0126 E4                CLR     A
+0127 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 123
                                            ; SOURCE LINE # 124
-0126 900000      R     MOV     DPTR,#l1Flag
-0129 E0                MOVX    A,@DPTR
-012A FF                MOV     R7,A
-012B EF                MOV     A,R7
-012C 604F              JZ      ?C0028
-                                           ; SOURCE LINE # 125
+0128 8006              SJMP    ?C0018
+012A         ?C0015:
                                            ; SOURCE LINE # 126
-012E 900000      R     MOV     DPTR,#status
-0131 E0                MOVX    A,@DPTR
-0132 FF                MOV     R7,A
-0133 EF                MOV     A,R7
-0134 B40208            CJNE    A,#02H,?C0021
                                            ; SOURCE LINE # 127
+012A 900000      R     MOV     DPTR,#triangleflg
+012D 7401              MOV     A,#01H
+012F F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 128
-0137 900000      R     MOV     DPTR,#status
-013A 7403              MOV     A,#03H
-013C F0                MOVX    @DPTR,A
+0130         ?C0018:
                                            ; SOURCE LINE # 129
-013D 8031              SJMP    ?C0022
-013F         ?C0021:
+0130 900000      R     MOV     DPTR,#psData+01H
+0133 E0                MOVX    A,@DPTR
+0134 FF                MOV     R7,A
+0135 EF                MOV     A,R7
+0136 30E251            JNB     ACC.2,?C0019
                                            ; SOURCE LINE # 130
-013F 900000      R     MOV     DPTR,#status
-0142 E0                MOVX    A,@DPTR
-0143 FF                MOV     R7,A
-0144 EF                MOV     A,R7
-0145 B40308            CJNE    A,#03H,?C0023
                                            ; SOURCE LINE # 131
+0139 900000      R     MOV     DPTR,#l1Flag
+013C E0                MOVX    A,@DPTR
+013D FF                MOV     R7,A
+013E EF                MOV     A,R7
+013F 604F              JZ      ?C0028
                                            ; SOURCE LINE # 132
-0148 900000      R     MOV     DPTR,#status
-014B 7402              MOV     A,#02H
-014D F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 133
-014E 8020              SJMP    ?C0022
-0150         ?C0023:
+0141 900000      R     MOV     DPTR,#status
+0144 E0                MOVX    A,@DPTR
+0145 FF                MOV     R7,A
+0146 EF                MOV     A,R7
+0147 B40208            CJNE    A,#02H,?C0021
                                            ; SOURCE LINE # 134
-0150 900000      R     MOV     DPTR,#status
-0153 E0                MOVX    A,@DPTR
-0154 FF                MOV     R7,A
-0155 EF                MOV     A,R7
-0156 B40608            CJNE    A,#06H,?C0025
                                            ; SOURCE LINE # 135
+014A 900000      R     MOV     DPTR,#status
+014D 7403              MOV     A,#03H
+014F F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 136
-0159 900000      R     MOV     DPTR,#status
-015C 7407              MOV     A,#07H
-015E F0                MOVX    @DPTR,A
+0150 8031              SJMP    ?C0022
+0152         ?C0021:
                                            ; SOURCE LINE # 137
-015F 800F              SJMP    ?C0022
-0161         ?C0025:
+0152 900000      R     MOV     DPTR,#status
+0155 E0                MOVX    A,@DPTR
+0156 FF                MOV     R7,A
+0157 EF                MOV     A,R7
+0158 B40308            CJNE    A,#03H,?C0023
                                            ; SOURCE LINE # 138
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 12  
-
-0161 900000      R     MOV     DPTR,#status
-0164 E0                MOVX    A,@DPTR
-0165 FF                MOV     R7,A
-0166 EF                MOV     A,R7
-0167 B40906            CJNE    A,#09H,?C0022
                                            ; SOURCE LINE # 139
+015B 900000      R     MOV     DPTR,#status
+015E 7402              MOV     A,#02H
+0160 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 140
-016A 900000      R     MOV     DPTR,#status
-016D 7402              MOV     A,#02H
-016F F0                MOVX    @DPTR,A
+0161 8020              SJMP    ?C0022
+0163         ?C0023:
                                            ; SOURCE LINE # 141
-0170         ?C0022:
+0163 900000      R     MOV     DPTR,#status
+0166 E0                MOVX    A,@DPTR
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 14  
+
+0167 FF                MOV     R7,A
+0168 EF                MOV     A,R7
+0169 B40608            CJNE    A,#06H,?C0025
                                            ; SOURCE LINE # 142
-0170 900000      R     MOV     DPTR,#l1Flag
-0173 E4                CLR     A
-0174 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 143
+016C 900000      R     MOV     DPTR,#status
+016F 7407              MOV     A,#07H
+0171 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 144
-0175 8006              SJMP    ?C0028
-0177         ?C0019:
+0172 800F              SJMP    ?C0022
+0174         ?C0025:
+                                           ; SOURCE LINE # 145
+0174 900000      R     MOV     DPTR,#status
+0177 E0                MOVX    A,@DPTR
+0178 FF                MOV     R7,A
+0179 EF                MOV     A,R7
+017A B40906            CJNE    A,#09H,?C0022
                                            ; SOURCE LINE # 146
                                            ; SOURCE LINE # 147
-0177 900000      R     MOV     DPTR,#l1Flag
-017A 7401              MOV     A,#01H
-017C F0                MOVX    @DPTR,A
+017D 900000      R     MOV     DPTR,#status
+0180 7402              MOV     A,#02H
+0182 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 148
-017D         ?C0028:
+0183         ?C0022:
                                            ; SOURCE LINE # 149
-017D 900000      R     MOV     DPTR,#psData+01H
-0180 E0                MOVX    A,@DPTR
-0181 FF                MOV     R7,A
-0182 EF                MOV     A,R7
-0183 30E040            JNB     ACC.0,?C0029
+0183 900000      R     MOV     DPTR,#l1Flag
+0186 E4                CLR     A
+0187 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 150
                                            ; SOURCE LINE # 151
-0186 900000      R     MOV     DPTR,#l2Flag
-0189 E0                MOVX    A,@DPTR
-018A FF                MOV     R7,A
-018B EF                MOV     A,R7
-018C 603E              JZ      ?C0036
-                                           ; SOURCE LINE # 152
+0188 8006              SJMP    ?C0028
+018A         ?C0019:
                                            ; SOURCE LINE # 153
-018E 900000      R     MOV     DPTR,#status
-0191 E0                MOVX    A,@DPTR
-0192 FF                MOV     R7,A
-0193 EF                MOV     A,R7
-0194 B40308            CJNE    A,#03H,?C0031
                                            ; SOURCE LINE # 154
+018A 900000      R     MOV     DPTR,#l1Flag
+018D 7401              MOV     A,#01H
+018F F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 155
-0197 900000      R     MOV     DPTR,#status
-019A 7404              MOV     A,#04H
-019C F0                MOVX    @DPTR,A
+0190         ?C0028:
                                            ; SOURCE LINE # 156
-019D 8020              SJMP    ?C0032
-019F         ?C0031:
+0190 900000      R     MOV     DPTR,#psData+01H
+0193 E0                MOVX    A,@DPTR
+0194 FF                MOV     R7,A
+0195 EF                MOV     A,R7
+0196 30E040            JNB     ACC.0,?C0029
                                            ; SOURCE LINE # 157
-019F 900000      R     MOV     DPTR,#status
-01A2 E0                MOVX    A,@DPTR
-01A3 FF                MOV     R7,A
-01A4 EF                MOV     A,R7
-01A5 B40408            CJNE    A,#04H,?C0033
                                            ; SOURCE LINE # 158
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 13  
-
+0199 900000      R     MOV     DPTR,#l2Flag
+019C E0                MOVX    A,@DPTR
+019D FF                MOV     R7,A
+019E EF                MOV     A,R7
+019F 603E              JZ      ?C0036
                                            ; SOURCE LINE # 159
-01A8 900000      R     MOV     DPTR,#status
-01AB 7403              MOV     A,#03H
-01AD F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 160
-01AE 800F              SJMP    ?C0032
-01B0         ?C0033:
+01A1 900000      R     MOV     DPTR,#status
+01A4 E0                MOVX    A,@DPTR
+01A5 FF                MOV     R7,A
+01A6 EF                MOV     A,R7
+01A7 B40308            CJNE    A,#03H,?C0031
                                            ; SOURCE LINE # 161
-01B0 900000      R     MOV     DPTR,#status
-01B3 E0                MOVX    A,@DPTR
-01B4 FF                MOV     R7,A
-01B5 EF                MOV     A,R7
-01B6 B40706            CJNE    A,#07H,?C0032
                                            ; SOURCE LINE # 162
+01AA 900000      R     MOV     DPTR,#status
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 15  
+
+01AD 7404              MOV     A,#04H
+01AF F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 163
-01B9 900000      R     MOV     DPTR,#status
-01BC 7408              MOV     A,#08H
-01BE F0                MOVX    @DPTR,A
+01B0 8020              SJMP    ?C0032
+01B2         ?C0031:
                                            ; SOURCE LINE # 164
-01BF         ?C0032:
+01B2 900000      R     MOV     DPTR,#status
+01B5 E0                MOVX    A,@DPTR
+01B6 FF                MOV     R7,A
+01B7 EF                MOV     A,R7
+01B8 B40408            CJNE    A,#04H,?C0033
                                            ; SOURCE LINE # 165
-01BF 900000      R     MOV     DPTR,#l2Flag
-01C2 E4                CLR     A
-01C3 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 166
+01BB 900000      R     MOV     DPTR,#status
+01BE 7403              MOV     A,#03H
+01C0 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 167
-01C4 8006              SJMP    ?C0036
-01C6         ?C0029:
+01C1 800F              SJMP    ?C0032
+01C3         ?C0033:
+                                           ; SOURCE LINE # 168
+01C3 900000      R     MOV     DPTR,#status
+01C6 E0                MOVX    A,@DPTR
+01C7 FF                MOV     R7,A
+01C8 EF                MOV     A,R7
+01C9 B40706            CJNE    A,#07H,?C0032
                                            ; SOURCE LINE # 169
                                            ; SOURCE LINE # 170
-01C6 900000      R     MOV     DPTR,#l2Flag
-01C9 7401              MOV     A,#01H
-01CB F0                MOVX    @DPTR,A
+01CC 900000      R     MOV     DPTR,#status
+01CF 7408              MOV     A,#08H
+01D1 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 171
-01CC         ?C0036:
+01D2         ?C0032:
                                            ; SOURCE LINE # 172
-01CC 900000      R     MOV     DPTR,#psData+01H
-01CF E0                MOVX    A,@DPTR
-01D0 FF                MOV     R7,A
-01D1 EF                MOV     A,R7
-01D2 30E32F            JNB     ACC.3,?C0037
+01D2 900000      R     MOV     DPTR,#l2Flag
+01D5 E4                CLR     A
+01D6 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 173
                                            ; SOURCE LINE # 174
-01D5 900000      R     MOV     DPTR,#r1Flag
-01D8 E0                MOVX    A,@DPTR
-01D9 FF                MOV     R7,A
-01DA EF                MOV     A,R7
-01DB 602D              JZ      ?C0042
-                                           ; SOURCE LINE # 175
+01D7 8006              SJMP    ?C0036
+01D9         ?C0029:
                                            ; SOURCE LINE # 176
-01DD 900000      R     MOV     DPTR,#status
-01E0 E0                MOVX    A,@DPTR
-01E1 FF                MOV     R7,A
-01E2 EF                MOV     A,R7
-01E3 B40408            CJNE    A,#04H,?C0039
                                            ; SOURCE LINE # 177
+01D9 900000      R     MOV     DPTR,#l2Flag
+01DC 7401              MOV     A,#01H
+01DE F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 178
-01E6 900000      R     MOV     DPTR,#status
-01E9 7405              MOV     A,#05H
-01EB F0                MOVX    @DPTR,A
+01DF         ?C0036:
                                            ; SOURCE LINE # 179
-01EC 800F              SJMP    ?C0040
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 14  
-
-01EE         ?C0039:
+01DF 900000      R     MOV     DPTR,#psData+01H
+01E2 E0                MOVX    A,@DPTR
+01E3 FF                MOV     R7,A
+01E4 EF                MOV     A,R7
+01E5 30E32F            JNB     ACC.3,?C0037
                                            ; SOURCE LINE # 180
-01EE 900000      R     MOV     DPTR,#status
-01F1 E0                MOVX    A,@DPTR
-01F2 FF                MOV     R7,A
-01F3 EF                MOV     A,R7
-01F4 B40806            CJNE    A,#08H,?C0040
                                            ; SOURCE LINE # 181
+01E8 900000      R     MOV     DPTR,#r1Flag
+01EB E0                MOVX    A,@DPTR
+01EC FF                MOV     R7,A
+01ED EF                MOV     A,R7
+01EE 602D              JZ      ?C0042
                                            ; SOURCE LINE # 182
-01F7 900000      R     MOV     DPTR,#status
-01FA 7409              MOV     A,#09H
-01FC F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 183
-01FD         ?C0040:
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 16  
+
+01F0 900000      R     MOV     DPTR,#status
+01F3 E0                MOVX    A,@DPTR
+01F4 FF                MOV     R7,A
+01F5 EF                MOV     A,R7
+01F6 B40408            CJNE    A,#04H,?C0039
                                            ; SOURCE LINE # 184
-01FD 900000      R     MOV     DPTR,#r1Flag
-0200 E4                CLR     A
-0201 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 185
+01F9 900000      R     MOV     DPTR,#status
+01FC 7405              MOV     A,#05H
+01FE F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 186
-0202 8006              SJMP    ?C0042
-0204         ?C0037:
+01FF 800F              SJMP    ?C0040
+0201         ?C0039:
+                                           ; SOURCE LINE # 187
+0201 900000      R     MOV     DPTR,#status
+0204 E0                MOVX    A,@DPTR
+0205 FF                MOV     R7,A
+0206 EF                MOV     A,R7
+0207 B40806            CJNE    A,#08H,?C0040
                                            ; SOURCE LINE # 188
                                            ; SOURCE LINE # 189
-0204 900000      R     MOV     DPTR,#r1Flag
-0207 7401              MOV     A,#01H
-0209 F0                MOVX    @DPTR,A
+020A 900000      R     MOV     DPTR,#status
+020D 7409              MOV     A,#09H
+020F F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 190
-020A         ?C0042:
+0210         ?C0040:
                                            ; SOURCE LINE # 191
-020A 900000      R     MOV     DPTR,#psData+01H
-020D E0                MOVX    A,@DPTR
-020E FF                MOV     R7,A
-020F EF                MOV     A,R7
-0210 30E11E            JNB     ACC.1,?C0043
+0210 900000      R     MOV     DPTR,#r1Flag
+0213 E4                CLR     A
+0214 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 192
                                            ; SOURCE LINE # 193
-0213 900000      R     MOV     DPTR,#r2Flag
-0216 E0                MOVX    A,@DPTR
-0217 FF                MOV     R7,A
-0218 EF                MOV     A,R7
-0219 601C              JZ      ?C0046
-                                           ; SOURCE LINE # 194
+0215 8006              SJMP    ?C0042
+0217         ?C0037:
                                            ; SOURCE LINE # 195
-021B 900000      R     MOV     DPTR,#status
-021E E0                MOVX    A,@DPTR
-021F FF                MOV     R7,A
-0220 EF                MOV     A,R7
-0221 B40506            CJNE    A,#05H,?C0045
                                            ; SOURCE LINE # 196
+0217 900000      R     MOV     DPTR,#r1Flag
+021A 7401              MOV     A,#01H
+021C F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 197
-0224 900000      R     MOV     DPTR,#status
-0227 7406              MOV     A,#06H
-0229 F0                MOVX    @DPTR,A
+021D         ?C0042:
                                            ; SOURCE LINE # 198
-022A         ?C0045:
+021D 900000      R     MOV     DPTR,#psData+01H
+0220 E0                MOVX    A,@DPTR
+0221 FF                MOV     R7,A
+0222 EF                MOV     A,R7
+0223 30E11E            JNB     ACC.1,?C0043
                                            ; SOURCE LINE # 199
-022A 900000      R     MOV     DPTR,#r2Flag
-022D E4                CLR     A
-022E F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 200
+0226 900000      R     MOV     DPTR,#r2Flag
+0229 E0                MOVX    A,@DPTR
+022A FF                MOV     R7,A
+022B EF                MOV     A,R7
+022C 601C              JZ      ?C0046
                                            ; SOURCE LINE # 201
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 15  
-
-022F 8006              SJMP    ?C0046
-0231         ?C0043:
+                                           ; SOURCE LINE # 202
+022E 900000      R     MOV     DPTR,#status
+0231 E0                MOVX    A,@DPTR
+0232 FF                MOV     R7,A
+0233 EF                MOV     A,R7
+0234 B40506            CJNE    A,#05H,?C0045
                                            ; SOURCE LINE # 203
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 17  
+
                                            ; SOURCE LINE # 204
-0231 900000      R     MOV     DPTR,#r2Flag
-0234 7401              MOV     A,#01H
-0236 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 205
-0237         ?C0046:
-                                           ; SOURCE LINE # 208
 0237 900000      R     MOV     DPTR,#status
-023A E0                MOVX    A,@DPTR
-023B FF                MOV     R7,A
-023C EF                MOV     A,R7
-023D 700B              JNZ     ?C0047
-                                           ; SOURCE LINE # 209
+023A 7406              MOV     A,#06H
+023C F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 205
+023D         ?C0045:
+                                           ; SOURCE LINE # 206
+023D 900000      R     MOV     DPTR,#r2Flag
+0240 E4                CLR     A
+0241 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 207
+                                           ; SOURCE LINE # 208
+0242 8006              SJMP    ?C0046
+0244         ?C0043:
                                            ; SOURCE LINE # 210
-023F 120000      R     LCALL   tyudan
                                            ; SOURCE LINE # 211
-0242 900000      R     MOV     DPTR,#menflag
-0245 E4                CLR     A
-0246 F0                MOVX    @DPTR,A
+0244 900000      R     MOV     DPTR,#r2Flag
+0247 7401              MOV     A,#01H
+0249 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 212
-0247 020000      R     LJMP    ?C0048
-024A         ?C0047:
-                                           ; SOURCE LINE # 213
-024A 900000      R     MOV     DPTR,#status
+024A         ?C0046:
+                                           ; SOURCE LINE # 214
+024A 900000      R     MOV     DPTR,#psData+01H
 024D E0                MOVX    A,@DPTR
 024E FF                MOV     R7,A
 024F EF                MOV     A,R7
-0250 6401              XRL     A,#01H
-0252 7043              JNZ     ?C0049
-                                           ; SOURCE LINE # 214
-0254 900000      R     MOV     DPTR,#menflag
-0257 E0                MOVX    A,@DPTR
-0258 FF                MOV     R7,A
-0259 EF                MOV     A,R7
-025A 7017              JNZ     ?C0050
+0250 30E72D            JNB     ACC.7,?C0047
                                            ; SOURCE LINE # 215
-025C 120000      R     LCALL   karimen
                                            ; SOURCE LINE # 216
-025F 900000      R     MOV     DPTR,#menflag
-0262 7401              MOV     A,#01H
-0264 F0                MOVX    @DPTR,A
+0253 900000      R     MOV     DPTR,#squareFlag
+0256 E0                MOVX    A,@DPTR
+0257 FF                MOV     R7,A
+0258 EF                MOV     A,R7
+0259 602B              JZ      ?C0052
                                            ; SOURCE LINE # 217
-0265 7F1E              MOV     R7,#01EH
-0267 7E00              MOV     R6,#00H
-0269 7D00              MOV     R5,#00H
-026B 7C00              MOV     R4,#00H
-026D 120000      E     LCALL   _?CyDelay
                                            ; SOURCE LINE # 218
-0270 020000      R     LJMP    ?C0048
-0273         ?C0050:
+025B 900000      R     MOV     DPTR,#status
+025E E0                MOVX    A,@DPTR
+025F FF                MOV     R7,A
+0260 EF                MOV     A,R7
+0261 7008              JNZ     ?C0049
                                            ; SOURCE LINE # 219
                                            ; SOURCE LINE # 220
-0273 120000      R     LCALL   karimen2
+0263 900000      R     MOV     DPTR,#status
+0266 740A              MOV     A,#0AH
+0268 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 221
-0276 7F2C              MOV     R7,#02CH
-0278 7E01              MOV     R6,#01H
-027A 7D00              MOV     R5,#00H
-027C 7C00              MOV     R4,#00H
-027E 120000      E     LCALL   _?CyDelay
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 16  
-
+0269 800E              SJMP    ?C0050
+026B         ?C0049:
                                            ; SOURCE LINE # 222
-0281 120000      R     LCALL   jodan
+026B 900000      R     MOV     DPTR,#status
+026E E0                MOVX    A,@DPTR
+026F FF                MOV     R7,A
+0270 EF                MOV     A,R7
+0271 B40A05            CJNE    A,#0AH,?C0050
                                            ; SOURCE LINE # 223
-0284 7F58              MOV     R7,#058H
-0286 7E02              MOV     R6,#02H
-0288 7D00              MOV     R5,#00H
-028A 7C00              MOV     R4,#00H
-028C 120000      E     LCALL   _?CyDelay
                                            ; SOURCE LINE # 224
-028F 900000      R     MOV     DPTR,#status
-0292 E4                CLR     A
-0293 F0                MOVX    @DPTR,A
+0274 900000      R     MOV     DPTR,#status
+0277 E4                CLR     A
+0278 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 225
+0279         ?C0050:
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 18  
+
+                                           ; SOURCE LINE # 226
+0279 900000      R     MOV     DPTR,#squareFlag
+027C E4                CLR     A
+027D F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 227
-0294 020000      R     LJMP    ?C0048
-0297         ?C0049:
                                            ; SOURCE LINE # 228
+027E 8006              SJMP    ?C0052
+0280         ?C0047:
+                                           ; SOURCE LINE # 230
+                                           ; SOURCE LINE # 231
+0280 900000      R     MOV     DPTR,#squareFlag
+0283 7401              MOV     A,#01H
+0285 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 232
+0286         ?C0052:
+                                           ; SOURCE LINE # 233
+0286 900000      R     MOV     DPTR,#psData+01H
+0289 E0                MOVX    A,@DPTR
+028A FF                MOV     R7,A
+028B EF                MOV     A,R7
+028C 30E62F            JNB     ACC.6,?C0053
+                                           ; SOURCE LINE # 234
+                                           ; SOURCE LINE # 235
+028F 900000      R     MOV     DPTR,#crossFlag
+0292 E0                MOVX    A,@DPTR
+0293 FF                MOV     R7,A
+0294 EF                MOV     A,R7
+0295 602D              JZ      ?C0058
+                                           ; SOURCE LINE # 236
+                                           ; SOURCE LINE # 237
 0297 900000      R     MOV     DPTR,#status
 029A E0                MOVX    A,@DPTR
 029B FF                MOV     R7,A
 029C EF                MOV     A,R7
-029D B4022A            CJNE    A,#02H,?C0053
-                                           ; SOURCE LINE # 229
-                                           ; SOURCE LINE # 230
-02A0 120000      R     LCALL   jodan
-                                           ; SOURCE LINE # 231
-02A3 900000      R     MOV     DPTR,#kaihiFlag
-02A6 E0                MOVX    A,@DPTR
-02A7 FF                MOV     R7,A
-02A8 EF                MOV     A,R7
-02A9 6401              XRL     A,#01H
-02AB 6003              JZ      $ + 5H
-02AD 020000      R     LJMP    ?C0048
-                                           ; SOURCE LINE # 232
-                                           ; SOURCE LINE # 233
-02B0 7F32              MOV     R7,#032H
-02B2 7E00              MOV     R6,#00H
-02B4 7D00              MOV     R5,#00H
-02B6 7C00              MOV     R4,#00H
-02B8 120000      E     LCALL   _?CyDelay
-                                           ; SOURCE LINE # 234
-02BB 7D7F              MOV     R5,#07FH
-02BD 7F01              MOV     R7,#01H
-02BF 120000      E     LCALL   _speed
-                                           ; SOURCE LINE # 235
-02C2 900000      R     MOV     DPTR,#kaihiFlag
-02C5 E4                CLR     A
-02C6 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 236
-                                           ; SOURCE LINE # 237
-02C7 020000      R     LJMP    ?C0048
-02CA         ?C0053:
+029D B40208            CJNE    A,#02H,?C0055
                                            ; SOURCE LINE # 238
-02CA 900000      R     MOV     DPTR,#status
-02CD E0                MOVX    A,@DPTR
-02CE FF                MOV     R7,A
-02CF EF                MOV     A,R7
-02D0 B40319            CJNE    A,#03H,?C0056
                                            ; SOURCE LINE # 239
+02A0 900000      R     MOV     DPTR,#status
+02A3 740B              MOV     A,#0BH
+02A5 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 240
-02D3 900000      R     MOV     DPTR,#kaihiFlag
-02D6 7401              MOV     A,#01H
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 17  
-
-02D8 F0                MOVX    @DPTR,A
+02A6 800F              SJMP    ?C0056
+02A8         ?C0055:
                                            ; SOURCE LINE # 241
-02D9 7D1E              MOV     R5,#01EH
-02DB 7F01              MOV     R7,#01H
-02DD 120000      E     LCALL   _speed
+02A8 900000      R     MOV     DPTR,#status
+02AB E0                MOVX    A,@DPTR
+02AC FF                MOV     R7,A
+02AD EF                MOV     A,R7
+02AE B40B06            CJNE    A,#0BH,?C0056
                                            ; SOURCE LINE # 242
-02E0 7D4B              MOV     R5,#04BH
-02E2 7C00              MOV     R4,#00H
-02E4 7F01              MOV     R7,#01H
-02E6 120000      E     LCALL   _Pos_Set
                                            ; SOURCE LINE # 243
-02E9 020000      R     LJMP    ?C0048
-02EC         ?C0056:
+02B1 900000      R     MOV     DPTR,#status
+02B4 7402              MOV     A,#02H
+02B6 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 244
-02EC 900000      R     MOV     DPTR,#status
-02EF E0                MOVX    A,@DPTR
-02F0 FF                MOV     R7,A
-02F1 EF                MOV     A,R7
-02F2 B4041E            CJNE    A,#04H,?C0058
+02B7         ?C0056:
                                            ; SOURCE LINE # 245
+02B7 900000      R     MOV     DPTR,#crossFlag
+02BA E4                CLR     A
+02BB F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 246
-02F5 7D04              MOV     R5,#04H
-02F7 7C00              MOV     R4,#00H
-02F9 7F02              MOV     R7,#02H
-02FB 120000      E     LCALL   _Pos_Set
                                            ; SOURCE LINE # 247
-02FE 7D00              MOV     R5,#00H
-0300 7C00              MOV     R4,#00H
-0302 7F03              MOV     R7,#03H
-0304 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 248
-0307 7DC4              MOV     R5,#0C4H
-0309 7CFF              MOV     R4,#0FFH
-030B 7F04              MOV     R7,#04H
-030D 120000      E     LCALL   _Pos_Set
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 19  
+
+02BC 8006              SJMP    ?C0058
+02BE         ?C0053:
                                            ; SOURCE LINE # 249
-0310 020000      R     LJMP    ?C0048
-0313         ?C0058:
                                            ; SOURCE LINE # 250
-0313 900000      R     MOV     DPTR,#status
-0316 E0                MOVX    A,@DPTR
-0317 FF                MOV     R7,A
-0318 EF                MOV     A,R7
-0319 B40513            CJNE    A,#05H,?C0060
+02BE 900000      R     MOV     DPTR,#crossFlag
+02C1 7401              MOV     A,#01H
+02C3 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 251
-                                           ; SOURCE LINE # 252
-031C 7D64              MOV     R5,#064H
-031E 7F00              MOV     R7,#00H
-0320 120000      E     LCALL   _speed
+02C4         ?C0058:
                                            ; SOURCE LINE # 253
-0323 7D87              MOV     R5,#087H
-0325 7C00              MOV     R4,#00H
-0327 7F00              MOV     R7,#00H
-0329 120000      E     LCALL   _Pos_Set
+02C4 900000      R     MOV     DPTR,#status
+02C7 E0                MOVX    A,@DPTR
+02C8 FF                MOV     R7,A
+02C9 EF                MOV     A,R7
+02CA 700B              JNZ     ?C0059
                                            ; SOURCE LINE # 254
-032C 020000      R     LJMP    ?C0048
-032F         ?C0060:
                                            ; SOURCE LINE # 255
-032F 900000      R     MOV     DPTR,#status
-0332 E0                MOVX    A,@DPTR
-0333 FF                MOV     R7,A
-0334 EF                MOV     A,R7
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 18  
-
-0335 6406              XRL     A,#06H
-0337 703F              JNZ     ?C0062
+02CC 120000      R     LCALL   tyudan
                                            ; SOURCE LINE # 256
+02CF 900000      R     MOV     DPTR,#menflag
+02D2 E4                CLR     A
+02D3 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 257
-0339 7D28              MOV     R5,#028H
-033B 7F01              MOV     R7,#01H
-033D 120000      E     LCALL   _speed
+02D4 020000      R     LJMP    ?C0060
+02D7         ?C0059:
                                            ; SOURCE LINE # 258
-0340 7D05              MOV     R5,#05H
-0342 7C00              MOV     R4,#00H
-0344 7F01              MOV     R7,#01H
-0346 120000      E     LCALL   _Pos_Set
+02D7 900000      R     MOV     DPTR,#status
+02DA E0                MOVX    A,@DPTR
+02DB FF                MOV     R7,A
+02DC EF                MOV     A,R7
+02DD 6401              XRL     A,#01H
+02DF 7043              JNZ     ?C0061
                                            ; SOURCE LINE # 259
-0349 7DD3              MOV     R5,#0D3H
-034B 7CFF              MOV     R4,#0FFH
-034D 7F02              MOV     R7,#02H
-034F 120000      E     LCALL   _Pos_Set
+02E1 900000      R     MOV     DPTR,#menflag
+02E4 E0                MOVX    A,@DPTR
+02E5 FF                MOV     R7,A
+02E6 EF                MOV     A,R7
+02E7 7017              JNZ     ?C0062
                                            ; SOURCE LINE # 260
-0352 7D05              MOV     R5,#05H
-0354 7C00              MOV     R4,#00H
-0356 7F03              MOV     R7,#03H
-0358 120000      E     LCALL   _Pos_Set
+02E9 120000      R     LCALL   karimen
                                            ; SOURCE LINE # 261
-035B 7D00              MOV     R5,#00H
-035D 7C00              MOV     R4,#00H
-035F 7F04              MOV     R7,#04H
-0361 120000      E     LCALL   _Pos_Set
+02EC 900000      R     MOV     DPTR,#menflag
+02EF 7401              MOV     A,#01H
+02F1 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 262
-0364 7FC8              MOV     R7,#0C8H
-0366 7E00              MOV     R6,#00H
-0368 7D00              MOV     R5,#00H
-036A 7C00              MOV     R4,#00H
-036C 120000      E     LCALL   _?CyDelay
+02F2 7F1E              MOV     R7,#01EH
+02F4 7E00              MOV     R6,#00H
+02F6 7D00              MOV     R5,#00H
+02F8 7C00              MOV     R4,#00H
+02FA 120000      E     LCALL   _?CyDelay
                                            ; SOURCE LINE # 263
-036F 7D7F              MOV     R5,#07FH
-0371 7F01              MOV     R7,#01H
-0373 120000      E     LCALL   _speed
+02FD 020000      R     LJMP    ?C0060
+0300         ?C0062:
                                            ; SOURCE LINE # 264
-0376 8053              SJMP    ?C0048
-0378         ?C0062:
                                            ; SOURCE LINE # 265
-0378 900000      R     MOV     DPTR,#status
-037B E0                MOVX    A,@DPTR
-037C FF                MOV     R7,A
-037D EF                MOV     A,R7
-037E B40712            CJNE    A,#07H,?C0064
+0300 120000      R     LCALL   karimen2
                                            ; SOURCE LINE # 266
-                                           ; SOURCE LINE # 267
-0381 7D1E              MOV     R5,#01EH
-0383 7F01              MOV     R7,#01H
-0385 120000      E     LCALL   _speed
-                                           ; SOURCE LINE # 268
-0388 7D9C              MOV     R5,#09CH
-038A 7CFF              MOV     R4,#0FFH
-038C 7F01              MOV     R7,#01H
-038E 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 269
-0391 8038              SJMP    ?C0048
-0393         ?C0064:
-                                           ; SOURCE LINE # 270
-0393 900000      R     MOV     DPTR,#status
-0396 E0                MOVX    A,@DPTR
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 19  
+0303 7F2C              MOV     R7,#02CH
+0305 7E01              MOV     R6,#01H
+0307 7D00              MOV     R5,#00H
+0309 7C00              MOV     R4,#00H
+030B 120000      E     LCALL   _?CyDelay
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 20  
 
-0397 FF                MOV     R7,A
-0398 EF                MOV     A,R7
-0399 B4081D            CJNE    A,#08H,?C0066
-                                           ; SOURCE LINE # 271
+                                           ; SOURCE LINE # 267
+030E 120000      R     LCALL   jodan
+                                           ; SOURCE LINE # 268
+0311 7F20              MOV     R7,#020H
+0313 7E03              MOV     R6,#03H
+0315 7D00              MOV     R5,#00H
+0317 7C00              MOV     R4,#00H
+0319 120000      E     LCALL   _?CyDelay
+                                           ; SOURCE LINE # 269
+031C 900000      R     MOV     DPTR,#status
+031F E4                CLR     A
+0320 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 270
                                            ; SOURCE LINE # 272
-039C 7D00              MOV     R5,#00H
-039E 7C00              MOV     R4,#00H
-03A0 7F02              MOV     R7,#02H
-03A2 120000      E     LCALL   _Pos_Set
+0321 020000      R     LJMP    ?C0060
+0324         ?C0061:
                                            ; SOURCE LINE # 273
-03A5 7D00              MOV     R5,#00H
-03A7 7C00              MOV     R4,#00H
-03A9 7F03              MOV     R7,#03H
-03AB 120000      E     LCALL   _Pos_Set
+0324 900000      R     MOV     DPTR,#status
+0327 E0                MOVX    A,@DPTR
+0328 FF                MOV     R7,A
+0329 EF                MOV     A,R7
+032A B4022A            CJNE    A,#02H,?C0065
                                            ; SOURCE LINE # 274
-03AE 7D1E              MOV     R5,#01EH
-03B0 7C00              MOV     R4,#00H
-03B2 7F04              MOV     R7,#04H
-03B4 120000      E     LCALL   _Pos_Set
                                            ; SOURCE LINE # 275
-03B7 8012              SJMP    ?C0048
-03B9         ?C0066:
+032D 120000      R     LCALL   jodan
                                            ; SOURCE LINE # 276
-03B9 900000      R     MOV     DPTR,#status
-03BC E0                MOVX    A,@DPTR
-03BD FF                MOV     R7,A
-03BE EF                MOV     A,R7
-03BF B40909            CJNE    A,#09H,?C0048
+0330 900000      R     MOV     DPTR,#kaihiFlag
+0333 E0                MOVX    A,@DPTR
+0334 FF                MOV     R7,A
+0335 EF                MOV     A,R7
+0336 6401              XRL     A,#01H
+0338 6003              JZ      $ + 5H
+033A 020000      R     LJMP    ?C0060
                                            ; SOURCE LINE # 277
                                            ; SOURCE LINE # 278
-03C2 7DBA              MOV     R5,#0BAH
-03C4 7CFF              MOV     R4,#0FFH
-03C6 7F00              MOV     R7,#00H
-03C8 120000      E     LCALL   _Pos_Set
+033D 7F32              MOV     R7,#032H
+033F 7E00              MOV     R6,#00H
+0341 7D00              MOV     R5,#00H
+0343 7C00              MOV     R4,#00H
+0345 120000      E     LCALL   _?CyDelay
                                            ; SOURCE LINE # 279
-03CB         ?C0048:
+0348 7D7F              MOV     R5,#07FH
+034A 7F01              MOV     R7,#01H
+034C 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 280
+034F 900000      R     MOV     DPTR,#kaihiFlag
+0352 E4                CLR     A
+0353 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 281
+                                           ; SOURCE LINE # 282
+0354 020000      R     LJMP    ?C0060
+0357         ?C0065:
+                                           ; SOURCE LINE # 283
+0357 900000      R     MOV     DPTR,#status
+035A E0                MOVX    A,@DPTR
+035B FF                MOV     R7,A
+035C EF                MOV     A,R7
+035D B40319            CJNE    A,#03H,?C0068
                                            ; SOURCE LINE # 284
-03CB 900000      R     MOV     DPTR,#g_timerFlag
-03CE E4                CLR     A
-03CF F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 285
+0360 900000      R     MOV     DPTR,#kaihiFlag
+0363 7401              MOV     A,#01H
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 21  
+
+0365 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 286
-03D0 020000      R     LJMP    ?C0006
-03D3 22                RET     
+0366 7D1E              MOV     R5,#01EH
+0368 7F01              MOV     R7,#01H
+036A 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 287
+036D 7D4B              MOV     R5,#04BH
+036F 7C00              MOV     R4,#00H
+0371 7F01              MOV     R7,#01H
+0373 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 288
+0376 020000      R     LJMP    ?C0060
+0379         ?C0068:
+                                           ; SOURCE LINE # 289
+0379 900000      R     MOV     DPTR,#status
+037C E0                MOVX    A,@DPTR
+037D FF                MOV     R7,A
+037E EF                MOV     A,R7
+037F B4041E            CJNE    A,#04H,?C0070
+                                           ; SOURCE LINE # 290
+                                           ; SOURCE LINE # 291
+0382 7D04              MOV     R5,#04H
+0384 7C00              MOV     R4,#00H
+0386 7F02              MOV     R7,#02H
+0388 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 292
+038B 7D00              MOV     R5,#00H
+038D 7C00              MOV     R4,#00H
+038F 7F03              MOV     R7,#03H
+0391 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 293
+0394 7DC4              MOV     R5,#0C4H
+0396 7CFF              MOV     R4,#0FFH
+0398 7F04              MOV     R7,#04H
+039A 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 294
+039D 020000      R     LJMP    ?C0060
+03A0         ?C0070:
+                                           ; SOURCE LINE # 295
+03A0 900000      R     MOV     DPTR,#status
+03A3 E0                MOVX    A,@DPTR
+03A4 FF                MOV     R7,A
+03A5 EF                MOV     A,R7
+03A6 B40513            CJNE    A,#05H,?C0072
+                                           ; SOURCE LINE # 296
+                                           ; SOURCE LINE # 297
+03A9 7D64              MOV     R5,#064H
+03AB 7F00              MOV     R7,#00H
+03AD 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 298
+03B0 7D87              MOV     R5,#087H
+03B2 7C00              MOV     R4,#00H
+03B4 7F00              MOV     R7,#00H
+03B6 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 299
+03B9 020000      R     LJMP    ?C0060
+03BC         ?C0072:
+                                           ; SOURCE LINE # 300
+03BC 900000      R     MOV     DPTR,#status
+03BF E0                MOVX    A,@DPTR
+03C0 FF                MOV     R7,A
+03C1 EF                MOV     A,R7
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 22  
+
+03C2 6406              XRL     A,#06H
+03C4 7040              JNZ     ?C0074
+                                           ; SOURCE LINE # 301
+                                           ; SOURCE LINE # 302
+03C6 7D28              MOV     R5,#028H
+03C8 7F01              MOV     R7,#01H
+03CA 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 303
+03CD 7D05              MOV     R5,#05H
+03CF 7C00              MOV     R4,#00H
+03D1 7F01              MOV     R7,#01H
+03D3 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 304
+03D6 7DD3              MOV     R5,#0D3H
+03D8 7CFF              MOV     R4,#0FFH
+03DA 7F02              MOV     R7,#02H
+03DC 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 305
+03DF 7D05              MOV     R5,#05H
+03E1 7C00              MOV     R4,#00H
+03E3 7F03              MOV     R7,#03H
+03E5 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 306
+03E8 7D00              MOV     R5,#00H
+03EA 7C00              MOV     R4,#00H
+03EC 7F04              MOV     R7,#04H
+03EE 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 307
+03F1 7FC8              MOV     R7,#0C8H
+03F3 7E00              MOV     R6,#00H
+03F5 7D00              MOV     R5,#00H
+03F7 7C00              MOV     R4,#00H
+03F9 120000      E     LCALL   _?CyDelay
+                                           ; SOURCE LINE # 308
+03FC 7D7F              MOV     R5,#07FH
+03FE 7F01              MOV     R7,#01H
+0400 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 309
+0403 020000      R     LJMP    ?C0060
+0406         ?C0074:
+                                           ; SOURCE LINE # 310
+0406 900000      R     MOV     DPTR,#status
+0409 E0                MOVX    A,@DPTR
+040A FF                MOV     R7,A
+040B EF                MOV     A,R7
+040C B40713            CJNE    A,#07H,?C0076
+                                           ; SOURCE LINE # 311
+                                           ; SOURCE LINE # 312
+040F 7D1E              MOV     R5,#01EH
+0411 7F01              MOV     R7,#01H
+0413 120000      E     LCALL   _speed
+                                           ; SOURCE LINE # 313
+0416 7D9C              MOV     R5,#09CH
+0418 7CFF              MOV     R4,#0FFH
+041A 7F01              MOV     R7,#01H
+041C 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 314
+041F 020000      R     LJMP    ?C0060
+0422         ?C0076:
+                                           ; SOURCE LINE # 315
+0422 900000      R     MOV     DPTR,#status
+0425 E0                MOVX    A,@DPTR
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 23  
+
+0426 FF                MOV     R7,A
+0427 EF                MOV     A,R7
+0428 B4081E            CJNE    A,#08H,?C0078
+                                           ; SOURCE LINE # 316
+                                           ; SOURCE LINE # 317
+042B 7D00              MOV     R5,#00H
+042D 7C00              MOV     R4,#00H
+042F 7F02              MOV     R7,#02H
+0431 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 318
+0434 7D00              MOV     R5,#00H
+0436 7C00              MOV     R4,#00H
+0438 7F03              MOV     R7,#03H
+043A 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 319
+043D 7D1E              MOV     R5,#01EH
+043F 7C00              MOV     R4,#00H
+0441 7F04              MOV     R7,#04H
+0443 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 320
+0446 020000      R     LJMP    ?C0060
+0449         ?C0078:
+                                           ; SOURCE LINE # 321
+0449 900000      R     MOV     DPTR,#status
+044C E0                MOVX    A,@DPTR
+044D FF                MOV     R7,A
+044E EF                MOV     A,R7
+044F B4090C            CJNE    A,#09H,?C0080
+                                           ; SOURCE LINE # 322
+                                           ; SOURCE LINE # 323
+0452 7DBA              MOV     R5,#0BAH
+0454 7CFF              MOV     R4,#0FFH
+0456 7F00              MOV     R7,#00H
+0458 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 324
+045B 020000      R     LJMP    ?C0060
+045E         ?C0080:
+                                           ; SOURCE LINE # 325
+045E 900000      R     MOV     DPTR,#status
+0461 E0                MOVX    A,@DPTR
+0462 FF                MOV     R7,A
+0463 EF                MOV     A,R7
+0464 640A              XRL     A,#0AH
+0466 7043              JNZ     ?C0082
+                                           ; SOURCE LINE # 326
+                                           ; SOURCE LINE # 327
+0468 120000      R     LCALL   dou
+046B         ?C0083:
+                                           ; SOURCE LINE # 328
+046B 120000      E     LCALL   PS2_Controller_get
+046E 120000      E     LCALL   ?C?CLDPTR
+0471 FF                MOV     R7,A
+0472 EF                MOV     A,R7
+0473 C4                SWAP    A
+0474 13                RRC     A
+0475 13                RRC     A
+0476 13                RRC     A
+0477 5401              ANL     A,#01H
+0479 FF                MOV     R7,A
+047A EF                MOV     A,R7
+047B 30E0ED            JNB     ACC.0,?C0083
+047E         ?C0084:
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 24  
+
+                                           ; SOURCE LINE # 329
+047E 120000      R     LCALL   dou2
+0481         ?C0085:
+                                           ; SOURCE LINE # 330
+0481 120000      E     LCALL   PS2_Controller_get
+0484 120000      E     LCALL   ?C?CLDPTR
+0487 FF                MOV     R7,A
+0488 EF                MOV     A,R7
+0489 C4                SWAP    A
+048A 13                RRC     A
+048B 5407              ANL     A,#07H
+048D FF                MOV     R7,A
+048E EF                MOV     A,R7
+048F 30E0EF            JNB     ACC.0,?C0085
+0492         ?C0086:
+                                           ; SOURCE LINE # 331
+0492 120000      R     LCALL   dou3
+0495         ?C0087:
+                                           ; SOURCE LINE # 332
+0495 120000      E     LCALL   PS2_Controller_get
+0498 120000      E     LCALL   ?C?CLDPTR
+049B FF                MOV     R7,A
+049C EF                MOV     A,R7
+049D C4                SWAP    A
+049E 13                RRC     A
+049F 13                RRC     A
+04A0 5403              ANL     A,#03H
+04A2 FF                MOV     R7,A
+04A3 EF                MOV     A,R7
+04A4 20E03B            JB      ACC.0,?C0060
+04A7 80EC              SJMP    ?C0087
+04A9         ?C0088:
+                                           ; SOURCE LINE # 333
+04A9 8037              SJMP    ?C0060
+04AB         ?C0082:
+                                           ; SOURCE LINE # 334
+04AB 900000      R     MOV     DPTR,#status
+04AE E0                MOVX    A,@DPTR
+04AF FF                MOV     R7,A
+04B0 EF                MOV     A,R7
+04B1 640B              XRL     A,#0BH
+04B3 702D              JNZ     ?C0060
+                                           ; SOURCE LINE # 335
+                                           ; SOURCE LINE # 336
+04B5 7DBA              MOV     R5,#0BAH
+04B7 7CFF              MOV     R4,#0FFH
+04B9 7F00              MOV     R7,#00H
+04BB 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 337
+04BE 7DD3              MOV     R5,#0D3H
+04C0 7CFF              MOV     R4,#0FFH
+04C2 7F01              MOV     R7,#01H
+04C4 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 338
+04C7 7DD3              MOV     R5,#0D3H
+04C9 7CFF              MOV     R4,#0FFH
+04CB 7F02              MOV     R7,#02H
+04CD 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 339
+04D0 7D05              MOV     R5,#05H
+04D2 7C00              MOV     R4,#00H
+04D4 7F03              MOV     R7,#03H
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 25  
+
+04D6 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 340
+04D9 7D2D              MOV     R5,#02DH
+04DB 7C00              MOV     R4,#00H
+04DD 7F04              MOV     R7,#04H
+04DF 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 341
+04E2         ?C0060:
+                                           ; SOURCE LINE # 346
+04E2 900000      R     MOV     DPTR,#g_timerFlag
+04E5 E4                CLR     A
+04E6 F0                MOVX    @DPTR,A
+                                           ; SOURCE LINE # 347
+                                           ; SOURCE LINE # 348
+04E7 020000      R     LJMP    ?C0006
+04EA 22                RET     
              ; FUNCTION main (END)
 
              ; FUNCTION _move (BEGIN)
-                                           ; SOURCE LINE # 289
+                                           ; SOURCE LINE # 351
 0000 900000      R     MOV     DPTR,#ID
 0003 EF                MOV     A,R7
 0004 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 292
+                                           ; SOURCE LINE # 354
 0005 900000      R     MOV     DPTR,#step
 0008 E0                MOVX    A,@DPTR
 0009 FE                MOV     R6,A
@@ -1196,10 +1509,8 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000C FF                MOV     R7,A
 000D EF                MOV     A,R7
 000E 4E                ORL     A,R6
-000F 705E              JNZ     ?C0070
-                                           ; SOURCE LINE # 293
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 20  
-
+000F 705E              JNZ     ?C0092
+                                           ; SOURCE LINE # 355
 0011 900000      R     MOV     DPTR,#ID
 0014 E0                MOVX    A,@DPTR
 0015 FF                MOV     R7,A
@@ -1224,10 +1535,12 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0038 AD07              MOV     R5,AR7
 003A D007              POP     AR7
 003C 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 294
+                                           ; SOURCE LINE # 356
 003F 900000      R     MOV     DPTR,#count
 0042 E0                MOVX    A,@DPTR
 0043 FC                MOV     R4,A
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 26  
+
 0044 A3                INC     DPTR
 0045 E0                MOVX    A,@DPTR
 0046 FD                MOV     R5,A
@@ -1243,17 +1556,17 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 005A 795C              MOV     R1,#05CH
 005C 7842              MOV     R0,#042H
 005E 120000      E     LCALL   ?C?FPCMP3
-0061 702E              JNZ     ?C0072
-                                           ; SOURCE LINE # 295
+0061 702E              JNZ     ?C0094
+                                           ; SOURCE LINE # 357
 0063 900000      R     MOV     DPTR,#step
 0066 E4                CLR     A
 0067 75F001            MOV     B,#01H
 006A 120000      E     LCALL   ?C?IILDX
-                                           ; SOURCE LINE # 296
-                                           ; SOURCE LINE # 297
-006D 8022              SJMP    ?C0072
-006F         ?C0070:
-                                           ; SOURCE LINE # 298
+                                           ; SOURCE LINE # 358
+                                           ; SOURCE LINE # 359
+006D 8022              SJMP    ?C0094
+006F         ?C0092:
+                                           ; SOURCE LINE # 360
 006F 900000      R     MOV     DPTR,#step
 0072 E0                MOVX    A,@DPTR
 0073 FE                MOV     R6,A
@@ -1262,202 +1575,292 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0076 FF                MOV     R7,A
 0077 EF                MOV     A,R7
 0078 6401              XRL     A,#01H
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 21  
-
 007A 4E                ORL     A,R6
-007B 7014              JNZ     ?C0072
-                                           ; SOURCE LINE # 299
+007B 7014              JNZ     ?C0094
+                                           ; SOURCE LINE # 361
 007D 900000      R     MOV     DPTR,#ID
 0080 E0                MOVX    A,@DPTR
 0081 FF                MOV     R7,A
 0082 7D3C              MOV     R5,#03CH
 0084 7C00              MOV     R4,#00H
 0086 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 300
+                                           ; SOURCE LINE # 362
 0089 900000      R     MOV     DPTR,#count
 008C E4                CLR     A
 008D F0                MOVX    @DPTR,A
 008E A3                INC     DPTR
 008F E4                CLR     A
 0090 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 301
-0091         ?C0072:
-                                           ; SOURCE LINE # 302
+                                           ; SOURCE LINE # 363
+0091         ?C0094:
+                                           ; SOURCE LINE # 364
 0091 900000      R     MOV     DPTR,#count
 0094 E4                CLR     A
 0095 75F001            MOV     B,#01H
 0098 120000      E     LCALL   ?C?IILDX
-                                           ; SOURCE LINE # 303
+                                           ; SOURCE LINE # 365
 009B 22                RET     
              ; FUNCTION _move (END)
 
              ; FUNCTION jodan (BEGIN)
-                                           ; SOURCE LINE # 305
-                                           ; SOURCE LINE # 306
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 27  
+
+                                           ; SOURCE LINE # 367
+                                           ; SOURCE LINE # 368
 0000 7DBA              MOV     R5,#0BAH
 0002 7CFF              MOV     R4,#0FFH
 0004 7F00              MOV     R7,#00H
 0006 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 307
+                                           ; SOURCE LINE # 369
 0009 7D05              MOV     R5,#05H
 000B 7C00              MOV     R4,#00H
 000D 7F01              MOV     R7,#01H
 000F 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 308
+                                           ; SOURCE LINE # 370
 0012 7DD3              MOV     R5,#0D3H
 0014 7CFF              MOV     R4,#0FFH
 0016 7F02              MOV     R7,#02H
 0018 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 309
+                                           ; SOURCE LINE # 371
 001B 7D05              MOV     R5,#05H
 001D 7C00              MOV     R4,#00H
 001F 7F03              MOV     R7,#03H
 0021 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 310
+                                           ; SOURCE LINE # 372
 0024 7D00              MOV     R5,#00H
 0026 7C00              MOV     R4,#00H
 0028 7F04              MOV     R7,#04H
 002A 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 311
+                                           ; SOURCE LINE # 373
 002D 22                RET     
              ; FUNCTION jodan (END)
 
              ; FUNCTION karimen (BEGIN)
-                                           ; SOURCE LINE # 313
-                                           ; SOURCE LINE # 314
+                                           ; SOURCE LINE # 375
+                                           ; SOURCE LINE # 376
 0000 7DBA              MOV     R5,#0BAH
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 22  
-
 0002 7CFF              MOV     R4,#0FFH
 0004 7F00              MOV     R7,#00H
 0006 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 315
+                                           ; SOURCE LINE # 377
 0009 7DD3              MOV     R5,#0D3H
 000B 7CFF              MOV     R4,#0FFH
 000D 7F01              MOV     R7,#01H
 000F 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 316
+                                           ; SOURCE LINE # 378
 0012 7DA6              MOV     R5,#0A6H
 0014 7CFF              MOV     R4,#0FFH
 0016 7F02              MOV     R7,#02H
 0018 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 317
+                                           ; SOURCE LINE # 379
 001B 7D05              MOV     R5,#05H
 001D 7C00              MOV     R4,#00H
 001F 7F03              MOV     R7,#03H
 0021 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 318
+                                           ; SOURCE LINE # 380
 0024 7D2D              MOV     R5,#02DH
 0026 7C00              MOV     R4,#00H
 0028 7F04              MOV     R7,#04H
 002A 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 319
+                                           ; SOURCE LINE # 381
 002D 22                RET     
              ; FUNCTION karimen (END)
 
              ; FUNCTION karimen2 (BEGIN)
-                                           ; SOURCE LINE # 320
-                                           ; SOURCE LINE # 321
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 28  
+
+                                           ; SOURCE LINE # 382
+                                           ; SOURCE LINE # 383
 0000 7DBA              MOV     R5,#0BAH
 0002 7CFF              MOV     R4,#0FFH
 0004 7F00              MOV     R7,#00H
 0006 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 322
-0009 7DB0              MOV     R5,#0B0H
+                                           ; SOURCE LINE # 384
+0009 7DC4              MOV     R5,#0C4H
 000B 7CFF              MOV     R4,#0FFH
 000D 7F01              MOV     R7,#01H
 000F 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 323
+                                           ; SOURCE LINE # 385
 0012 7D00              MOV     R5,#00H
 0014 7C00              MOV     R4,#00H
 0016 7F02              MOV     R7,#02H
 0018 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 324
+                                           ; SOURCE LINE # 386
 001B 7D05              MOV     R5,#05H
 001D 7C00              MOV     R4,#00H
 001F 7F03              MOV     R7,#03H
 0021 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 325
+                                           ; SOURCE LINE # 387
 0024 7DF1              MOV     R5,#0F1H
 0026 7CFF              MOV     R4,#0FFH
 0028 7F04              MOV     R7,#04H
 002A 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 326
+                                           ; SOURCE LINE # 388
 002D 22                RET     
              ; FUNCTION karimen2 (END)
 
              ; FUNCTION antei (BEGIN)
-                                           ; SOURCE LINE # 328
-                                           ; SOURCE LINE # 329
+                                           ; SOURCE LINE # 390
+                                           ; SOURCE LINE # 391
 0000 7DBA              MOV     R5,#0BAH
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 23  
-
 0002 7CFF              MOV     R4,#0FFH
 0004 7F00              MOV     R7,#00H
 0006 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 330
+                                           ; SOURCE LINE # 392
 0009 7DF6              MOV     R5,#0F6H
 000B 7CFF              MOV     R4,#0FFH
 000D 7F01              MOV     R7,#01H
 000F 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 331
+                                           ; SOURCE LINE # 393
 0012 7D04              MOV     R5,#04H
 0014 7C00              MOV     R4,#00H
 0016 7F02              MOV     R7,#02H
 0018 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 332
+                                           ; SOURCE LINE # 394
 001B 7D00              MOV     R5,#00H
 001D 7C00              MOV     R4,#00H
 001F 7F03              MOV     R7,#03H
 0021 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 333
+                                           ; SOURCE LINE # 395
 0024 7DDD              MOV     R5,#0DDH
 0026 7CFF              MOV     R4,#0FFH
 0028 7F04              MOV     R7,#04H
 002A 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 334
+                                           ; SOURCE LINE # 396
 002D 22                RET     
              ; FUNCTION antei (END)
 
              ; FUNCTION tyudan (BEGIN)
-                                           ; SOURCE LINE # 335
-                                           ; SOURCE LINE # 336
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 29  
+
+                                           ; SOURCE LINE # 397
+                                           ; SOURCE LINE # 398
 0000 7DBA              MOV     R5,#0BAH
 0002 7CFF              MOV     R4,#0FFH
 0004 7F00              MOV     R7,#00H
 0006 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 337
+                                           ; SOURCE LINE # 399
 0009 7D05              MOV     R5,#05H
 000B 7C00              MOV     R4,#00H
 000D 7F01              MOV     R7,#01H
 000F 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 338
-0012 7D92              MOV     R5,#092H
+                                           ; SOURCE LINE # 400
+0012 7D9C              MOV     R5,#09CH
 0014 7CFF              MOV     R4,#0FFH
 0016 7F02              MOV     R7,#02H
 0018 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 339
+                                           ; SOURCE LINE # 401
 001B 7D05              MOV     R5,#05H
 001D 7C00              MOV     R4,#00H
 001F 7F03              MOV     R7,#03H
 0021 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 340
+                                           ; SOURCE LINE # 402
 0024 7D00              MOV     R5,#00H
 0026 7C00              MOV     R4,#00H
 0028 7F04              MOV     R7,#04H
 002A 120000      E     LCALL   _Pos_Set
-                                           ; SOURCE LINE # 341
+                                           ; SOURCE LINE # 403
 002D 22                RET     
              ; FUNCTION tyudan (END)
+
+             ; FUNCTION dou (BEGIN)
+                                           ; SOURCE LINE # 404
+                                           ; SOURCE LINE # 405
+0000 7DD3              MOV     R5,#0D3H
+0002 7CFF              MOV     R4,#0FFH
+0004 7F00              MOV     R7,#00H
+0006 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 406
+0009 7DBA              MOV     R5,#0BAH
+000B 7CFF              MOV     R4,#0FFH
+000D 7F02              MOV     R7,#02H
+000F 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 407
+0012 7D37              MOV     R5,#037H
+0014 7C00              MOV     R4,#00H
+0016 7F03              MOV     R7,#03H
+0018 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 408
+001B 7D46              MOV     R5,#046H
+001D 7C00              MOV     R4,#00H
+001F 7F04              MOV     R7,#04H
+0021 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 409
+0024 22                RET     
+             ; FUNCTION dou (END)
+
+             ; FUNCTION dou2 (BEGIN)
+                                           ; SOURCE LINE # 410
+                                           ; SOURCE LINE # 411
+0000 7DBA              MOV     R5,#0BAH
+0002 7CFF              MOV     R4,#0FFH
+0004 7F00              MOV     R7,#00H
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 30  
+
+0006 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 412
+0009 7DE2              MOV     R5,#0E2H
+000B 7CFF              MOV     R4,#0FFH
+000D 7F01              MOV     R7,#01H
+000F 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 413
+0012 7DD3              MOV     R5,#0D3H
+0014 7CFF              MOV     R4,#0FFH
+0016 7F02              MOV     R7,#02H
+0018 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 414
+001B 7DDD              MOV     R5,#0DDH
+001D 7CFF              MOV     R4,#0FFH
+001F 7F03              MOV     R7,#03H
+0021 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 415
+0024 7D2D              MOV     R5,#02DH
+0026 7C00              MOV     R4,#00H
+0028 7F04              MOV     R7,#04H
+002A 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 416
+002D 22                RET     
+             ; FUNCTION dou2 (END)
+
+             ; FUNCTION dou3 (BEGIN)
+                                           ; SOURCE LINE # 417
+                                           ; SOURCE LINE # 418
+0000 7DBA              MOV     R5,#0BAH
+0002 7CFF              MOV     R4,#0FFH
+0004 7F00              MOV     R7,#00H
+0006 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 419
+0009 7DB5              MOV     R5,#0B5H
+000B 7CFF              MOV     R4,#0FFH
+000D 7F01              MOV     R7,#01H
+000F 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 420
+0012 7D00              MOV     R5,#00H
+0014 7C00              MOV     R4,#00H
+0016 7F02              MOV     R7,#02H
+0018 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 421
+001B 7DD3              MOV     R5,#0D3H
+001D 7CFF              MOV     R4,#0FFH
+001F 7F03              MOV     R7,#03H
+0021 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 422
+0024 7DD8              MOV     R5,#0D8H
+0026 7CFF              MOV     R4,#0FFH
+0028 7F04              MOV     R7,#04H
+002A 120000      E     LCALL   _Pos_Set
+                                           ; SOURCE LINE # 423
+002D 22                RET     
+             ; FUNCTION dou3 (END)
 
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1407    ----
-C51 COMPILER V9.51   MAIN                                                                  12/11/2015 03:35:21 PAGE 24  
-
+   CODE SIZE        =   1815    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      5     121
+   XDATA SIZE       =      5     123
+C51 COMPILER V9.51   MAIN                                                                  12/11/2015 07:59:15 PAGE 31  
+
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

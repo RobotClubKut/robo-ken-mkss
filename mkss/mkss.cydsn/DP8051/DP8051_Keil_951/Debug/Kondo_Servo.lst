@@ -1,4 +1,4 @@
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 1   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 1   
 
 
 C51 COMPILER V9.51, COMPILATION OF MODULE KONDO_SERVO
@@ -39,7 +39,7 @@ line level    source
   28   1          pos_h=((int)rx[4]<<7)&0x3f80; 
   29   1          pos_l=(int)rx[5]&0x7f;
   30   1          pos=pos_h|pos_l; //値に変換
-  31   1          pos=(7500-pos)*0.0333333; //角度に変換
+  31   1          pos=(7500-pos)*0.0333333f; //角度に変換
   32   1          return pos;
   33   1      }
 *** WARNING C280 IN LINE 14 OF .\Kondo_Servo.c: 'kakudo': unreferenced local variable
@@ -62,7 +62,7 @@ line level    source
   46          
   47          void ID_Read()
   48          {       
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 2   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 2   
 
   49   1          int i,pos_h,pos_l,pos,kakudo,Data;
   50   1          uint8 tx[4], rx[6];
@@ -111,7 +111,7 @@ line level    source
   88   1          CyDelay(1000);
   89   1      }
 *** WARNING C280 IN LINE 73 OF .\Kondo_Servo.c: 'buffer': unreferenced local variable
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 3   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 3   
 
 ASSEMBLY LISTING OF GENERATED OBJECT CODE
 
@@ -175,7 +175,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 000B 4480              ORL     A,#080H
 000D FF                MOV     R7,A
 000E 900000      R     MOV     DPTR,#tx
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 4   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 4   
 
 0011 EF                MOV     A,R7
 0012 F0                MOVX    @DPTR,A
@@ -239,7 +239,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0066 A4                MUL     AB
 0067 FF                MOV     R7,A
 0068 AEF0              MOV     R6,B
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 5   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 5   
 
 006A EE                MOV     A,R6
 006B 543F              ANL     A,#03FH
@@ -303,7 +303,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00B5 C3                CLR     C
 00B6 744C              MOV     A,#04CH
 00B8 9F                SUBB    A,R7
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 6   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 6   
 
 00B9 FD                MOV     R5,A
 00BA 741D              MOV     A,#01DH
@@ -367,7 +367,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0028 EE                MOV     A,R6
 0029 F0                MOVX    @DPTR,A
 002A A3                INC     DPTR
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 7   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 7   
 
 002B EF                MOV     A,R7
 002C F0                MOVX    @DPTR,A
@@ -431,7 +431,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 007C 120000      E     LCALL   _?CyDelay
                                            ; SOURCE LINE # 45
 007F 22                RET     
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 8   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 8   
 
              ; FUNCTION _Pos_Set (END)
 
@@ -495,7 +495,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0047 900000      R     MOV     DPTR,#i
 004A E4                CLR     A
 004B 75F001            MOV     B,#01H
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 9   
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 9   
 
 004E 120000      E     LCALL   ?C?IILDX
 0051 80CA              SJMP    ?C0007
@@ -559,7 +559,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 00A9 900000      R     MOV     DPTR,#rx
 00AC E0                MOVX    A,@DPTR
 00AD FF                MOV     R7,A
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 10  
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 10  
 
 00AE 7E00              MOV     R6,#00H
 00B0 900000      E     MOV     DPTR,#?_sprintf?BYTE+06H
@@ -623,7 +623,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0004 F0                MOVX    @DPTR,A
                                            ; SOURCE LINE # 71
                                            ; SOURCE LINE # 75
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 11  
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 11  
 
 0005 900000      R     MOV     DPTR,#ID
 0008 E0                MOVX    A,@DPTR
@@ -687,7 +687,7 @@ ASSEMBLY LISTING OF GENERATED OBJECT CODE
 0059 E0                MOVX    A,@DPTR
 005A FF                MOV     R7,A
 005B EF                MOV     A,R7
-C51 COMPILER V9.51   KONDO_SERVO                                                           12/10/2015 22:46:07 PAGE 12  
+C51 COMPILER V9.51   KONDO_SERVO                                                           12/11/2015 06:46:30 PAGE 12  
 
 005C C3                CLR     C
 005D 9405              SUBB    A,#05H
