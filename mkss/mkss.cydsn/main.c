@@ -14,13 +14,16 @@
 #include "PS2_Controller.h"
 #include "ICS3_5.h"
 
-#define MODE_TYUDAN 0
-#define MODE_MEN    1
-#define MODE_JODAN  2
-#define MODE_KAIHI  3
-#define MODE_NOBI   4
-#define MODE_KAITEN 5
-#define MODE_JODAN2 6
+#define MODE_TYUDAN     0
+#define MODE_MEN        1
+#define MODE_JODAN      2
+#define MODE_KAIHI      3
+#define MODE_NOBI       4
+#define MODE_KAITEN     5
+#define MODE_JODAN2     6
+#define MODE_KAIHI2     7
+#define MODE_NOBI2      8
+#define MODE_KAITEN2    9 
 
 uint8 g_timerFlag;
 CY_ISR(clock_isr)
@@ -45,6 +48,7 @@ int main()
     uint8 l1Flag = 1;
     uint8 l2Flag = 1;
     uint8 r1Flag = 1;
+    uint8 r2Flag = 1;
     uint8 kensei = 1;
     int16 kakudo=0,count=0;
     char buffer[100];
@@ -68,7 +72,7 @@ int main()
             //UART_Debug_PutString(buffer);
 
         //tyudan();
-        if(g_timerFlag == 2)
+        if(g_timerFlag == 1)
         {
             ////実験
 //
@@ -127,9 +131,13 @@ int main()
                     {
                         status = MODE_JODAN;
                     }
-                    else if(status==MODE_KAITEN)
+                    else if(status==MODE_JODAN2)
                     {
-                        status = MODE_JODAN2;
+                        status = MODE_KAIHI2;
+                    }
+                    else if(status==MODE_KAITEN2)
+                    {
+                        status = MODE_JODAN;
                     }
                     l1Flag = 0;
                 }
@@ -150,6 +158,10 @@ int main()
                     {
                         status = MODE_KAIHI;
                     }
+                    else if(status==MODE_KAIHI2)
+                    {
+                        status = MODE_NOBI2;
+                    }
                     l2Flag = 0;
                 }
             }
@@ -165,12 +177,31 @@ int main()
                     {
                         status = MODE_KAITEN;
                     }
+                    else if(status==MODE_NOBI2)
+                    {
+                        status = MODE_KAITEN2;
+                    }
                     r1Flag = 0;
                 }   
             }
             else
             {
                 r1Flag = 1;
+            }
+            if(psData.R2)
+            {
+                if(r2Flag)
+                {
+                    if(status==MODE_KAITEN)
+                    {
+                        status = MODE_JODAN2;
+                    }
+                    r2Flag = 0;
+                }   
+            }
+            else
+            {
+                r2Flag = 1;
             }
 
             /*---状態変化---*/            
@@ -199,6 +230,7 @@ int main()
                 jodan();
                 if(kaihiFlag==1)
                 {
+                    CyDelay(50);
                     speed(1,127);
                     kaihiFlag=0;
                 }
@@ -207,7 +239,7 @@ int main()
             {
                 kaihiFlag=1;
                 speed(1,30);
-                Pos_Set(1,80);
+                Pos_Set(1,75);
             }
             else if(status==MODE_NOBI)
             {
@@ -227,8 +259,25 @@ int main()
                 Pos_Set(2,-45);
                 Pos_Set(3,5);
                 Pos_Set(4,0);
+                CyDelay(200);
+                speed(1,127);
             }
-                            
+            else if(status==MODE_KAIHI2)
+            {
+                speed(1,30);
+                Pos_Set(1,-100);
+            }
+            else if(status==MODE_NOBI2)
+            {
+                Pos_Set(2,0);
+                Pos_Set(3,0);
+                Pos_Set(4,30);
+            }
+            else if(status==MODE_KAITEN2)
+            {
+                Pos_Set(0,-70);
+            }
+
             /*---デバッグ---*/
             //sprintf(buffer,"%d %d %d %d %d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (int)Free(4));
             //UART_Debug_PutString(buffer);
