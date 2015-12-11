@@ -26,6 +26,7 @@
 #define MODE_KAITEN2    9 
 #define MODE_DOU        10
 #define MODE_MEN2       11
+#define MODE_MEN3       12
 
 uint8 g_timerFlag;
 CY_ISR(clock_isr)
@@ -43,6 +44,7 @@ void dou(void);
 void dou2(void);
 void dou3(void);
 void men(void);
+
 
 int main()
 {
@@ -79,6 +81,8 @@ int main()
         /*---10msごとにフラグ---*/
             //sprintf(buffer,"ID0:%d ID1:%d ID2:%d ID3:%d ID4:%d\n", (int)Free(0), (int)Free(1), (int)Free(2), (int)Free(3), (int)Free(4));
             //UART_Debug_PutString(buffer);
+        //Pos_Set(0,-70);
+        //antei();
         if(g_timerFlag == 1)
         {
             ////実験
@@ -92,7 +96,7 @@ int main()
             psData = PS2_Controller_get();
             
             /*---コントローラー処理---*/
-            if(psData.CIRCLE)
+            if(psData.CIRCLE)//上段と中段
             {
                 if(circleFlag)
                 {
@@ -115,9 +119,9 @@ int main()
             {
                 if(triangleflg)
                 {
-                    if(status==MODE_TYUDAN)
+                    if((status==MODE_MEN)||(status==MODE_MEN2))
                     {
-                        status = MODE_MEN;
+                        status = MODE_MEN3;
                     }
                     triangleflg = 0;
                 }
@@ -180,7 +184,15 @@ int main()
             {
                 if(r1Flag)
                 {
-                    if(status==MODE_NOBI)
+                    if(status==MODE_TYUDAN)//面（ガチ）
+                    {
+                        status = MODE_MEN;
+                    }
+                    else if(status==MODE_JODAN)
+                    {
+                        status = MODE_MEN;
+                    }
+                    else if(status==MODE_NOBI)
                     {
                         status = MODE_KAITEN;
                     }
@@ -188,12 +200,21 @@ int main()
                     {
                         status = MODE_KAITEN2;
                     }
+     
                     r1Flag = 0;
                 }   
             }
             else
             {
                 r1Flag = 1;
+                if(status==MODE_MEN)
+                {
+                    status=MODE_TYUDAN;
+                }
+                if(status==MODE_MEN2)
+                {
+                    status=MODE_JODAN;
+                }
             }
             if(psData.R2)
             {
@@ -255,20 +276,17 @@ int main()
                 tyudan();
                 menflag=0;
             }
-            else if(status==MODE_MEN){
-                if(menflag==0){
-                    karimen();
-                    menflag=1;
-                    CyDelay(30);
-                }
-                else{
-                    karimen2();
-                    CyDelay(300);
-                    jodan();
-                    CyDelay(800);
-                    status=MODE_TYUDAN;
-                }
-                //move(4);
+            else if(status==MODE_MEN)
+            {
+                karimen();
+            }
+            else if(status==MODE_MEN3)
+            {
+                karimen2();
+                CyDelay(300);
+                jodan();
+                CyDelay(800);
+                status=MODE_TYUDAN;
             }
             else if(status==MODE_JODAN)
             {
@@ -331,13 +349,9 @@ int main()
                 dou3();
                 while(!PS2_Controller_get().DOWN);
             }
-            else if(status==MODE_MEN2)
-            {         
-                Pos_Set(0,-70);
-                Pos_Set(1,-45);
-                Pos_Set(2,-45);
-                Pos_Set(3,5);
-                Pos_Set(4,45);
+            else if(status==MODE_MEN2)//上段からの面
+            {
+                men();
             }
             
             /*---デバッグ---*/
@@ -420,6 +434,13 @@ void dou3(void){
     Pos_Set(2,0);//変更有り
     Pos_Set(3,-45);
     Pos_Set(4,-40);
+}
+void men(void){
+    Pos_Set(0,-70);
+    Pos_Set(1,-45);
+    Pos_Set(2,-45);
+    Pos_Set(3,5);
+    Pos_Set(4,45);
 }
 
 /* [] END OF FILE */
