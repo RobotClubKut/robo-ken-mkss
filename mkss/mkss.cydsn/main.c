@@ -27,6 +27,15 @@
 #define MODE_DOU        10
 #define MODE_MEN2       11
 #define MODE_MEN3       12
+#define MODE_DOU2       13
+#define MODE_DOU3       14
+#define MODE_LEFIT_MEN  15
+#define MODE_RIGHT_MEN  16
+#define MODE_SAGE       17
+#define MODE_AGE        18
+#define MODE_NIGE       19  
+#define MODE_FREE       20
+
 
 uint8 g_timerFlag;
 CY_ISR(clock_isr)
@@ -57,13 +66,17 @@ int main()
     uint8 crossFlag = 1;
     uint8 l1Flag = 1;
     uint8 l2Flag = 1;
+    uint8 l3Flag = 1;
     uint8 r1Flag = 1;
     uint8 r2Flag = 1;
+    uint8 upFlag = 1;
+    uint8 downFlag = 1;
+    uint8 selectFlag = 1;
     uint8 kensei = 1;
     int16 kakudo=0,count=0;
     char buffer[100];
     PS2Controller psData;
-
+    
     CyGlobalIntEnable; /* Enable global interrupts. */
     isr_mkss_StartEx(clock_isr);
     UART_Servo_Start();
@@ -72,8 +85,6 @@ int main()
     CyDelay(1000);
     while(!PS2_Analog_Flag());
     while(!PS2_Controller_get().START);
-    speed(0,127);
-    speed(2,70);
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     for(;;)
     {
@@ -83,6 +94,7 @@ int main()
             //UART_Debug_PutString(buffer);
         //Pos_Set(0,-70);
         //antei();
+        
         if(g_timerFlag == 1)
         {
             ////実験
@@ -96,9 +108,9 @@ int main()
             psData = PS2_Controller_get();
             
             /*---コントローラー処理---*/
-            if(psData.CIRCLE)//上段と中段
+            if(psData.L2)//上段と中段
             {
-                if(circleFlag)
+                if(l2Flag)
                 {
                     if(status==MODE_JODAN){
                         status = MODE_TYUDAN;
@@ -107,19 +119,27 @@ int main()
                     {
                         status = MODE_JODAN;
                     }
-                    circleFlag = 0;
+                    else if(status==MODE_JODAN2)//上段2から中段へ
+                    {
+                        status = MODE_TYUDAN;
+                    }
+                    l2Flag = 0;
                 }
             }
             else
             {
-                circleFlag = 1;
+                l2Flag = 1;
             }
             
-            if(psData.TRIANGLE)
+            if(psData.TRIANGLE)//面のラストの動き
             {
                 if(triangleflg)
                 {
                     if((status==MODE_MEN)||(status==MODE_MEN2))
+                    {
+                        status = MODE_MEN3;
+                    }
+                    else if(status==MODE_AGE)
                     {
                         status = MODE_MEN3;
                     }
@@ -130,7 +150,7 @@ int main()
             {
                 triangleflg = 1;
             }
-            if(psData.L1)
+            if(psData.L1)//回避と回転
             {
                 if(l1Flag)
                 {
@@ -146,10 +166,6 @@ int main()
                     {
                         status = MODE_KAIHI2;
                     }
-                    else if(status==MODE_KAITEN2)
-                    {
-                        status = MODE_JODAN;
-                    }
                     l1Flag = 0;
                 }
             }
@@ -157,38 +173,12 @@ int main()
             {
                 l1Flag = 1;
             }
-            if(psData.L2)
-            {
-                if(l2Flag)
-                {
-                    if(status==MODE_KAIHI)
-                    {
-                        status = MODE_NOBI;
-                    }
-                    else if(status==MODE_NOBI)
-                    {
-                        status = MODE_KAIHI;
-                    }
-                    else if(status==MODE_KAIHI2)
-                    {
-                        status = MODE_NOBI2;
-                    }
-                    l2Flag = 0;
-                }
-            }
-            else
-            {
-                l2Flag = 1;
-            }
-            if(psData.R1)
+            
+            if(psData.R1)//面の最後の動き&伸びからの回転
             {
                 if(r1Flag)
                 {
-                    if(status==MODE_TYUDAN)//面（ガチ）
-                    {
-                        status = MODE_MEN;
-                    }
-                    else if(status==MODE_JODAN)
+                    if((status==MODE_TYUDAN)||(status==MODE_JODAN))//面（ガチ）
                     {
                         status = MODE_MEN;
                     }
@@ -202,9 +192,9 @@ int main()
                     }
      
                     r1Flag = 0;
-                }   
+                }
             }
-            else
+            else//離したら戻る
             {
                 r1Flag = 1;
                 if(status==MODE_MEN)
@@ -216,60 +206,178 @@ int main()
                     status=MODE_JODAN;
                 }
             }
-            if(psData.R2)
+            if(psData.R2)//回転して体を起こす
             {
                 if(r2Flag)
                 {
-                    if(status==MODE_KAITEN)
+                    if(status==MODE_TYUDAN)//胴
+                    {
+                        status = MODE_DOU;
+                    }
+                    else if(status==MODE_KAITEN)
                     {
                         status = MODE_JODAN2;
                     }
                     r2Flag = 0;
-                }   
+                }
             }
             else
             {
                 r2Flag = 1;
+                if(status==MODE_DOU)
+                {
+                    status=MODE_TYUDAN;
+                }
             }
 
-            if(psData.SQUARE)
+            if(psData.SQUARE)//胴と左右面
             {
                 if(squareFlag)
                 {
-                    if(status==MODE_TYUDAN)
+                    if(status==MODE_DOU)//胴を振り切る
                     {
-                        status = MODE_DOU;
+                        status = MODE_DOU2;
                     }
-                    else if(status==MODE_DOU)
+                    else if(status==MODE_TYUDAN)
                     {
-                        status = MODE_TYUDAN;
+                        status = MODE_DOU3;
                     }
+                    else if(status==MODE_MEN)
+                    {
+                        status = MODE_LEFIT_MEN;
+                    }
+                    else if(status==MODE_AGE)
+                    {
+                        status = MODE_LEFIT_MEN;
+                    }
+                    
                     squareFlag = 0;
                 }   
             }
             else
             {
                 squareFlag = 1;
+            }  
+            if(psData.CIRCLE)
+            {
+                if(circleFlag)
+                {
+                    if(status==MODE_MEN)
+                    {
+                        status = MODE_RIGHT_MEN;
+                    }
+                    else if(status==MODE_AGE)
+                    {
+                        status = MODE_RIGHT_MEN;
+                    }
+                    circleFlag = 0;
+                }   
+            }
+            else
+            {
+                circleFlag = 1;
+            }
+            
+            if(psData.DOWN)//伸び
+            {
+                if(downFlag)
+                {
+                    if(status==MODE_KAIHI)
+                    {
+                        status = MODE_NOBI;
+                    }
+                    else if(status==MODE_KAIHI2)
+                    {
+                        status = MODE_NOBI2;
+                    }
+                    else if(status==MODE_TYUDAN)
+                    {
+                        status = MODE_SAGE;
+                    }
+                    downFlag = 0;
+                }   
+            }
+            else
+            {
+                downFlag = 1;
+                if(status==MODE_SAGE)
+                {
+                    status = MODE_TYUDAN;
+                }
+            }
+            if(psData.L3)//回転
+            {
+                if(l3Flag)
+                {
+                    if(status==MODE_NOBI)
+                    {
+                        status = MODE_KAITEN;
+                    }
+                    
+                    else if(status==MODE_NOBI2)
+                    {
+                        status = MODE_KAITEN2;
+                    }
+                    l3Flag = 0;
+                }   
+            }
+            else
+            {
+                l3Flag = 1;
+            }
+            if(psData.UP)//回転
+            {
+                if(upFlag)
+                {
+                    if(status==MODE_TYUDAN)
+                    {
+                        status = MODE_AGE;
+                    }
+                    upFlag = 0;
+                }   
+            }
+            else
+            {
+                upFlag = 1;
+                if(status==MODE_AGE)
+                {
+                    status = MODE_TYUDAN;
+                }
             }
             if(psData.CROSS)
             {
                 if(crossFlag)
                 {
-                    if(status==MODE_JODAN)
+                    if(status==MODE_TYUDAN)
                     {
-                        status = MODE_MEN2;
+                        status = MODE_NIGE;
                     }
-                    else if(status==MODE_MEN2)
-                    {
-                        status = MODE_JODAN;
-                    }
-                    crossFlag = 0;
+
+                    circleFlag = 0;
                 }   
             }
             else
             {
-                crossFlag = 1;
+                circleFlag = 1;  
+                if(status==MODE_NIGE)
+                {
+                    status = MODE_TYUDAN;
+                    
+                }
             }
+            
+            if(psData.SELECT)
+            {
+                for(;;){
+                    
+                    Free(0);
+                    Free(1);
+                    Free(2);
+                    Free(3);
+                    Free(4);
+                }
+            }
+            
             /*---状態変化---*/            
             if(status==MODE_TYUDAN)
             {
@@ -301,19 +409,21 @@ int main()
             else if(status==MODE_KAIHI)
             {
                 kaihiFlag=1;
-                speed(1,30);
-                Pos_Set(1,75);
+                speed(1,50);
+                Pos_Set(1,81);
             }
             else if(status==MODE_NOBI)
             {
                 Pos_Set(2,4);
                 Pos_Set(3,0);
-                Pos_Set(4,-60);
+                Pos_Set(4,-80);//-60
             }
             else if(status==MODE_KAITEN)
             {
                 speed(0,100);
                 Pos_Set(0,135);
+                CyDelay(1000);
+                status=MODE_JODAN2;
             }
             else if(status==MODE_JODAN2)
             {
@@ -328,30 +438,92 @@ int main()
             else if(status==MODE_KAIHI2)
             {
                 speed(1,30);
-                Pos_Set(1,-100);
+                Pos_Set(1,-102);
             }
             else if(status==MODE_NOBI2)
             {
                 Pos_Set(2,0);
                 Pos_Set(3,0);
-                Pos_Set(4,30);
+                Pos_Set(4,50);
             }
             else if(status==MODE_KAITEN2)
             {
                 Pos_Set(0,-70);
+                CyDelay(1000);
+                status=MODE_TYUDAN;
             }
             else if(status==MODE_DOU)
             {
                 dou();
-                while(!PS2_Controller_get().LEFT);
+            }
+            else if(status==MODE_DOU2)
+            {
                 dou2();
-                while(!PS2_Controller_get().RIGHT);
+                CyDelay(100);
                 dou3();
-                while(!PS2_Controller_get().DOWN);
+                CyDelay(600);
+                status = MODE_TYUDAN;
             }
             else if(status==MODE_MEN2)//上段からの面
             {
                 men();
+            }
+            else if(status==MODE_DOU3)
+            {
+                dou2();
+                CyDelay(100);
+                dou3();
+                CyDelay(700);
+                status = MODE_TYUDAN;
+            }
+            else if(status==MODE_LEFIT_MEN)
+            { 
+                Pos_Set(0,-70);
+                Pos_Set(1,-60);
+                Pos_Set(2,0);
+                Pos_Set(3,-35);
+                Pos_Set(4,-15);
+                CyDelay(400);
+                jodan();
+                CyDelay(800);
+                status=MODE_TYUDAN;
+            }
+            else if(status==MODE_RIGHT_MEN)
+            {             
+                Pos_Set(0,-70);
+                Pos_Set(1,-60);
+                Pos_Set(2,0);
+                Pos_Set(3,35);
+                Pos_Set(4,-15);
+                CyDelay(400);
+                jodan();
+                CyDelay(800);
+                status=MODE_TYUDAN;
+            }
+            else if(status==MODE_SAGE)
+            {
+                Pos_Set(4,-45);
+            }
+            else if(status==MODE_AGE)
+            {
+                Pos_Set(4,80);
+            }
+            else if(status==MODE_NIGE)
+            {
+                //speed(1,50);
+                Pos_Set(0,-75);
+                Pos_Set(1,81);
+                Pos_Set(2,-100);
+                Pos_Set(3,6);
+                Pos_Set(4,95);
+            }
+            else if(status==MODE_FREE)
+            {
+                Free(0);
+                Free(1);
+                Free(2);
+                Free(3);
+                Free(4);
             }
             
             /*---デバッグ---*/
