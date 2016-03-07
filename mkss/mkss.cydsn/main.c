@@ -83,9 +83,11 @@ int main()
     PS2_Start();
     UART_Debug_Start();
     CyDelay(1000);
-    while(!PS2_Analog_Flag());
-    while(!PS2_Controller_get().START);
+    //while(!PS2_Analog_Flag());
+    //while(!PS2_Controller_get().START);
     /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    ID_Write(10);
+    Pos_Set(10,0);
     for(;;)
     {
         /* Place your application code here. */
